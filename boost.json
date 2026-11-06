@@ -2,18 +2,25 @@
     "agents": [
         "claude_code",
         "factory",
-        "grok_build"
+        "grok_build",
+        "antigravity",
+        "copilot"
     ],
     "cloud": true,
     "guidelines": true,
     "mcp": true,
     "nightwatch": false,
+    "packages": [
+        "filament/filament"
+    ],
     "sail": false,
     "skills": [
         "infer-conventions",
         "deploying-to-cloud",
         "laravel-best-practices",
         "testing-best-practices",
-        "tailwindcss-development"
+        "echo-development",
+        "tailwindcss-development",
+        "filament-development"
     ]
 }

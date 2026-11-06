@@ -8,20 +8,27 @@ use App\Events\OrderCompleted;
 use App\Models\Category;
 use App\Models\Order;
 use App\Models\Product;
+use BackedEnum;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use UnitEnum;
 
 class PosPage extends Page
 {
     protected string $view = 'filament.pages.pos-page';
 
-    protected static ?string $navigationLabel = 'Expo POS (Register)';
+    protected static ?string $navigationLabel = 'POS Terminal';
 
     protected static ?string $title = 'Expo POS Terminal';
 
     protected static ?string $slug = 'pos';
+
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedComputerDesktop;
+
+    protected static string|UnitEnum|null $navigationGroup = 'Expo POS';
 
     protected static ?int $navigationSort = 1;
 

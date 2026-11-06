@@ -16,3 +16,4 @@ window.Echo = new Echo({
     forceTLS: reverbScheme === 'https',
     enabledTransports: ['ws', 'wss'],
 });
+
