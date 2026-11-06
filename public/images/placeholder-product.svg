@@ -40,5 +40,5 @@
 
   <!-- Typography -->
   <text x="200" y="300" font-family="'Instrument Sans', sans-serif" font-size="22" font-weight="900" fill="#4c0519" text-anchor="middle" letter-spacing="1.5">GHASA PRODUCTS</text>
-  <text x="200" y="326" font-family="'Instrument Sans', sans-serif" font-size="13" font-weight="800" fill="#be123c" text-anchor="middle" letter-spacing="3">TRADITIONAL ACHAR & FOOD</text>
+  <text x="200" y="326" font-family="'Instrument Sans', sans-serif" font-size="13" font-weight="800" fill="#be123c" text-anchor="middle" letter-spacing="3">TRADITIONAL ACHAR &amp; PANI PURI</text>
 </svg>
