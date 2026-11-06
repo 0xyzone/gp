@@ -37,6 +37,8 @@ class PanelPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Amber,
             ])
+            ->sidebarCollapsibleOnDesktop()
+            ->maxContentWidth('full')
             ->navigationGroups([
                 NavigationGroup::make('Expo POS'),
                 NavigationGroup::make('Catalog'),
