@@ -2,6 +2,9 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Widgets\DashboardStatsOverview;
+use App\Filament\Widgets\RecentOrdersTable;
+use App\Filament\Widgets\TopSellingProductsChart;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -11,10 +14,7 @@ use Filament\Navigation\NavigationItem;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
-use Filament\Support\Colors\Color;
 use Filament\Support\Icons\Heroicon;
-use Filament\Widgets\AccountWidget;
-use Filament\Widgets\FilamentInfoWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
@@ -35,7 +35,19 @@ class PanelPanelProvider extends PanelProvider
             ->brandLogo(fn () => view('filament.brand'))
             ->brandLogoHeight('2.25rem')
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => [
+                    50 => '#fff1f2',
+                    100 => '#ffe4e6',
+                    200 => '#fecdd3',
+                    300 => '#fda4af',
+                    400 => '#fb7185',
+                    500 => '#e11d48',
+                    600 => '#be123c',
+                    700 => '#9f1239',
+                    800 => '#881337', // Brand Burgundy
+                    900 => '#4c0519',
+                    950 => '#2d020e',
+                ],
             ])
             ->sidebarCollapsibleOnDesktop()
             ->maxContentWidth('full')
@@ -58,8 +70,9 @@ class PanelPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
-                AccountWidget::class,
-                FilamentInfoWidget::class,
+                DashboardStatsOverview::class,
+                TopSellingProductsChart::class,
+                RecentOrdersTable::class,
             ])
             ->middleware([
                 EncryptCookies::class,

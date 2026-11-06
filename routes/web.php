@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Category;
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\Setting;
 use Illuminate\Support\Facades\Route;
@@ -59,3 +60,9 @@ Route::get('/display', function () {
 
     return view('customer-display', compact('categories', 'allProducts', 'initialSettings'));
 })->name('customer.display');
+
+Route::get('/orders/{order}/receipt', function (Order $order) {
+    $order->load('items.product');
+
+    return view('receipts.thermal', compact('order'));
+})->name('orders.receipt');

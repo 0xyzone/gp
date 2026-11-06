@@ -3,6 +3,106 @@
 @source '../../../../app/Filament/**/*';
 @source '../../../../resources/views/filament/**/*';
 
+/* ==========================================================================
+   Full Dark Burgundy & Glassmorphism Theme for Filament Panel
+   ========================================================================== */
+
+:root {
+    --burgundy-950: #1a0309;
+    --burgundy-900: #2d040f;
+    --burgundy-850: #3b0514;
+    --burgundy-800: #4c0519;
+    --burgundy-700: #881337;
+    --burgundy-600: #9f1239;
+    --burgundy-500: #be123c;
+    --burgundy-400: #e11d48;
+}
+
+/* Elegant dark burgundy background for the entire panel layout */
+.fi-layout,
+.fi-topbar,
+.fi-sidebar {
+    background-color: #1c0309 !important;
+}
+
+/* Topbar glass finish */
+.fi-topbar {
+    border-bottom: 1px solid rgba(225, 29, 72, 0.15) !important;
+    backdrop-filter: blur(16px);
+}
+
+/* Sidebar styling with dark burgundy gradient and clean borders */
+.fi-sidebar {
+    border-right: 1px solid rgba(225, 29, 72, 0.15) !important;
+    background: linear-gradient(180deg, #22040b 0%, #150207 100%) !important;
+}
+
+.fi-sidebar-nav {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(225, 29, 72, 0.2) transparent;
+}
+
+/* Sidebar active navigation item with glowing burgundy pill */
+.fi-sidebar-item-active .fi-sidebar-item-btn {
+    background: linear-gradient(135deg, rgba(136, 19, 55, 0.9) 0%, rgba(76, 5, 25, 0.95) 100%) !important;
+    color: #fff !important;
+    box-shadow: 0 4px 16px -2px rgba(136, 19, 55, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+    border: 1px solid rgba(225, 29, 72, 0.3) !important;
+}
+
+.fi-sidebar-item-btn:hover {
+    background-color: rgba(136, 19, 55, 0.25) !important;
+}
+
+/* Main Content Area Canvas */
+.fi-main {
+    background: radial-gradient(circle at 10% 10%, #2b050f 0%, #170207 60%, #100104 100%) !important;
+    min-height: 100vh;
+}
+
+/* Filament Sections, Widget Cards and Modals: Rich Dark Burgundy Surface */
+.fi-section,
+.fi-wi-stats-overview-stat,
+.fi-ta-ctn,
+.fi-modal-window,
+.fi-dropdown-panel {
+    background: rgba(38, 5, 14, 0.85) !important;
+    border: 1px solid rgba(225, 29, 72, 0.2) !important;
+    box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+    backdrop-filter: blur(12px);
+    border-radius: 1.25rem !important;
+}
+
+/* Stats Overview Stat Cards */
+.fi-wi-stats-overview-stat {
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.fi-wi-stats-overview-stat:hover {
+    border-color: rgba(225, 29, 72, 0.45) !important;
+}
+
+/* Tables styling */
+.fi-ta-header,
+.fi-ta-content {
+    background: transparent !important;
+}
+
+.fi-ta-record:hover {
+    background-color: rgba(136, 19, 55, 0.15) !important;
+}
+
+/* Header Action Buttons */
+.fi-btn-primary {
+    background: linear-gradient(135deg, #be123c 0%, #881337 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    box-shadow: 0 4px 14px 0 rgba(136, 19, 55, 0.4) !important;
+}
+
+.fi-btn-primary:hover {
+    background: linear-gradient(135deg, #e11d48 0%, #9f1239 100%) !important;
+}
+
 /* Clean scrollbar styling */
 .scrollbar-thin::-webkit-scrollbar {
     width: 6px;
@@ -12,9 +112,9 @@
     background: transparent;
 }
 .scrollbar-thin::-webkit-scrollbar-thumb {
-    background: rgba(156, 163, 175, 0.4);
+    background: rgba(225, 29, 72, 0.3);
     border-radius: 9999px;
 }
 .scrollbar-thin::-webkit-scrollbar-thumb:hover {
-    background: rgba(156, 163, 175, 0.7);
+    background: rgba(225, 29, 72, 0.6);
 }
