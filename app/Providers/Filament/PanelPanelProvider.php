@@ -38,12 +38,9 @@ class PanelPanelProvider extends PanelProvider
                 'primary' => Color::Amber,
             ])
             ->navigationGroups([
-                NavigationGroup::make('Expo POS')
-                    ->icon(Heroicon::OutlinedComputerDesktop),
-                NavigationGroup::make('Catalog')
-                    ->icon(Heroicon::OutlinedSquaresPlus),
-                NavigationGroup::make('Sales & Reports')
-                    ->icon(Heroicon::OutlinedCurrencyRupee),
+                NavigationGroup::make('Expo POS'),
+                NavigationGroup::make('Catalog'),
+                NavigationGroup::make('Sales & Reports'),
             ])
             ->navigationItems([
                 NavigationItem::make('Customer Display Screen')
