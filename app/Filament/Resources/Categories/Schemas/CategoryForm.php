@@ -19,7 +19,10 @@ class CategoryForm
                     ->description('Organize products into clean, searchable expo categories')
                     ->icon('heroicon-o-tag')
                     ->schema([
-                        Grid::make(2)
+                        Grid::make([
+                            'default' => 1,
+                            'sm' => 2,
+                        ])
                             ->schema([
                                 TextInput::make('name')
                                     ->label('Category Name')
@@ -38,7 +41,10 @@ class CategoryForm
                                     ->maxLength(120)
                                     ->helperText('Auto-generated from name on blur or can be customized'),
                             ]),
-                        Grid::make(2)
+                        Grid::make([
+                            'default' => 1,
+                            'sm' => 2,
+                        ])
                             ->schema([
                                 TextInput::make('sort_order')
                                     ->label('Sort Order')
@@ -48,7 +54,7 @@ class CategoryForm
                                 Toggle::make('is_active')
                                     ->label('Active Status')
                                     ->default(true)
-                                    ->helperText('Active categories appear on POS terminal and public screens')
+                                    ->helperText('Enable to display this category on the POS register')
                                     ->inline(false),
                             ]),
                     ]),

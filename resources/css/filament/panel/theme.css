@@ -16,7 +16,7 @@
                  radial-gradient(circle at 50% 50%, #20030a 0%, #120106 70%, #0a0104 100%);
     
     /* Warm Glass Surface Tokens */
-    --glass-bg: rgba(38, 5, 14, 0.65);
+    --glass-bg: rgba(38, 5, 14, 0.72);
     --glass-bg-subtle: rgba(46, 7, 18, 0.45);
     --glass-bg-hover: rgba(65, 10, 26, 0.7);
     --glass-border: rgba(251, 113, 133, 0.2);
@@ -59,11 +59,11 @@
     min-height: 100vh;
 }
 
-/* Glassmorphism Containers in Dark Mode */
+/* Glassmorphism Containers in Dark Mode (Non Slide-Over Windows) */
 .dark .fi-wi-stats-overview-stat,
 .dark .fi-ta-ctn,
-.dark .fi-modal-window,
 .dark .fi-dropdown-panel,
+.dark .fi-modal:not(.fi-modal-slide-over) .fi-modal-window,
 .dark .fi-section:not(.fi-section-not-contained) {
     background: var(--glass-bg) !important;
     border: 1px solid var(--glass-border) !important;
@@ -83,10 +83,126 @@
     padding: 0 !important;
 }
 
-/* LIGHT MODE: Warm Peach-Cream & Liquid Frosted Glass */
+/* ==========================================================================
+   SLIDE-OVER MODALS - BEAUTIFUL DEDICATED SLIDE-OUT PANEL THEMING
+   ========================================================================== */
+
+/* Dark Mode Slide-Over Window */
+.dark .fi-modal.fi-modal-slide-over .fi-modal-window {
+    background: linear-gradient(180deg, #24040e 0%, #160208 100%) !important;
+    border-left: 1px solid rgba(251, 113, 133, 0.25) !important;
+    box-shadow: -15px 0 45px -10px rgba(0, 0, 0, 0.85), inset 1px 0 0 rgba(255, 255, 255, 0.1) !important;
+    border-radius: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+/* Slide-Over Header in Dark Mode */
+.dark .fi-modal.fi-modal-slide-over .fi-modal-header {
+    background: rgba(36, 4, 14, 0.85) !important;
+    border-bottom: 1px solid rgba(251, 113, 133, 0.18) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    padding: 1.25rem 1.75rem !important;
+}
+
+.dark .fi-modal.fi-modal-slide-over .fi-modal-heading {
+    color: #fff1f2 !important;
+    font-size: 1.25rem !important;
+    font-weight: 800 !important;
+    letter-spacing: -0.02em !important;
+}
+
+.dark .fi-modal.fi-modal-slide-over .fi-modal-close-btn button {
+    color: #fda4af !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+    border-radius: 0.625rem !important;
+    border: 1px solid rgba(251, 113, 133, 0.15) !important;
+    transition: all 0.2s ease !important;
+}
+
+.dark .fi-modal.fi-modal-slide-over .fi-modal-close-btn button:hover {
+    color: #ffffff !important;
+    background: rgba(225, 29, 72, 0.3) !important;
+    border-color: rgba(251, 113, 133, 0.4) !important;
+}
+
+/* Slide-Over Content Body in Dark Mode */
+.dark .fi-modal.fi-modal-slide-over .fi-modal-content {
+    background: transparent !important;
+    padding: 1.75rem !important;
+    overflow-y: auto !important;
+    flex: 1 1 auto !important;
+}
+
+/* Sections inside Slide-Over: warm frosted inset cards */
+.dark .fi-modal.fi-modal-slide-over .fi-section {
+    background: rgba(43, 6, 17, 0.65) !important;
+    border: 1px solid rgba(251, 113, 133, 0.2) !important;
+    box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.12) !important;
+    backdrop-filter: blur(12px) !important;
+    border-radius: 1rem !important;
+    padding: 1.25rem !important;
+}
+
+/* Slide-Over Footer in Dark Mode */
+.dark .fi-modal.fi-modal-slide-over .fi-modal-footer {
+    background: rgba(20, 2, 7, 0.95) !important;
+    border-top: 1px solid rgba(251, 113, 133, 0.18) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    padding: 1.25rem 1.75rem !important;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* LIGHT MODE: Slide-Over Window */
+html:not(.dark) .fi-modal.fi-modal-slide-over .fi-modal-window {
+    background: #ffffff !important;
+    border-left: 1px solid rgba(244, 63, 94, 0.18) !important;
+    box-shadow: -12px 0 35px -8px rgba(136, 19, 55, 0.15) !important;
+    border-radius: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+html:not(.dark) .fi-modal.fi-modal-slide-over .fi-modal-header {
+    background: #fff1f2 !important;
+    border-bottom: 1px solid rgba(244, 63, 94, 0.15) !important;
+    padding: 1.25rem 1.75rem !important;
+}
+
+html:not(.dark) .fi-modal.fi-modal-slide-over .fi-modal-content {
+    background: #fffbfa !important;
+    padding: 1.75rem !important;
+    overflow-y: auto !important;
+    flex: 1 1 auto !important;
+}
+
+html:not(.dark) .fi-modal.fi-modal-slide-over .fi-section {
+    background: #ffffff !important;
+    border: 1px solid rgba(244, 63, 94, 0.15) !important;
+    box-shadow: 0 4px 16px -2px rgba(136, 19, 55, 0.06) !important;
+    border-radius: 1rem !important;
+    padding: 1.25rem !important;
+}
+
+html:not(.dark) .fi-modal.fi-modal-slide-over .fi-modal-footer {
+    background: #ffffff !important;
+    border-top: 1px solid rgba(244, 63, 94, 0.15) !important;
+    padding: 1.25rem 1.75rem !important;
+}
+
+/* Modal Backdrop Blur */
+.fi-modal-close-overlay {
+    backdrop-filter: blur(8px) saturate(140%) !important;
+    -webkit-backdrop-filter: blur(8px) saturate(140%) !important;
+    background: rgba(10, 1, 4, 0.65) !important;
+}
+
+/* LIGHT MODE: General Surfaces */
 html:not(.dark) {
     --bg-light-canvas: radial-gradient(circle at 15% 15%, #ffe4e6 0%, #fff1f2 40%, #fdf2e9 100%);
-    --light-glass-bg: rgba(255, 255, 255, 0.72);
+    --light-glass-bg: rgba(255, 255, 255, 0.75);
     --light-glass-border: rgba(244, 63, 94, 0.18);
     --light-glass-shadow: 0 14px 32px -8px rgba(159, 18, 57, 0.12), 0 2px 8px -2px rgba(217, 119, 6, 0.08);
     --light-glass-blur: blur(16px) saturate(160%);
@@ -118,7 +234,7 @@ html:not(.dark) .fi-sidebar-item-active .fi-sidebar-item-btn {
 
 html:not(.dark) .fi-wi-stats-overview-stat,
 html:not(.dark) .fi-ta-ctn,
-html:not(.dark) .fi-modal-window,
+html:not(.dark) .fi-modal:not(.fi-modal-slide-over) .fi-modal-window,
 html:not(.dark) .fi-section:not(.fi-section-not-contained) {
     background: var(--light-glass-bg) !important;
     border: 1px solid var(--light-glass-border) !important;
