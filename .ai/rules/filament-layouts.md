@@ -33,3 +33,4 @@ All Filament resources across the application must strictly follow this visual a
 - Use bold typography for primary identifiers.
 - Use badges with semantic colors (`success`, `warning`, `danger`, `primary`).
 - Slide-over action modals for Edit / View.
+
