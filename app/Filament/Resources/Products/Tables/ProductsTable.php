@@ -77,10 +77,10 @@ class ProductsTable
             ->recordActions([
                 ViewAction::make()
                     ->slideOver()
-                    ->modalWidth(Width::SevenExtraLarge),
+                    ->modalWidth(Width::FiveExtraLarge),
                 EditAction::make()
                     ->slideOver()
-                    ->modalWidth(Width::SevenExtraLarge),
+                    ->modalWidth(Width::FiveExtraLarge),
                 DeleteAction::make(),
             ])
             ->toolbarActions([

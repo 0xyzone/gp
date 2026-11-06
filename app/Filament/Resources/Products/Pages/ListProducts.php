@@ -17,7 +17,7 @@ class ListProducts extends ListRecords
         return [
             CreateAction::make()
                 ->slideOver()
-                ->modalWidth(Width::SevenExtraLarge),
+                ->modalWidth(Width::FiveExtraLarge),
         ];
     }
 
