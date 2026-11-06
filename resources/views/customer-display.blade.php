@@ -75,7 +75,7 @@
                     <span class="px-3 py-1 rounded-full bg-[#881337]/10 text-[#881337] font-extrabold text-xs tracking-wider uppercase" x-text="settings.display_badge_text"></span>
                 </div>
                 <p class="text-xs text-slate-500 font-semibold mt-0.5">
-                    100% Traditional Homemade Pickles, Organics & Live Crunchy Pani Puri
+                    100% Traditional Homemade Pickles and sweet & sour candies.
                 </p>
             </div>
         </div>
