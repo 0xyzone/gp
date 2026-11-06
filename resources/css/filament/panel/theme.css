@@ -4,106 +4,128 @@
 @source '../../../../resources/views/filament/**/*';
 
 /* ==========================================================================
-   Full Dark Burgundy & Glassmorphism Theme for Filament Panel
+   Full Dark Burgundy & Harmonized Light Theme for Filament Panel
    ========================================================================== */
 
-:root {
-    --burgundy-950: #1a0309;
-    --burgundy-900: #2d040f;
-    --burgundy-850: #3b0514;
-    --burgundy-800: #4c0519;
-    --burgundy-700: #881337;
-    --burgundy-600: #9f1239;
-    --burgundy-500: #be123c;
-    --burgundy-400: #e11d48;
+/* DARK MODE: Full Elegant Dark Burgundy & Glassmorphism */
+.dark {
+    --bg-panel: #160207;
+    --bg-canvas: radial-gradient(circle at 10% 10%, #29040e 0%, #170207 60%, #0e0104 100%);
+    --bg-surface: rgba(43, 6, 16, 0.88);
+    --border-surface: rgba(225, 29, 72, 0.22);
+    --border-subtle: rgba(225, 29, 72, 0.12);
 }
 
-/* Elegant dark burgundy background for the entire panel layout */
-.fi-layout,
-.fi-topbar,
-.fi-sidebar {
-    background-color: #1c0309 !important;
+.dark .fi-layout,
+.dark .fi-topbar,
+.dark .fi-sidebar {
+    background-color: var(--bg-panel) !important;
 }
 
-/* Topbar glass finish */
-.fi-topbar {
-    border-bottom: 1px solid rgba(225, 29, 72, 0.15) !important;
+.dark .fi-topbar {
+    border-bottom: 1px solid var(--border-subtle) !important;
     backdrop-filter: blur(16px);
 }
 
-/* Sidebar styling with dark burgundy gradient and clean borders */
-.fi-sidebar {
-    border-right: 1px solid rgba(225, 29, 72, 0.15) !important;
-    background: linear-gradient(180deg, #22040b 0%, #150207 100%) !important;
+.dark .fi-sidebar {
+    border-right: 1px solid var(--border-subtle) !important;
+    background: linear-gradient(180deg, #1f030a 0%, #120105 100%) !important;
 }
 
-.fi-sidebar-nav {
-    scrollbar-width: thin;
-    scrollbar-color: rgba(225, 29, 72, 0.2) transparent;
-}
-
-/* Sidebar active navigation item with glowing burgundy pill */
-.fi-sidebar-item-active .fi-sidebar-item-btn {
-    background: linear-gradient(135deg, rgba(136, 19, 55, 0.9) 0%, rgba(76, 5, 25, 0.95) 100%) !important;
+.dark .fi-sidebar-item-active .fi-sidebar-item-btn {
+    background: linear-gradient(135deg, rgba(136, 19, 55, 0.95) 0%, rgba(76, 5, 25, 0.98) 100%) !important;
     color: #fff !important;
     box-shadow: 0 4px 16px -2px rgba(136, 19, 55, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
-    border: 1px solid rgba(225, 29, 72, 0.3) !important;
+    border: 1px solid rgba(225, 29, 72, 0.35) !important;
 }
 
-.fi-sidebar-item-btn:hover {
-    background-color: rgba(136, 19, 55, 0.25) !important;
-}
-
-/* Main Content Area Canvas */
-.fi-main {
-    background: radial-gradient(circle at 10% 10%, #2b050f 0%, #170207 60%, #100104 100%) !important;
+.dark .fi-main {
+    background: var(--bg-canvas) !important;
     min-height: 100vh;
 }
 
-/* Filament Sections, Widget Cards and Modals: Rich Dark Burgundy Surface */
-.fi-section,
-.fi-wi-stats-overview-stat,
-.fi-ta-ctn,
-.fi-modal-window,
-.fi-dropdown-panel {
-    background: rgba(38, 5, 14, 0.85) !important;
-    border: 1px solid rgba(225, 29, 72, 0.2) !important;
-    box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+/* Individual card styling in Dark Mode */
+.dark .fi-wi-stats-overview-stat,
+.dark .fi-ta-ctn,
+.dark .fi-modal-window,
+.dark .fi-dropdown-panel {
+    background: var(--bg-surface) !important;
+    border: 1px solid var(--border-surface) !important;
+    box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
     backdrop-filter: blur(12px);
     border-radius: 1.25rem !important;
 }
 
-/* Stats Overview Stat Cards */
-.fi-wi-stats-overview-stat {
-    transition: transform 0.2s ease, border-color 0.2s ease;
-}
-
-.fi-wi-stats-overview-stat:hover {
-    border-color: rgba(225, 29, 72, 0.45) !important;
-}
-
-/* Tables styling */
-.fi-ta-header,
-.fi-ta-content {
+/* Fix overlapping rectangles: do not wrap stats overview widget in an outer box */
+.fi-wi-stats-overview,
+.fi-wi-stats-overview > .fi-section,
+.fi-wi-stats-overview .fi-section-not-contained {
     background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
 }
 
-.fi-ta-record:hover {
-    background-color: rgba(136, 19, 55, 0.15) !important;
+/* Standard sections (forms / settings / resources) */
+.dark .fi-section:not(.fi-section-not-contained) {
+    background: var(--bg-surface) !important;
+    border: 1px solid var(--border-surface) !important;
+    box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+    backdrop-filter: blur(12px);
+    border-radius: 1.25rem !important;
 }
 
-/* Header Action Buttons */
+/* LIGHT MODE: Harmonized Clean Burgundy & Rose Cream */
+html:not(.dark) {
+    --bg-light-canvas: radial-gradient(circle at 10% 10%, #fff1f2 0%, #fdf8f8 50%, #f9f1f3 100%);
+    --bg-light-surface: #ffffff;
+    --border-light-surface: rgba(136, 19, 55, 0.12);
+}
+
+html:not(.dark) .fi-main {
+    background: var(--bg-light-canvas) !important;
+}
+
+html:not(.dark) .fi-topbar {
+    background: rgba(255, 255, 255, 0.9) !important;
+    border-bottom: 1px solid var(--border-light-surface) !important;
+    backdrop-filter: blur(12px);
+}
+
+html:not(.dark) .fi-sidebar {
+    background: #ffffff !important;
+    border-right: 1px solid var(--border-light-surface) !important;
+}
+
+html:not(.dark) .fi-sidebar-item-active .fi-sidebar-item-btn {
+    background: linear-gradient(135deg, #881337 0%, #4c0519 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 12px -2px rgba(136, 19, 55, 0.35) !important;
+}
+
+html:not(.dark) .fi-wi-stats-overview-stat,
+html:not(.dark) .fi-ta-ctn,
+html:not(.dark) .fi-modal-window,
+html:not(.dark) .fi-section:not(.fi-section-not-contained) {
+    background: #ffffff !important;
+    border: 1px solid var(--border-light-surface) !important;
+    box-shadow: 0 10px 25px -8px rgba(136, 19, 55, 0.08), 0 0 1px rgba(136, 19, 55, 0.05) !important;
+    border-radius: 1.25rem !important;
+}
+
+/* Universal Button Styling (Burgundy Brand in both light and dark) */
 .fi-btn-primary {
     background: linear-gradient(135deg, #be123c 0%, #881337 100%) !important;
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border: 1px solid rgba(255, 255, 255, 0.18) !important;
     box-shadow: 0 4px 14px 0 rgba(136, 19, 55, 0.4) !important;
+    color: #ffffff !important;
 }
 
 .fi-btn-primary:hover {
     background: linear-gradient(135deg, #e11d48 0%, #9f1239 100%) !important;
 }
 
-/* Clean scrollbar styling */
+/* Scrollbar styling */
 .scrollbar-thin::-webkit-scrollbar {
     width: 6px;
     height: 6px;
