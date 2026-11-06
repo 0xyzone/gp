@@ -131,7 +131,7 @@
                         @if(! $isOutOfStock)
                             wire:click="addToCart({{ $product->id }})"
                         @endif
-                        class="relative rounded-2xl p-3.5 select-none flex flex-col justify-between glass-product-card {{ $inCart ? 'glass-product-card-active' : '' }} {{ $isOutOfStock ? 'opacity-60 cursor-not-allowed filter grayscale-[30%]' : 'cursor-pointer' }}"
+                        class="relative rounded-2xl p-3.5 select-none flex flex-col justify-between glass-product-card {{ $inCart ? 'glass-product-card-active' : '' }} {{ $isOutOfStock ? 'opacity-60 cursor-not-allowed filter grayscale-30' : 'cursor-pointer' }}"
                     >
                         <div>
                             <!-- Glass Inset Image Container -->
@@ -150,7 +150,7 @@
                                         </span>
                                     </div>
                                 @elseif($inCart)
-                                    <div class="absolute top-2 right-2 bg-gradient-to-r from-rose-600 to-rose-700 text-white text-[11px] font-black px-2.5 py-1 rounded-full shadow-lg shadow-rose-900/50 border border-white/30 backdrop-blur-md">
+                                    <div class="absolute top-2 right-2 bg-linear-to-r from-rose-600 to-rose-700 text-white text-[11px] font-black px-2.5 py-1 rounded-full shadow-lg shadow-rose-900/50 border border-white/30 backdrop-blur-md">
                                         {{ $qty }} in cart
                                     </div>
                                 @elseif($isLowStock)
@@ -194,7 +194,7 @@
                                     >
                                         -
                                     </button>
-                                    <span class="text-xs font-black px-1.5 text-gray-900 dark:text-white min-w-[16px] text-center">
+                                    <span class="text-xs font-black px-1.5 text-gray-900 dark:text-white min-w-4 text-center">
                                         {{ $qty }}
                                     </span>
                                     <button 
@@ -223,10 +223,10 @@
         </div>
 
         <!-- RIGHT: Cashier Bill Summary & Fast Checkout (Frosted Glass Panel) -->
-        <div class="w-full xl:w-[410px] shrink-0 flex flex-col">
+        <div class="w-full xl:w-102.5 shrink-0 flex flex-col">
             <div class="rounded-2xl glass-panel flex flex-col h-[calc(100vh-130px)] sticky top-4 overflow-hidden">
                 <!-- Sidebar Top Glass Banner -->
-                <div class="p-4 bg-gradient-to-r from-rose-950/90 via-[#881337]/90 to-rose-950/90 backdrop-blur-md text-white flex items-center justify-between border-b border-white/10 shadow-sm">
+                <div class="p-4 bg-linear-to-r from-rose-950/90 via-burgundy-900/90 to-rose-950/90 backdrop-blur-md text-white flex items-center justify-between border-b border-white/10 shadow-sm">
                     <div class="flex items-center gap-2.5">
                         <div class="w-9 h-9 rounded-xl bg-white/15 border border-white/25 text-white flex items-center justify-center backdrop-blur-md shadow-[inset_0_1px_1px_rgba(255,255,255,0.4)]">
                             <x-heroicon-s-shopping-bag class="w-5 h-5" />
@@ -263,7 +263,7 @@
                                         रू {{ number_format($item['price'], 2) }}
                                     </span>
                                     <span class="text-rose-300 dark:text-rose-800">•</span>
-                                    <span class="text-xs font-extrabold text-[#881337] dark:text-rose-400">
+                                    <span class="text-xs font-extrabold text-burgundy-900 dark:text-rose-400">
                                         रू {{ number_format($item['total'], 2) }}
                                     </span>
                                 </div>
@@ -278,7 +278,7 @@
                                     >
                                         -
                                     </button>
-                                    <span class="text-xs font-black px-1.5 min-w-[20px] text-center text-gray-900 dark:text-white">
+                                    <span class="text-xs font-black px-1.5 min-w-5 text-center text-gray-900 dark:text-white">
                                         {{ $item['quantity'] }}
                                     </span>
                                     <button 
@@ -301,11 +301,11 @@
                         </div>
                     @empty
                         <div class="h-full flex flex-col items-center justify-center text-center text-gray-400 dark:text-gray-500 py-16">
-                            <div class="w-16 h-16 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-[#881337] dark:text-rose-400 flex items-center justify-center mb-3 backdrop-blur-sm">
+                            <div class="w-16 h-16 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-burgundy-900 dark:text-rose-400 flex items-center justify-center mb-3 backdrop-blur-sm">
                                 <x-heroicon-o-shopping-cart class="w-8 h-8" />
                             </div>
                             <p class="text-sm font-bold text-gray-700 dark:text-rose-200">Cart is Empty</p>
-                            <span class="text-xs text-gray-400 dark:text-rose-300/70 mt-1 max-w-[220px]">Click any product card to add to order.</span>
+                            <span class="text-xs text-gray-400 dark:text-rose-300/70 mt-1 max-w-55">Click any product card to add to order.</span>
                         </div>
                     @endforelse
                 </div>
@@ -335,7 +335,7 @@
 
                         <div class="flex justify-between items-center pt-2 border-t border-rose-200/40 dark:border-rose-900/40">
                             <span class="text-xs font-black text-gray-950 dark:text-white uppercase tracking-wider">NET PAYABLE:</span>
-                            <span class="text-lg font-black text-[#881337] dark:text-rose-400">
+                            <span class="text-lg font-black text-burgundy-900 dark:text-rose-400">
                                 रू {{ number_format($this->grand_total, 2) }}
                             </span>
                         </div>
@@ -427,7 +427,7 @@
                             type="button"
                             wire:click="completeOrder"
                             @disabled(count($cart) === 0 || ($paymentMethod === 'cash' && $this->change_due < 0))
-                            class="w-full py-3 px-4 rounded-xl font-black text-xs text-white bg-gradient-to-r from-rose-700 via-rose-600 to-rose-700 hover:from-rose-600 hover:to-rose-600 border border-white/20 shadow-lg shadow-rose-950/40 backdrop-blur-md disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-all uppercase tracking-wider"
+                            class="w-full py-3 px-4 rounded-xl font-black text-xs text-white bg-linear-to-r from-rose-700 via-rose-600 to-rose-700 hover:from-rose-600 hover:to-rose-600 border border-white/20 shadow-lg shadow-rose-950/40 backdrop-blur-md disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-all uppercase tracking-wider"
                         >
                             <x-heroicon-m-check class="w-4 h-4" />
                             <span>Complete & Pay Now (रू {{ number_format($this->grand_total, 2) }})</span>
