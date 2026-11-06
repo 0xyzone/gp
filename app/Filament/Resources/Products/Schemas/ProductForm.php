@@ -80,8 +80,8 @@ class ProductForm
                                     ->placeholder('e.g. Discounted stall price')
                                     ->helperText('Must be strictly less than the actual price'),
                             ]),
-                        Section::make('Inventory & Stock Management')
-                            ->description('Track physical stall inventory, available units, and low stock warnings')
+                        Section::make('Stock Rules')
+                            ->description('Enable automated stock deduction and alert threshold')
                             ->icon('heroicon-o-cube')
                             ->compact()
                             ->schema([
@@ -89,29 +89,17 @@ class ProductForm
                                     ->label('Enable Stock Tracking')
                                     ->default(true)
                                     ->live()
-                                    ->helperText('When enabled, stock will decrease as sales are made in POS'),
-                                Grid::make(2)
+                                    ->helperText('When enabled, stock will be calculated from Stock Entries and auto-deducted on POS checkout'),
+                                TextInput::make('low_stock_threshold')
+                                    ->label('Low Stock Alert Level')
+                                    ->numeric()
+                                    ->required()
+                                    ->default(10)
+                                    ->minValue(1)
+                                    ->step(1)
+                                    ->suffix('Units')
                                     ->visible(fn ($get) => (bool) $get('track_stock'))
-                                    ->schema([
-                                        TextInput::make('stock_quantity')
-                                            ->label('Current Stock Units')
-                                            ->numeric()
-                                            ->required()
-                                            ->default(50)
-                                            ->minValue(0)
-                                            ->step(1)
-                                            ->suffix('Units')
-                                            ->helperText('Available inventory at stall'),
-                                        TextInput::make('low_stock_threshold')
-                                            ->label('Low Stock Alert Level')
-                                            ->numeric()
-                                            ->required()
-                                            ->default(10)
-                                            ->minValue(1)
-                                            ->step(1)
-                                            ->suffix('Units')
-                                            ->helperText('Triggers warning badge when stock drops to or below this level'),
-                                    ]),
+                                    ->helperText('Triggers low stock alert when inventory reaches this level'),
                             ]),
                         Textarea::make('description')
                             ->label('Description / Notes')

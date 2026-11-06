@@ -141,6 +141,29 @@ class Product extends Model
         return $this->belongsTo(Category::class);
     }
 
+    public function stockEntries(): HasMany
+    {
+        return $this->hasMany(StockEntry::class);
+    }
+
+    /**
+     * Recalculate total stock from all stock entries minus completed orders.
+     */
+    public function recalculateStock(): void
+    {
+        $added = (int) $this->stockEntries()->where('type', 'add')->sum('quantity');
+        $subtracted = (int) $this->stockEntries()->where('type', 'subtract')->sum('quantity');
+
+        // Count sold items from completed orders
+        $sold = (int) $this->orderItems()
+            ->whereHas('order', fn ($q) => $q->where('status', 'completed'))
+            ->sum('quantity');
+
+        $computedStock = max(0, $added - $subtracted - $sold);
+
+        $this->updateQuietly(['stock_quantity' => $computedStock]);
+    }
+
     public function orderItems(): HasMany
     {
         return $this->hasMany(OrderItem::class);
