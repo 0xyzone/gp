@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=1920, height=1080, initial-scale=1">
-    <title>{{ \App\Models\Setting::get('stall_name', 'Ghasa Products') }} - Customer Display</title>
+    <title>{{ \App\Models\Setting::get('stall_name', 'घासा • Ghasa Products') }} - Customer Display</title>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
@@ -11,7 +11,7 @@
     <style>
         [x-cloak] { display: none !important; }
 
-        /* Fixed 1920x1080 Viewport Enclosure */
+        /* Fixed 1920x1080 Viewport */
         body {
             width: 1920px;
             height: 1080px;
@@ -22,7 +22,6 @@
 
         .scrollbar-none::-webkit-scrollbar { display: none; }
 
-        /* Soft Burgundy Drop Shadows */
         .shadow-burgundy-soft {
             box-shadow: 0 20px 40px -15px rgba(136, 19, 55, 0.12), 0 0 1px 1px rgba(136, 19, 55, 0.05);
         }
@@ -31,9 +30,11 @@
             box-shadow: 0 25px 60px -10px rgba(136, 19, 55, 0.35);
         }
 
-        /* Smooth step slide transition */
-        .slide-carousel-track {
-            transition: transform 0.75s cubic-bezier(0.4, 0, 0.2, 1);
+        /* 3D clean surface with zero clipping */
+        .card-3d-clean {
+            background: #ffffff;
+            border: 1px solid rgba(225, 29, 72, 0.15);
+            box-shadow: 0 12px 28px -8px rgba(136, 19, 55, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.9);
         }
     </style>
 </head>
@@ -47,86 +48,91 @@
     </div>
 
     <!-- ========================================================================= -->
-    <!-- HEADER BAR: CLEAN MOBILE/TABLET APP HEADER IN BRIGHT BURGUNDY THEME -->
+    <!-- MODULAR HEADER BAR -->
     <!-- ========================================================================= -->
-    <header class="relative z-20 flex items-center justify-between px-8 py-5 rounded-3xl glass-panel-light shadow-burgundy-soft">
-        <div class="flex items-center gap-4">
-            <!-- App Icon / Badge -->
-            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#881337] to-[#4c0519] flex items-center justify-center text-white font-black text-2xl shadow-lg shadow-rose-950/20">
-                घ
-            </div>
-            <div>
-                <div class="flex items-center gap-3">
-                    <h1 class="text-2xl font-black tracking-tight text-[#4c0519]">
-                        घासा • Ghasa Products
-                    </h1>
-                    <span class="px-3 py-1 rounded-full bg-[#881337]/10 text-[#881337] font-extrabold text-xs tracking-wider uppercase">
-                        Authentic Nepali Achar & Pani Puri Stall
-                    </span>
+    @if(\App\Models\Setting::get('show_display_header', '1') === '1')
+        <header class="relative z-20 flex items-center justify-between px-8 py-5 rounded-3xl glass-panel-light shadow-burgundy-soft">
+            <div class="flex items-center gap-4">
+                <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#881337] to-[#4c0519] flex items-center justify-center text-white font-black text-2xl shadow-lg shadow-rose-950/20">
+                    घ
                 </div>
-                <p class="text-xs text-slate-500 font-semibold mt-0.5">
-                    100% Traditional Homemade Pickles, Organics & Live Crunchy Pani Puri
-                </p>
+                <div>
+                    <div class="flex items-center gap-3">
+                        <h1 class="text-2xl font-black tracking-tight text-[#4c0519]">
+                            {{ \App\Models\Setting::get('stall_name', 'घासा • Ghasa Products') }}
+                        </h1>
+                        <span class="px-3 py-1 rounded-full bg-[#881337]/10 text-[#881337] font-extrabold text-xs tracking-wider uppercase">
+                            {{ \App\Models\Setting::get('display_badge_text', 'Authentic Nepali Achar & Pani Puri Stall') }}
+                        </span>
+                    </div>
+                    <p class="text-xs text-slate-500 font-semibold mt-0.5">
+                        100% Traditional Homemade Pickles, Organics & Live Crunchy Pani Puri
+                    </p>
+                </div>
             </div>
-        </div>
 
-        <!-- Connection Badge & Real-Time Clock -->
-        <div class="flex items-center gap-4">
-            <div class="flex items-center gap-2.5 px-5 py-2.5 rounded-2xl bg-white border border-rose-100 shadow-sm text-xs font-bold text-slate-700">
-                <span class="relative flex h-3 w-3">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" :class="connected ? 'bg-emerald-400' : 'bg-rose-400'"></span>
-                    <span class="relative inline-flex rounded-full h-3 w-3" :class="connected ? 'bg-emerald-500' : 'bg-rose-500'"></span>
-                </span>
-                <span x-text="connected ? 'Counter Connected' : 'Connecting...'"></span>
+            <!-- Connection Badge & Real-Time Clock -->
+            <div class="flex items-center gap-4">
+                <div class="flex items-center gap-2.5 px-5 py-2.5 rounded-2xl bg-white border border-rose-100 shadow-sm text-xs font-bold text-slate-700">
+                    <span class="relative flex h-3 w-3">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" :class="connected ? 'bg-emerald-400' : 'bg-rose-400'"></span>
+                        <span class="relative inline-flex rounded-full h-3 w-3" :class="connected ? 'bg-emerald-500' : 'bg-rose-500'"></span>
+                    </span>
+                    <span x-text="connected ? 'Counter Connected' : 'Connecting...'"></span>
+                </div>
+
+                <div class="px-5 py-2.5 rounded-2xl bg-[#881337] text-white font-mono text-xs font-bold shadow-md shadow-rose-950/15" x-text="currentTime"></div>
             </div>
-
-            <div class="px-5 py-2.5 rounded-2xl bg-[#881337] text-white font-mono text-xs font-bold shadow-md shadow-rose-950/15" x-text="currentTime"></div>
-        </div>
-    </header>
+        </header>
+    @endif
 
     <!-- ========================================================================= -->
     <!-- MAIN INTERFACE: 1920x1080 FULL SCREEN WITH CLEAN PROPORTIONS & BREATHING SPACE -->
     <!-- ========================================================================= -->
-    <main class="relative z-10 flex-1 my-7 flex flex-col min-h-0 overflow-hidden">
+    <main class="relative z-10 flex-1 my-6 flex flex-col min-h-0 overflow-hidden">
 
         <!-- ===================================================================== -->
-        <!-- VIEW 1: STANDBY / IDLE SCREEN (SMOOTH STEP SLIDE ANIMATION - 2s INTERVAL) -->
+        <!-- VIEW 1: STANDBY SCREEN (INFINITE CIRCULAR MARQUEE SLIDER - IMAGE, PRICE & NAME ONLY) -->
         <!-- ===================================================================== -->
         <template x-if="screenState === 'idle'">
             <div class="w-full h-full flex flex-col justify-between">
                 
-                <!-- Hero Banner Card -->
-                <div class="relative rounded-[32px] p-8 glass-panel-burgundy text-white flex items-center justify-between overflow-hidden shrink-0">
-                    <div class="absolute -right-20 -bottom-20 w-80 h-80 rounded-full bg-white/5 blur-2xl pointer-events-none"></div>
+                <!-- Hero Promo Banner (Controlled via Settings Page) -->
+                @if(\App\Models\Setting::get('show_hero_banner', '1') === '1')
+                    <div class="relative rounded-[32px] p-8 glass-panel-burgundy text-white flex items-center justify-between overflow-hidden shrink-0">
+                        <div class="absolute -right-20 -bottom-20 w-80 h-80 rounded-full bg-white/5 blur-2xl pointer-events-none"></div>
 
-                    <div class="space-y-2 max-w-3xl">
-                        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/15 text-rose-100 text-xs font-bold uppercase tracking-widest backdrop-blur-md">
-                            <span>✨</span> Welcome to our Expo Stall
+                        <div class="space-y-2 max-w-3xl">
+                            <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/15 text-rose-100 text-xs font-bold uppercase tracking-widest backdrop-blur-md">
+                                <span>✨</span> Welcome to our Expo Stall
+                            </div>
+                            <h2 class="text-4xl font-black tracking-tight leading-tight">
+                                {{ \App\Models\Setting::get('display_hero_title', 'स्वादिलो घरको अचार र क्रिस्पी पानी पुरी!') }}
+                            </h2>
+                            <p class="text-sm text-rose-100/90 leading-relaxed font-normal max-w-2xl">
+                                {{ \App\Models\Setting::get('display_hero_desc', 'Taste our signature Akabare, Gundruk, Buff & Chicken Pickles, or enjoy freshly served hygienic Pani Puri with tingling jaljeera and sweet lapsi chutney.') }}
+                            </p>
                         </div>
-                        <h2 class="text-4xl font-black tracking-tight leading-tight">
-                            स्वादिलो घरको अचार र क्रिस्पी पानी पुरी!
-                        </h2>
-                        <p class="text-sm text-rose-100/90 leading-relaxed font-normal max-w-2xl">
-                            Taste our signature Akabare, Gundruk, Buff & Chicken Pickles, or enjoy freshly served hygienic Pani Puri with tingling jaljeera and sweet lapsi chutney.
-                        </p>
+
+                        <!-- Right Quick QR Scan Pill (Modular Toggle) -->
+                        @if(\App\Models\Setting::get('show_qr_pill', '1') === '1')
+                            <div class="bg-white/10 backdrop-blur-md p-5 rounded-3xl border border-white/20 flex items-center gap-4 shrink-0 shadow-lg">
+                                <div class="w-14 h-14 rounded-2xl bg-white text-[#881337] flex items-center justify-center font-black shadow-md">
+                                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
+                                    </svg>
+                                </div>
+                                <div class="text-left">
+                                    <span class="text-[11px] font-black uppercase tracking-widest text-rose-200 block">Digital Stall Pay</span>
+                                    <span class="text-base font-black text-white">{{ \App\Models\Setting::get('upi_bank_name', 'Siddhartha Bank') }} QR</span>
+                                    <span class="text-[11px] text-rose-100/80 block mt-0.5">Fonepay • eSewa • Mobile Banking</span>
+                                </div>
+                            </div>
+                        @endif
                     </div>
+                @endif
 
-                    <!-- Right Quick QR Scan Pill -->
-                    <div class="bg-white/10 backdrop-blur-md p-5 rounded-3xl border border-white/20 flex items-center gap-4 shrink-0 shadow-lg animate-float-gentle">
-                        <div class="w-14 h-14 rounded-2xl bg-white text-[#881337] flex items-center justify-center font-black shadow-md">
-                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
-                            </svg>
-                        </div>
-                        <div class="text-left">
-                            <span class="text-[11px] font-black uppercase tracking-widest text-rose-200 block">Digital Stall Pay</span>
-                            <span class="text-base font-black text-white">Siddhartha Bank QR</span>
-                            <span class="text-[11px] text-rose-100/80 block mt-0.5">Fonepay • eSewa • Mobile Banking</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Products Step-by-Step Sliding Showcase (Slides 1 item, pauses 2s, smooth ease-in-out) -->
+                <!-- Products Showcase: Smooth Step Carousel with Auto Infinite Reset (Image, Price & Name Only) -->
                 <div class="relative w-full flex-1 flex flex-col justify-center overflow-hidden py-3">
                     <div class="flex items-center justify-between mb-4 px-2">
                         <div class="flex items-center gap-2.5">
@@ -136,70 +142,73 @@
                             </span>
                         </div>
 
-                        <!-- Progress Dots Indicator -->
-                        <div class="flex items-center gap-1.5">
-                            <template x-for="(dot, dotIdx) in totalProducts" :key="dotIdx">
-                                <span 
-                                    class="h-1.5 rounded-full transition-all duration-500"
-                                    :class="(currentSlide % totalProducts) === dotIdx ? 'w-6 bg-[#881337]' : 'w-1.5 bg-rose-200'"
-                                ></span>
-                            </template>
-                        </div>
+                        <!-- Modular Carousel Progress Indicator -->
+                        @if(\App\Models\Setting::get('show_carousel_dots', '1') === '1')
+                            <div class="flex items-center gap-1.5">
+                                <template x-for="(dot, dotIdx) in totalProducts" :key="dotIdx">
+                                    <span 
+                                        class="h-1.5 rounded-full transition-all duration-300"
+                                        :class="(activeProductIndex) === dotIdx ? 'w-6 bg-[#881337]' : 'w-1.5 bg-rose-200'"
+                                    ></span>
+                                </template>
+                            </div>
+                        @endif
 
-                        <span class="text-xs font-semibold text-slate-500" x-text="'Item ' + ((currentSlide % totalProducts) + 1) + ' of ' + totalProducts"></span>
+                        <span class="text-xs font-semibold text-slate-500" x-text="'Item ' + (activeProductIndex + 1) + ' of ' + totalProducts"></span>
                     </div>
 
                     <!-- Slide Track Enclosure -->
-                    <div class="relative w-full overflow-hidden">
+                    <div class="relative w-full overflow-hidden" id="slider-viewport">
                         <div class="absolute left-0 inset-y-0 w-28 bg-gradient-to-r from-[#fcf9f9] to-transparent z-10 pointer-events-none"></div>
                         <div class="absolute right-0 inset-y-0 w-28 bg-gradient-to-l from-[#fcf9f9] to-transparent z-10 pointer-events-none"></div>
 
-                        <!-- Smooth Translating Track (328px step = 300px card + 28px gap) -->
+                        <!-- Infinite Looping Slider Track -->
                         <div 
-                            class="flex gap-7 slide-carousel-track w-max py-3"
-                            :style="'transform: translateX(-' + (currentSlide * 328) + 'px)'"
+                            class="flex gap-7 w-max py-3"
+                            id="slider-track"
+                            :style="'transform: translateX(-' + scrollX + 'px); transition: ' + (isResetting ? 'none' : 'transform 0.75s cubic-bezier(0.4, 0, 0.2, 1)')"
                         >
-                            @foreach([$allProducts, $allProducts, $allProducts] as $productsBatch)
-                                @foreach($productsBatch as $product)
+                            <!-- 4 sets of products chained to enable true seamless infinite looping -->
+                            @foreach([$allProducts, $allProducts, $allProducts, $allProducts] as $batch)
+                                @foreach($batch as $product)
                                     @php
                                         $img = $product->image ? asset('storage/' . $product->image) : asset('images/placeholder-product.svg');
                                     @endphp
-                                    <div class="w-[300px] shrink-0 rounded-[28px] p-5 glass-card-clean flex flex-col justify-between select-none">
+                                    <!-- Clean Product Card: Image, Price and Name ONLY (No tags, no clipping) -->
+                                    <div class="w-[300px] shrink-0 rounded-[28px] p-5 card-3d-clean flex flex-col justify-between select-none">
                                         <div>
-                                            <!-- Image Box -->
-                                            <div class="relative w-full aspect-square rounded-2xl overflow-hidden bg-rose-50/50 mb-4 border border-rose-100/60 flex items-center justify-center p-3">
+                                            <!-- Image Box Only (No category tags) -->
+                                            <div class="relative w-full aspect-square rounded-2xl overflow-hidden bg-rose-50/40 mb-4 border border-rose-100/60 flex items-center justify-center p-3">
                                                 <img 
                                                     src="{{ $img }}" 
                                                     alt="{{ $product->name }}" 
                                                     class="w-full h-full object-contain"
                                                     loading="lazy"
                                                 />
-                                                @if($product->category)
-                                                    <span class="absolute top-3 left-3 px-3 py-1 rounded-full bg-[#881337] text-white text-[10px] font-black uppercase tracking-wider shadow-sm">
-                                                        {{ $product->category->name }}
-                                                    </span>
-                                                @endif
                                             </div>
 
-                                            <h3 class="text-base font-black text-slate-900 line-clamp-1 leading-snug">
+                                            <!-- Product Name Only -->
+                                            <h3 class="text-base font-extrabold text-slate-900 line-clamp-2 leading-snug">
                                                 {{ $product->name }}
                                             </h3>
-                                            @if($product->description)
-                                                <p class="text-xs text-slate-500 line-clamp-2 mt-1.5 leading-relaxed font-normal">
+
+                                            @if(\App\Models\Setting::get('show_product_description', '0') === '1' && $product->description)
+                                                <p class="text-xs text-slate-500 line-clamp-1 mt-1 font-normal">
                                                     {{ $product->description }}
                                                 </p>
                                             @endif
                                         </div>
 
+                                        <!-- Price Section Only -->
                                         <div class="mt-5 pt-3.5 border-t border-rose-100 flex items-center justify-between">
                                             <div>
                                                 <span class="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">Price</span>
-                                                <span class="text-xl font-black text-[#881337]">
+                                                <span class="text-2xl font-black text-[#881337]">
                                                     रू {{ number_format($product->price, 2) }}
                                                 </span>
                                             </div>
                                             <div class="px-3.5 py-1.5 rounded-xl bg-rose-50 text-[#881337] font-black text-xs border border-rose-200/60">
-                                                Freshly Prepared
+                                                In Stock
                                             </div>
                                         </div>
                                     </div>
@@ -214,8 +223,7 @@
 
 
         <!-- ===================================================================== -->
-        <!-- VIEW 2: ACTIVE ORDER PLACEMENT (ELEGANT BURGUNDY LIVE BILLING) -->
-        <!-- Left: Itemized Order | Right: Total & Big Siddhartha Bank QR Frame -->
+        <!-- VIEW 2: ACTIVE ORDER PLACEMENT (LIVE BILLING & BIG QR FRAME) -->
         <!-- ===================================================================== -->
         <template x-if="screenState === 'active'">
             <div class="w-full h-full grid grid-cols-12 gap-8">
@@ -243,7 +251,7 @@
                     <!-- Scrollable items -->
                     <div class="flex-1 overflow-y-auto py-5 space-y-3.5 pr-2 scrollbar-none">
                         <template x-for="(item, index) in cart" :key="item.id">
-                            <div class="flex items-center justify-between p-4 rounded-2xl bg-white border border-rose-100/80 shadow-sm hover:border-[#881337]/30 transition-colors">
+                            <div class="flex items-center justify-between p-4 rounded-2xl bg-white border border-rose-100/80 shadow-sm">
                                 <div class="flex items-center gap-4">
                                     <div class="w-14 h-14 rounded-2xl bg-rose-50 border border-rose-200/60 flex items-center justify-center text-[#881337] font-black text-xl shadow-inner shrink-0" x-text="item.quantity + 'x'"></div>
                                     <div>
@@ -330,7 +338,7 @@
                                 </div>
 
                                 <!-- Big Prominent QR Art in Clean White Card -->
-                                <div class="my-auto w-full max-w-[340px] bg-white rounded-3xl p-3 shadow-xl border-4 border-[#881337] transform hover:scale-105 transition-all">
+                                <div class="my-auto w-full max-w-[340px] bg-white rounded-3xl p-3 shadow-xl border-4 border-[#881337]">
                                     @php
                                         $qrImage = \App\Models\Setting::get('payment_qr_image', 'images/siddhartha-bank-qr.png');
                                         $qrUrl = str_starts_with($qrImage, 'http') ? $qrImage : (str_starts_with($qrImage, 'images/') ? asset($qrImage) : asset('storage/' . $qrImage));
@@ -399,19 +407,21 @@
 
     </main>
 
-    <!-- Clean Bottom Footer Bar -->
-    <footer class="relative z-10 px-8 py-3 rounded-2xl glass-panel-light flex items-center justify-between text-xs text-slate-500 font-medium">
-        <div class="flex items-center gap-3">
-            <span class="font-bold text-[#881337]">{{ \App\Models\Setting::get('account_holder', 'Ghasa Products Nepal') }}</span>
-            <span>•</span>
-            <span>Customer Helpline: {{ \App\Models\Setting::get('contact_phone', '+977-9800000000') }}</span>
-        </div>
-        <div class="flex items-center gap-2 font-bold text-[#881337]">
-            <span>घासा अचार तथा पानी पुरी स्टलमा स्वागत छ!</span>
-        </div>
-    </footer>
+    <!-- Clean Bottom Footer Bar (Modular Toggle) -->
+    @if(\App\Models\Setting::get('show_display_footer', '1') === '1')
+        <footer class="relative z-10 px-8 py-3 rounded-2xl glass-panel-light flex items-center justify-between text-xs text-slate-500 font-medium">
+            <div class="flex items-center gap-3">
+                <span class="font-bold text-[#881337]">{{ \App\Models\Setting::get('account_holder', 'Ghasa Products Nepal') }}</span>
+                <span>•</span>
+                <span>Customer Helpline: {{ \App\Models\Setting::get('contact_phone', '+977-9800000000') }}</span>
+            </div>
+            <div class="flex items-center gap-2 font-bold text-[#881337]">
+                <span>घासा अचार तथा पानी पुरी स्टलमा स्वागत छ!</span>
+            </div>
+        </footer>
+    @endif
 
-    <!-- Customer Display Echo Connection & State Handler -->
+    <!-- Customer Display Echo Connection & Infinite Carousel Handler -->
     <script>
         function customerDisplay() {
             return {
@@ -427,15 +437,24 @@
                 cashReceived: 0,
                 changeDue: 0,
                 lastOrder: {},
-                currentSlide: 0,
+
+                // Infinite Step Slider logic
                 totalProducts: {{ count($allProducts) }},
-                slideTimer: null,
+                stepWidth: 328, // 300px card + 28px gap
+                currentIndex: 0,
+                scrollX: 0,
+                isResetting: false,
+                slideInterval: null,
+
+                get activeProductIndex() {
+                    return this.totalProducts > 0 ? (this.currentIndex % this.totalProducts) : 0;
+                },
 
                 init() {
                     this.updateTime();
                     setInterval(() => this.updateTime(), 1000);
                     this.setupEcho();
-                    this.startProductSlideTimer();
+                    this.startInfiniteSlideCycle();
                 },
 
                 updateTime() {
@@ -443,21 +462,28 @@
                     this.currentTime = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
                 },
 
-                startProductSlideTimer() {
-                    if (this.slideTimer) {
-                        clearInterval(this.slideTimer);
+                startInfiniteSlideCycle() {
+                    if (this.slideInterval) {
+                        clearInterval(this.slideInterval);
                     }
 
-                    // Slides one product, stays for 2 seconds, then smoothly transitions
-                    this.slideTimer = setInterval(() => {
-                        if (this.screenState === 'idle' && this.totalProducts > 0) {
-                            this.currentSlide++;
-                            // Reset position seamlessly when cycling through duplicate batches
-                            if (this.currentSlide >= this.totalProducts * 2) {
-                                this.currentSlide = 0;
-                            }
+                    // Slide 1 product, stay for 2 seconds, transition with smooth ease-in-out
+                    this.slideInterval = setInterval(() => {
+                        if (this.screenState !== 'idle' || this.totalProducts === 0) return;
+
+                        this.isResetting = false;
+                        this.currentIndex++;
+                        this.scrollX = this.currentIndex * this.stepWidth;
+
+                        // When we have scrolled through 2 full sets of products, silently jump back 1 full set (300ms after slide ends)
+                        if (this.currentIndex >= this.totalProducts * 2) {
+                            setTimeout(() => {
+                                this.isResetting = true;
+                                this.currentIndex -= this.totalProducts;
+                                this.scrollX = this.currentIndex * this.stepWidth;
+                            }, 800);
                         }
-                    }, 2000);
+                    }, 2800); // 2s pause + 0.8s transition time
                 },
 
                 setupEcho() {
