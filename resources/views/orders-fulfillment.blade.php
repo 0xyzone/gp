@@ -323,7 +323,6 @@
                     this.updateTime();
                     setInterval(() => this.updateTime(), 1000);
                     this.setupEcho();
-                    this.playChime();
                 },
 
                 updateTime() {
@@ -333,7 +332,12 @@
 
                 playChime() {
                     try {
-                        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                        const AudioCtxClass = window.AudioContext || window.webkitAudioContext;
+                        if (!AudioCtxClass) return;
+                        const ctx = new AudioCtxClass();
+                        if (ctx.state === 'suspended') {
+                            ctx.resume();
+                        }
                         const osc = ctx.createOscillator();
                         const gain = ctx.createGain();
                         osc.type = 'sine';
@@ -346,7 +350,7 @@
                         osc.start();
                         osc.stop(ctx.currentTime + 0.35);
                     } catch (e) {
-                        // Audio context restriction before user interaction
+                        // Suppress browser autoplay restrictions if user gesture hasn't occurred yet
                     }
                 },
 
