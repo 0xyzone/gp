@@ -183,9 +183,17 @@
                                 @foreach($batch as $product)
                                     @php
                                         $img = $product->image_url ?? asset('images/placeholder-product.svg');
+                                        $hasOffer = $product->offer_price && (float) $product->offer_price > 0 && (float) $product->offer_price < (float) $product->price;
+                                        $sellingPrice = $hasOffer ? (float) $product->offer_price : (float) $product->price;
                                     @endphp
                                     <!-- Clean Product Card: Image, Price and Name ONLY (No tags, no clipping) -->
-                                    <div class="w-[300px] shrink-0 rounded-[28px] p-5 card-3d-clean flex flex-col justify-between select-none">
+                                    <div class="w-[300px] shrink-0 rounded-[28px] p-5 card-3d-clean flex flex-col justify-between select-none relative">
+                                        @if($hasOffer)
+                                            <div class="absolute top-4 right-4 z-10 px-2.5 py-1 rounded-full bg-gradient-to-r from-rose-600 to-amber-600 text-white font-black text-[10px] tracking-wider uppercase shadow-md shadow-rose-900/30 border border-white/40">
+                                                Stall Offer
+                                            </div>
+                                        @endif
+
                                         <div>
                                             <!-- Image Box Only (No category tags) -->
                                             <div class="relative w-full aspect-square rounded-2xl overflow-hidden bg-rose-50/40 mb-4 border border-rose-100/60 flex items-center justify-center p-3">
@@ -215,10 +223,23 @@
                                         <!-- Price Section Only -->
                                         <div class="mt-5 pt-3.5 border-t border-rose-100 flex items-center justify-between">
                                             <div>
-                                                <span class="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">Price</span>
-                                                <span class="text-2xl font-black text-[#881337]">
-                                                    रू {{ number_format($product->price, 2) }}
-                                                </span>
+                                                @if($hasOffer)
+                                                    <div class="flex items-center gap-1.5 leading-none mb-1">
+                                                        <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Regular</span>
+                                                        <span class="text-xs font-bold line-through text-slate-400">
+                                                            रू {{ number_format($product->price, 2) }}
+                                                        </span>
+                                                    </div>
+                                                    <span class="text-[10px] uppercase font-bold text-rose-600 block tracking-wider leading-none">Offer Price</span>
+                                                    <span class="text-2xl font-black text-[#881337] leading-tight">
+                                                        रू {{ number_format($sellingPrice, 2) }}
+                                                    </span>
+                                                @else
+                                                    <span class="text-[10px] uppercase font-bold text-slate-400 block tracking-wider leading-none">Price</span>
+                                                    <span class="text-2xl font-black text-[#881337] leading-tight">
+                                                        रू {{ number_format($product->price, 2) }}
+                                                    </span>
+                                                @endif
                                             </div>
                                             <div class="px-3.5 py-1.5 rounded-xl bg-rose-50 text-[#881337] font-black text-xs border border-rose-200/60">
                                                 In Stock
