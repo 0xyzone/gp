@@ -1,11 +1,11 @@
 <x-filament-panels::page class="fi-page-pos">
-    <div class="flex flex-col xl:flex-row gap-5 -mt-3 w-full">
+    <div class="flex flex-col xl:flex-row gap-5 -mt-3 w-full" x-data="{ showUnpaidDrawer: false }">
         <!-- LEFT: Products Catalog Screen -->
         <div class="flex-1 flex flex-col gap-4 min-w-0">
             <!-- Filter & Search Bar with Frosted Glass -->
             <div class="rounded-2xl glass-panel p-3.5 flex flex-col sm:flex-row items-center gap-3 justify-between">
                 <!-- Search input -->
-                <div class="relative w-full sm:w-80">
+                <div class="relative w-full sm:w-72">
                     <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-rose-400">
                         <x-heroicon-m-magnifying-glass class="w-4 h-4" />
                     </div>
@@ -16,6 +16,23 @@
                         class="w-full rounded-xl border border-rose-200/50 dark:border-rose-900/60 bg-white/60 dark:bg-black/30 backdrop-blur-md py-2 pl-10 pr-4 text-xs font-semibold text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-rose-300/40 focus:outline-none focus:ring-2 focus:ring-rose-500/50 focus:border-transparent transition-all shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)]"
                     />
                 </div>
+
+                <!-- Unpaid Orders Quick Drawer Pill (Shows badge when unpaid orders exist) -->
+                @php
+                    $unpaidOrders = $this->unpaid_orders;
+                    $unpaidCount = $unpaidOrders->count();
+                    $unpaidTotal = $unpaidOrders->sum('grand_total');
+                @endphp
+                @if($unpaidCount > 0)
+                    <button 
+                        type="button"
+                        @click="showUnpaidDrawer = !showUnpaidDrawer"
+                        class="px-3.5 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 font-bold text-xs flex items-center gap-2 shadow-sm transition animate-pulse"
+                    >
+                        <x-heroicon-m-clock class="w-4 h-4 text-amber-400" />
+                        <span>{{ $unpaidCount }} Pay Later Tabs (रू {{ number_format($unpaidTotal, 2) }})</span>
+                    </button>
+                @endif
 
                 <!-- Category Glass Navigation Pills -->
                 <div class="flex items-center gap-2 overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0 scrollbar-none">
@@ -35,6 +52,66 @@
                             {{ $category->name }}
                         </button>
                     @endforeach
+                </div>
+            </div>
+
+            <!-- Unpaid Orders Quick Settlement Sliding Drawer -->
+            <div 
+                x-show="showUnpaidDrawer" 
+                x-cloak 
+                x-collapse 
+                class="rounded-2xl glass-panel p-4 border border-amber-500/30 bg-amber-950/20"
+            >
+                <div class="flex items-center justify-between pb-3 border-b border-amber-500/20 mb-3">
+                    <div class="flex items-center gap-2">
+                        <x-heroicon-m-clock class="w-5 h-5 text-amber-400" />
+                        <h4 class="text-sm font-black text-amber-200">Unpaid Orders Awaiting Settlement</h4>
+                    </div>
+                    <button type="button" @click="showUnpaidDrawer = false" class="text-xs text-amber-400 hover:text-white font-bold">
+                        Close ✕
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                    @forelse($this->unpaid_orders as $unpaidOrder)
+                        <div class="p-3.5 rounded-xl bg-black/40 border border-amber-500/20 flex flex-col justify-between gap-3">
+                            <div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs font-mono font-black text-white">#{{ $unpaidOrder->order_number }}</span>
+                                    <span class="text-[10px] font-bold text-amber-400 font-mono">{{ $unpaidOrder->created_at->format('h:i A') }}</span>
+                                </div>
+                                <div class="mt-2 text-xs text-rose-200/70 space-y-0.5">
+                                    @foreach($unpaidOrder->items as $item)
+                                        <div class="truncate">{{ $item->quantity }}x {{ $item->product_name }}</div>
+                                    @endforeach
+                                </div>
+                            </div>
+
+                            <div class="pt-2 border-t border-white/10 flex items-center justify-between">
+                                <span class="text-sm font-black text-white">रू {{ number_format($unpaidOrder->grand_total, 2) }}</span>
+                                <div class="flex items-center gap-1.5">
+                                    <button 
+                                        type="button"
+                                        wire:click="settleUnpaidOrder({{ $unpaidOrder->id }}, 'cash')"
+                                        class="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-[10px] font-black uppercase transition"
+                                    >
+                                        Cash
+                                    </button>
+                                    <button 
+                                        type="button"
+                                        wire:click="settleUnpaidOrder({{ $unpaidOrder->id }}, 'qr')"
+                                        class="px-2.5 py-1 rounded-lg bg-rose-600 hover:bg-rose-500 text-white text-[10px] font-black uppercase transition"
+                                    >
+                                        QR
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="col-span-full py-4 text-center text-xs text-amber-300/50">
+                            No pending unpaid orders.
+                        </div>
+                    @endforelse
                 </div>
             </div>
 
@@ -343,16 +420,30 @@
                         </div>
                     @endif
 
-                    <!-- Complete Bill Action Button -->
-                    <button 
-                        type="button"
-                        wire:click="completeOrder"
-                        @disabled(count($cart) === 0 || ($paymentMethod === 'cash' && $this->change_due < 0))
-                        class="w-full py-3 px-4 rounded-xl font-black text-xs text-white bg-gradient-to-r from-rose-700 via-rose-600 to-rose-700 hover:from-rose-600 hover:to-rose-600 border border-white/20 shadow-lg shadow-rose-950/40 backdrop-blur-md disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-all uppercase tracking-wider"
-                    >
-                        <x-heroicon-m-check class="w-4 h-4" />
-                        Complete Bill (रू {{ number_format($this->grand_total, 2) }})
-                    </button>
+                    <!-- Checkout Buttons: Pay Now vs Pay Later -->
+                    <div class="space-y-2 pt-1">
+                        <!-- Complete & Pay Now Button -->
+                        <button 
+                            type="button"
+                            wire:click="completeOrder"
+                            @disabled(count($cart) === 0 || ($paymentMethod === 'cash' && $this->change_due < 0))
+                            class="w-full py-3 px-4 rounded-xl font-black text-xs text-white bg-gradient-to-r from-rose-700 via-rose-600 to-rose-700 hover:from-rose-600 hover:to-rose-600 border border-white/20 shadow-lg shadow-rose-950/40 backdrop-blur-md disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-all uppercase tracking-wider"
+                        >
+                            <x-heroicon-m-check class="w-4 h-4" />
+                            <span>Complete & Pay Now (रू {{ number_format($this->grand_total, 2) }})</span>
+                        </button>
+
+                        <!-- Place Order (Pay Later / Dine First) Button -->
+                        <button 
+                            type="button"
+                            wire:click="placeOrderPayLater"
+                            @disabled(count($cart) === 0)
+                            class="w-full py-2.5 px-3 rounded-xl font-black text-xs text-amber-200 hover:text-white bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/40 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-all uppercase tracking-wider"
+                        >
+                            <x-heroicon-m-clock class="w-4 h-4 text-amber-400" />
+                            <span>Place Order • Pay Later</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

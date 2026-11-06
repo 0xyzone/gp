@@ -39,6 +39,34 @@ class OrderFulfillmentController extends Controller
     }
 
     /**
+     * Mark an order as paid / settle payment (staff only).
+     */
+    public function markPaid(Request $request, Order $order): JsonResponse
+    {
+        $validated = $request->validate([
+            'payment_method' => 'required|in:cash,qr',
+            'cash_received' => 'nullable|numeric|min:0',
+        ]);
+
+        $method = $validated['payment_method'];
+        $received = isset($validated['cash_received']) ? (float) $validated['cash_received'] : (float) $order->grand_total;
+        $change = max(0, $received - (float) $order->grand_total);
+
+        $order->markAsPaid($method, $received, $change);
+
+        return response()->json([
+            'success' => true,
+            'message' => "Order #{$order->order_number} marked as paid ({$method}).",
+            'order' => [
+                'id' => $order->id,
+                'order_number' => $order->order_number,
+                'payment_status' => 'paid',
+                'payment_method' => $method,
+            ],
+        ]);
+    }
+
+    /**
      * Mark an order as served (staff only).
      */
     public function markServed(Order $order): JsonResponse

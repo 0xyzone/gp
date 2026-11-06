@@ -75,7 +75,7 @@
     <div>
         <div><strong>Receipt:</strong> #{{ $order->order_number }}</div>
         <div><strong>Date:</strong> {{ $order->created_at->format('Y-m-d h:i A') }}</div>
-        <div><strong>Payment:</strong> {{ strtoupper($order->payment_method) }} ({{ ucfirst($order->status) }})</div>
+        <div><strong>Payment:</strong> {{ strtoupper($order->payment_method) }} ({{ strtoupper($order->payment_status ?? 'PAID') }} - {{ ucfirst($order->status) }})</div>
     </div>
 
     <div class="divider"></div>

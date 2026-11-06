@@ -19,7 +19,7 @@ class OrderInfolist
                     ->icon('heroicon-o-receipt-percent')
                     ->description('Order identity, status, and payment breakdown')
                     ->schema([
-                        Grid::make(3)
+                        Grid::make(4)
                             ->schema([
                                 TextEntry::make('order_number')
                                     ->label('ORDER NUMBER')
@@ -30,10 +30,21 @@ class OrderInfolist
                                     ->label('STATUS')
                                     ->badge()
                                     ->color(fn (string $state): string => match ($state) {
-                                        'completed' => 'success',
+                                        'completed' => 'primary',
+                                        'served' => 'success',
                                         'cancelled' => 'danger',
                                         default => 'warning',
                                     }),
+
+                                TextEntry::make('payment_status')
+                                    ->label('PAYMENT STATUS')
+                                    ->badge()
+                                    ->color(fn (?string $state): string => match ($state) {
+                                        'paid' => 'success',
+                                        'unpaid' => 'danger',
+                                        default => 'warning',
+                                    })
+                                    ->formatStateUsing(fn (?string $state) => strtoupper($state ?? 'unpaid')),
 
                                 TextEntry::make('payment_method')
                                     ->label('PAYMENT METHOD')

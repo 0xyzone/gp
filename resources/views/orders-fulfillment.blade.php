@@ -136,11 +136,25 @@
                                 <span class="text-[11px] font-black uppercase tracking-wider text-rose-300/60 block">Ticket No.</span>
                                 <h3 class="text-2xl font-black text-white tracking-tight" x-text="'#' + order.order_number"></h3>
                             </div>
-                            <div class="text-right">
-                                <span class="px-2.5 py-1 rounded-full text-[10px] font-black tracking-wider uppercase bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                            <div class="text-right flex flex-col items-end gap-1">
+                                <!-- Fulfillment Status Badge -->
+                                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black tracking-wider uppercase bg-amber-500/20 text-amber-300 border border-amber-500/30">
                                     Preparing
                                 </span>
-                                <p class="text-[11px] text-rose-200/50 mt-1 font-mono" x-text="order.created_at_human || order.created_at"></p>
+
+                                <!-- Payment Status Badge (Paid vs Unpaid Alert) -->
+                                <template x-if="order.payment_status === 'paid'">
+                                    <span class="px-2 py-0.5 rounded-md text-[9px] font-black tracking-wider uppercase bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                                        ✓ Paid (Ready for handoff)
+                                    </span>
+                                </template>
+                                <template x-if="order.payment_status !== 'paid'">
+                                    <span class="px-2 py-0.5 rounded-md text-[9px] font-black tracking-wider uppercase bg-rose-500/25 text-rose-200 border border-rose-500/40 animate-pulse">
+                                        ⚠ Unpaid • Collect रू <span x-text="Number(order.grand_total).toFixed(2)"></span>
+                                    </span>
+                                </template>
+
+                                <p class="text-[11px] text-rose-200/50 font-mono" x-text="order.created_at_human || order.created_at"></p>
                             </div>
                         </div>
 
@@ -166,33 +180,55 @@
                         </div>
 
                         <!-- Staff Action Buttons -->
-                        <div class="grid grid-cols-2 gap-3 pt-1">
+                        <div class="space-y-2 pt-1">
                             @if($isStaff)
-                                <!-- Cancel & Restock Button -->
-                                <button 
-                                    @click="cancelOrder(order)"
-                                    :disabled="order._loading"
-                                    class="w-full py-2.5 px-3 rounded-xl bg-red-950/40 hover:bg-red-900/60 border border-red-500/40 text-red-200 hover:text-white font-bold text-xs tracking-wider transition flex items-center justify-center gap-1.5 disabled:opacity-50"
-                                >
-                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                    <span>Cancel & Restock</span>
-                                </button>
+                                <!-- Quick Collect Payment button if order is unpaid -->
+                                <template x-if="order.payment_status !== 'paid'">
+                                    <div class="flex items-center gap-2 pb-1">
+                                        <button 
+                                            @click="settlePayment(order, 'cash')"
+                                            :disabled="order._loading"
+                                            class="flex-1 py-1.5 px-2 rounded-lg bg-emerald-600/30 hover:bg-emerald-600/50 border border-emerald-500/40 text-emerald-200 text-[11px] font-bold flex items-center justify-center gap-1 transition"
+                                        >
+                                            💵 Settle Cash
+                                        </button>
+                                        <button 
+                                            @click="settlePayment(order, 'qr')"
+                                            :disabled="order._loading"
+                                            class="flex-1 py-1.5 px-2 rounded-lg bg-rose-600/30 hover:bg-rose-600/50 border border-rose-500/40 text-rose-200 text-[11px] font-bold flex items-center justify-center gap-1 transition"
+                                        >
+                                            📱 Settle QR
+                                        </button>
+                                    </div>
+                                </template>
 
-                                <!-- Mark as Served Button -->
-                                <button 
-                                    @click="markServed(order)"
-                                    :disabled="order._loading"
-                                    class="w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600 border border-emerald-400/40 text-white font-black text-xs tracking-wider shadow-lg shadow-emerald-950/60 transition flex items-center justify-center gap-1.5 disabled:opacity-50"
-                                >
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                    </svg>
-                                    <span>Mark Served</span>
-                                </button>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <!-- Cancel & Restock Button -->
+                                    <button 
+                                        @click="cancelOrder(order)"
+                                        :disabled="order._loading"
+                                        class="w-full py-2.5 px-3 rounded-xl bg-red-950/40 hover:bg-red-900/60 border border-red-500/40 text-red-200 hover:text-white font-bold text-xs tracking-wider transition flex items-center justify-center gap-1.5 disabled:opacity-50"
+                                    >
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                        <span>Cancel & Restock</span>
+                                    </button>
+
+                                    <!-- Mark as Served Button -->
+                                    <button 
+                                        @click="markServed(order)"
+                                        :disabled="order._loading"
+                                        class="w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600 border border-emerald-400/40 text-white font-black text-xs tracking-wider shadow-lg shadow-emerald-950/60 transition flex items-center justify-center gap-1.5 disabled:opacity-50"
+                                    >
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                        </svg>
+                                        <span>Mark Served</span>
+                                    </button>
+                                </div>
                             @else
-                                <div class="col-span-2 text-center py-2 px-3 rounded-xl bg-black/40 border border-white/5 text-[11px] text-rose-300/50 font-medium">
+                                <div class="text-center py-2 px-3 rounded-xl bg-black/40 border border-white/5 text-[11px] text-rose-300/50 font-medium">
                                     Login with staff account to fulfill or cancel tickets
                                 </div>
                             @endif
@@ -319,6 +355,7 @@
                     const newTicket = {
                         id: orderData.order_id || Date.now(),
                         order_number: orderData.order_number,
+                        payment_status: orderData.payment_status || 'paid',
                         grand_total: orderData.grand_total,
                         items: (orderData.items || []).map(i => ({
                             id: i.id,
@@ -353,6 +390,34 @@
                         }
                     } else if (status === 'cancelled') {
                         this.activeOrders = this.activeOrders.filter(o => o.id !== orderId && o.order_number !== orderNum);
+                    }
+                },
+
+                async settlePayment(order, method) {
+                    if (order._loading) return;
+                    order._loading = true;
+
+                    try {
+                        const res = await fetch(`/orders-board/${order.id}/pay`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                                'Accept': 'application/json'
+                            },
+                            body: JSON.stringify({ payment_method: method })
+                        });
+
+                        const data = await res.json();
+                        if (data.success) {
+                            order.payment_status = 'paid';
+                        } else {
+                            alert(data.message || 'Could not record payment.');
+                        }
+                    } catch (e) {
+                        alert('Could not record payment. Please check connection.');
+                    } finally {
+                        order._loading = false;
                     }
                 },
 

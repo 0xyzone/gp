@@ -17,6 +17,7 @@ class Order extends Model
     protected $fillable = [
         'order_number',
         'status',
+        'payment_status',
         'subtotal',
         'discount',
         'grand_total',
@@ -40,6 +41,29 @@ class Order extends Model
     public function items(): HasMany
     {
         return $this->hasMany(OrderItem::class);
+    }
+
+    /**
+     * Mark order as paid when customer tenders payment (cash or qr).
+     */
+    public function markAsPaid(string $method = 'cash', ?float $cashReceived = null, ?float $changeReturned = null): bool
+    {
+        $this->update([
+            'payment_status' => 'paid',
+            'payment_method' => $method,
+            'cash_received' => $method === 'cash' ? ($cashReceived ?? $this->grand_total) : null,
+            'change_returned' => $method === 'cash' ? ($changeReturned ?? 0.00) : null,
+        ]);
+
+        OrderStatusChanged::dispatch([
+            'order_id' => $this->id,
+            'order_number' => $this->order_number,
+            'status' => $this->status,
+            'payment_status' => 'paid',
+            'payment_method' => $method,
+        ]);
+
+        return true;
     }
 
     /**

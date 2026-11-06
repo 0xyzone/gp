@@ -73,9 +73,10 @@ Route::get('/orders/{order}/receipt', function (Order $order) {
 Route::get('/orders-board', [OrderFulfillmentController::class, 'index'])->name('orders.fulfillment');
 Route::get('/orders-board/active', [OrderFulfillmentController::class, 'activeOrders'])->name('orders.fulfillment.active');
 
-// Action endpoints: Staff-only access for Serving and Cancelling orders
+// Action endpoints: Staff-only access for Serving, Paying, and Cancelling orders
 Route::middleware('auth')->group(function () {
     Route::post('/orders-board/{order}/serve', [OrderFulfillmentController::class, 'markServed'])->name('orders.fulfillment.serve');
+    Route::post('/orders-board/{order}/pay', [OrderFulfillmentController::class, 'markPaid'])->name('orders.fulfillment.pay');
     Route::post('/orders-board/{order}/cancel', [OrderFulfillmentController::class, 'cancel'])->name('orders.fulfillment.cancel');
 });
 

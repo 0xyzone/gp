@@ -274,6 +274,111 @@ class PosPage extends Page
         CartUpdated::dispatch($payload);
     }
 
+    /**
+     * Place order without upfront payment (Dine first / Pay on pickup).
+     */
+    public function placeOrderPayLater(): void
+    {
+        if (empty($this->cart)) {
+            Notification::make()
+                ->title('Cannot place empty order')
+                ->warning()
+                ->send();
+
+            return;
+        }
+
+        $grandTotal = $this->getGrandTotalProperty();
+
+        $order = Order::create([
+            'order_number' => 'ORD-'.strtoupper(Str::random(6)),
+            'status' => 'completed',
+            'payment_status' => 'unpaid',
+            'subtotal' => $this->getSubtotalProperty(),
+            'discount' => $this->discount,
+            'grand_total' => $grandTotal,
+            'payment_method' => 'unpaid',
+            'cash_received' => null,
+            'change_returned' => null,
+            'notes' => $this->notes,
+        ]);
+
+        foreach ($this->cart as $item) {
+            $order->items()->create([
+                'product_id' => $item['id'],
+                'product_name' => $item['name'],
+                'unit_price' => $item['price'],
+                'quantity' => $item['quantity'],
+                'total_price' => $item['total'],
+            ]);
+
+            // Deduct stock if tracking is enabled so items are reserved
+            $product = Product::find($item['id']);
+            if ($product) {
+                $product->decrementStock($item['quantity']);
+            }
+        }
+
+        OrderCompleted::dispatch([
+            'order_id' => $order->id,
+            'order_number' => $order->order_number,
+            'items' => array_values($this->cart),
+            'grand_total' => $grandTotal,
+            'payment_status' => 'unpaid',
+            'payment_method' => 'unpaid',
+            'cash_received' => null,
+            'change_returned' => null,
+            'created_at' => $order->created_at->format('h:i A'),
+            'status' => 'completed',
+        ]);
+
+        Notification::make()
+            ->title('Pay Later Ticket #'.$order->order_number.' Placed!')
+            ->body('Ticket sent to kitchen fulfillment board. Payment marked as Pending.')
+            ->warning()
+            ->send();
+
+        // Reset cart
+        $this->cart = [];
+        $this->discount = 0.00;
+        $this->cashReceived = null;
+        $this->notes = null;
+
+        $this->broadcastCartState();
+    }
+
+    /**
+     * Quick settle an unpaid order from POS terminal.
+     */
+    public function settleUnpaidOrder(int $orderId, string $method = 'cash', ?float $cashGiven = null): void
+    {
+        $order = Order::find($orderId);
+        if (! $order) {
+            return;
+        }
+
+        $received = $method === 'cash' ? ($cashGiven ?? $order->grand_total) : null;
+        $change = $method === 'cash' && $received ? max(0, $received - (float) $order->grand_total) : null;
+
+        $order->markAsPaid($method, $received, $change);
+
+        Notification::make()
+            ->title('Order #'.$order->order_number.' Settled!')
+            ->body('Marked as Paid via '.strtoupper($method))
+            ->success()
+            ->send();
+    }
+
+    public function getUnpaidOrdersProperty()
+    {
+        return Order::query()
+            ->where('payment_status', 'unpaid')
+            ->whereIn('status', ['completed', 'served'])
+            ->with('items')
+            ->orderBy('created_at', 'desc')
+            ->get();
+    }
+
     public function completeOrder(): void
     {
         if (empty($this->cart)) {
@@ -302,6 +407,7 @@ class PosPage extends Page
         $order = Order::create([
             'order_number' => 'ORD-'.strtoupper(Str::random(6)),
             'status' => 'completed',
+            'payment_status' => 'paid',
             'subtotal' => $this->getSubtotalProperty(),
             'discount' => $this->discount,
             'grand_total' => $grandTotal,
@@ -332,6 +438,7 @@ class PosPage extends Page
             'order_number' => $order->order_number,
             'items' => array_values($this->cart),
             'grand_total' => $grandTotal,
+            'payment_status' => 'paid',
             'payment_method' => $this->paymentMethod,
             'cash_received' => $order->cash_received,
             'change_returned' => $order->change_returned,
