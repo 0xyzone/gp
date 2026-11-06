@@ -44,7 +44,7 @@
                     @php
                         $inCart = isset($cart[$product->id]);
                         $qty = $inCart ? $cart[$product->id]['quantity'] : 0;
-                        $imgUrl = $product->image ? asset('storage/' . $product->image) : asset('images/placeholder-product.svg');
+                        $imgUrl = $product->image_url ?? asset('images/placeholder-product.svg');
                     @endphp
                     <!-- Glassmorphic Product Card -->
                     <div 

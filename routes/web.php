@@ -79,3 +79,15 @@ Route::get('/storage/{path}', function (string $path) {
         'Cache-Control' => 'public, max-age=31536000',
     ]);
 })->where('path', '.*')->name('storage.fallback');
+
+// Fallback image delivery route for cPanel / LiteSpeed shared hosting where symbolic links to storage are forbidden or disabled
+Route::get('/storage/{path}', function (string $path) {
+    $disk = Storage::disk('public');
+
+    abort_unless($disk->exists($path), 404);
+
+    return response()->file($disk->path($path), [
+        'Content-Type' => $disk->mimeType($path) ?? 'application/octet-stream',
+        'Cache-Control' => 'public, max-age=31536000',
+    ]);
+})->where('path', '.*')->name('storage.fallback');

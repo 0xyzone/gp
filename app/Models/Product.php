@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Storage;
 
 class Product extends Model
 {
@@ -35,6 +36,22 @@ class Product extends Model
         'is_active' => 'boolean',
         'sort_order' => 'integer',
     ];
+
+    /**
+     * Get the resolved public URL of the product image, or null if not set.
+     */
+    public function getImageUrlAttribute(): ?string
+    {
+        if (blank($this->image)) {
+            return null;
+        }
+
+        if (str_starts_with($this->image, 'http://') || str_starts_with($this->image, 'https://')) {
+            return $this->image;
+        }
+
+        return Storage::disk('public')->url($this->image);
+    }
 
     /**
      * Get the effective selling price (offer_price if set, positive, and strictly less than price, otherwise regular price).

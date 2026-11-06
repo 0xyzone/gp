@@ -182,7 +182,7 @@
                             @foreach([$allProducts, $allProducts, $allProducts, $allProducts] as $batch)
                                 @foreach($batch as $product)
                                     @php
-                                        $img = $product->image ? asset('storage/' . $product->image) : asset('images/placeholder-product.svg');
+                                        $img = $product->image_url ?? asset('images/placeholder-product.svg');
                                     @endphp
                                     <!-- Clean Product Card: Image, Price and Name ONLY (No tags, no clipping) -->
                                     <div class="w-[300px] shrink-0 rounded-[28px] p-5 card-3d-clean flex flex-col justify-between select-none">

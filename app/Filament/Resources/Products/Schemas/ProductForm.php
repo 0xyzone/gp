@@ -99,7 +99,9 @@ class ProductForm
                         FileUpload::make('image')
                             ->label('Product Image')
                             ->image()
+                            ->disk('public')
                             ->directory('products')
+                            ->visibility('public')
                             ->imageCropAspectRatio('1:1')
                             ->imageResizeTargetWidth('600')
                             ->imageResizeTargetHeight('600'),

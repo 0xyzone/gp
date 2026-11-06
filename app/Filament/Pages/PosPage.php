@@ -106,7 +106,7 @@ class PosPage extends Page
                 'offer_price' => $product->offer_price ? (float) $product->offer_price : null,
                 'quantity' => 1,
                 'total' => $effectivePrice,
-                'image' => $product->image ? asset('storage/'.$product->image) : null,
+                'image' => $product->image_url,
             ];
         }
 
