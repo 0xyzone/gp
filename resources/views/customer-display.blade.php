@@ -47,9 +47,9 @@
     
     <!-- Background Elegant Burgundy Blobs -->
     <div class="absolute inset-0 pointer-events-none overflow-hidden z-0">
-        <div class="absolute -top-32 -left-32 w-[650px] h-[650px] bg-rose-200/40 rounded-full blur-[140px]"></div>
-        <div class="absolute -bottom-40 -right-20 w-[700px] h-[700px] bg-red-100/50 rounded-full blur-[150px]"></div>
-        <div class="absolute top-1/3 right-1/4 w-[450px] h-[450px] bg-amber-100/40 rounded-full blur-[120px]"></div>
+        <div class="absolute -top-32 -left-32 w-162.5 h-162.5 bg-rose-200/40 rounded-full blur-[140px]"></div>
+        <div class="absolute -bottom-40 -right-20 w-175 h-175 bg-red-100/50 rounded-full blur-[150px]"></div>
+        <div class="absolute top-1/3 right-1/4 w-112.5 h-112.5 bg-amber-100/40 rounded-full blur-[120px]"></div>
     </div>
 
     <!-- ========================================================================= -->
@@ -66,13 +66,13 @@
         class="relative z-20 flex items-center justify-between px-8 py-5 rounded-3xl glass-panel-light shadow-burgundy-soft"
     >
         <div class="flex items-center gap-4">
-            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#881337] to-[#4c0519] flex items-center justify-center text-white font-black text-2xl shadow-lg shadow-rose-950/20">
+            <div class="w-14 h-14 rounded-2xl bg-linear-to-br from-burgundy-900 to-burgundy-950 flex items-center justify-center text-white font-black text-2xl shadow-lg shadow-rose-950/20">
                 घ
             </div>
             <div>
                 <div class="flex items-center gap-3">
-                    <h1 class="text-2xl font-black tracking-tight text-[#4c0519]" x-text="settings.stall_name"></h1>
-                    <span class="px-3 py-1 rounded-full bg-[#881337]/10 text-[#881337] font-extrabold text-xs tracking-wider uppercase" x-text="settings.display_badge_text"></span>
+                    <h1 class="text-2xl font-black tracking-tight text-burgundy-950" x-text="settings.stall_name"></h1>
+                    <span class="px-3 py-1 rounded-full bg-burgundy-900/10 text-burgundy-900 font-extrabold text-xs tracking-wider uppercase" x-text="settings.display_badge_text"></span>
                 </div>
                 <p class="text-xs text-slate-500 font-semibold mt-0.5">
                     100% Traditional Homemade Pickles and sweet & sour candies.
@@ -90,7 +90,7 @@
                 <span x-text="connected ? 'Counter Connected' : 'Connecting...'"></span>
             </div>
 
-            <div class="px-5 py-2.5 rounded-2xl bg-[#881337] text-white font-mono text-xs font-bold shadow-md shadow-rose-950/15" x-text="currentTime"></div>
+            <div class="px-5 py-2.5 rounded-2xl bg-burgundy-900 text-white font-mono text-xs font-bold shadow-md shadow-rose-950/15" x-text="currentTime"></div>
         </div>
     </header>
 
@@ -114,7 +114,7 @@
                     x-transition:leave="transition ease-in duration-200"
                     x-transition:leave-start="opacity-100 translate-y-0"
                     x-transition:leave-end="opacity-0 -translate-y-4"
-                    class="relative rounded-[32px] p-8 glass-panel-burgundy text-white flex items-center justify-between overflow-hidden shrink-0"
+                    class="relative rounded-4xl p-8 glass-panel-burgundy text-white flex items-center justify-between overflow-hidden shrink-0"
                 >
                     <div class="absolute -right-20 -bottom-20 w-80 h-80 rounded-full bg-white/5 blur-2xl pointer-events-none"></div>
 
@@ -131,7 +131,7 @@
                         x-show="settings.show_qr_pill === '1'"
                         class="bg-white/10 backdrop-blur-md p-5 rounded-3xl border border-white/20 flex items-center gap-4 shrink-0 shadow-lg"
                     >
-                        <div class="w-14 h-14 rounded-2xl bg-white text-[#881337] flex items-center justify-center font-black shadow-md">
+                        <div class="w-14 h-14 rounded-2xl bg-white text-burgundy-900 flex items-center justify-center font-black shadow-md">
                             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
                             </svg>
@@ -148,8 +148,8 @@
                 <div class="relative w-full flex-1 flex flex-col justify-center overflow-hidden py-3">
                     <div class="flex items-center justify-between mb-4 px-2">
                         <div class="flex items-center gap-2.5">
-                            <span class="w-2.5 h-2.5 rounded-full bg-[#881337]"></span>
-                            <span class="text-xs font-black uppercase tracking-widest text-[#881337]">
+                            <span class="w-2.5 h-2.5 rounded-full bg-burgundy-900"></span>
+                            <span class="text-xs font-black uppercase tracking-widest text-burgundy-900">
                                 Fresh Stall Catalog • Live Menu
                             </span>
                         </div>
@@ -159,7 +159,7 @@
                             <template x-for="(dot, dotIdx) in totalProducts" :key="dotIdx">
                                 <span 
                                     class="h-1.5 rounded-full transition-all duration-300"
-                                    :class="(activeProductIndex) === dotIdx ? 'w-6 bg-[#881337]' : 'w-1.5 bg-rose-200'"
+                                    :class="(activeProductIndex) === dotIdx ? 'w-6 bg-burgundy-900' : 'w-1.5 bg-rose-200'"
                                 ></span>
                             </template>
                         </div>
@@ -169,8 +169,8 @@
 
                     <!-- Slide Track Enclosure -->
                     <div class="relative w-full overflow-hidden" id="slider-viewport">
-                        <div class="absolute left-0 inset-y-0 w-28 bg-gradient-to-r from-[#fcf9f9] to-transparent z-10 pointer-events-none"></div>
-                        <div class="absolute right-0 inset-y-0 w-28 bg-gradient-to-l from-[#fcf9f9] to-transparent z-10 pointer-events-none"></div>
+                        <div class="absolute left-0 inset-y-0 w-28 bg-linear-to-r from-[#fcf9f9] to-transparent z-10 pointer-events-none"></div>
+                        <div class="absolute right-0 inset-y-0 w-28 bg-linear-to-l from-[#fcf9f9] to-transparent z-10 pointer-events-none"></div>
 
                         <!-- Infinite Looping Slider Track -->
                         <div 
@@ -189,13 +189,13 @@
                                         $isLowStock = $product->track_stock && $product->stock_quantity > 0 && $product->stock_quantity <= $product->low_stock_threshold;
                                     @endphp
                                     <!-- Clean Product Card: Image, Price and Name ONLY (No tags, no clipping) -->
-                                    <div class="w-[300px] shrink-0 rounded-[28px] p-5 card-3d-clean flex flex-col justify-between select-none relative {{ $isOutOfStock ? 'opacity-70 filter grayscale-[25%]' : '' }}">
+                                    <div class="w-75 shrink-0 rounded-[28px] p-5 card-3d-clean flex flex-col justify-between select-none relative {{ $isOutOfStock ? 'opacity-70 filter grayscale-25' : '' }}">
                                         @if($isOutOfStock)
                                             <div class="absolute top-4 right-4 z-10 px-2.5 py-1 rounded-full bg-slate-800 text-white font-black text-[10px] tracking-wider uppercase shadow-md border border-white/20">
                                                 Sold Out
                                             </div>
                                         @elseif($hasOffer)
-                                            <div class="absolute top-4 right-4 z-10 px-2.5 py-1 rounded-full bg-gradient-to-r from-rose-600 to-amber-600 text-white font-black text-[10px] tracking-wider uppercase shadow-md shadow-rose-900/30 border border-white/40">
+                                            <div class="absolute top-4 right-4 z-10 px-2.5 py-1 rounded-full bg-linear-to-r from-rose-600 to-amber-600 text-white font-black text-[10px] tracking-wider uppercase shadow-md shadow-rose-900/30 border border-white/40">
                                                 Stall Offer
                                             </div>
                                         @endif
@@ -237,12 +237,12 @@
                                                         </span>
                                                     </div>
                                                     <span class="text-[10px] uppercase font-bold text-rose-600 block tracking-wider leading-none">Offer Price</span>
-                                                    <span class="text-2xl font-black text-[#881337] leading-tight">
+                                                    <span class="text-2xl font-black text-burgundy-900 leading-tight">
                                                         रू {{ number_format($sellingPrice, 2) }}
                                                     </span>
                                                 @else
                                                     <span class="text-[10px] uppercase font-bold text-slate-400 block tracking-wider leading-none">Price</span>
-                                                    <span class="text-2xl font-black text-[#881337] leading-tight">
+                                                    <span class="text-2xl font-black text-burgundy-900 leading-tight">
                                                         रू {{ number_format($product->price, 2) }}
                                                     </span>
                                                 @endif
@@ -256,7 +256,7 @@
                                                     Only {{ $product->stock_quantity }} left
                                                 </div>
                                             @else
-                                                <div class="px-3.5 py-1.5 rounded-xl bg-rose-50 text-[#881337] font-black text-xs border border-rose-200/60">
+                                                <div class="px-3.5 py-1.5 rounded-xl bg-rose-50 text-burgundy-900 font-black text-xs border border-rose-200/60">
                                                     In Stock
                                                 </div>
                                             @endif
@@ -279,10 +279,10 @@
             <div class="w-full h-full grid grid-cols-12 gap-8">
                 
                 <!-- Left 7 Columns: Order Items List Card -->
-                <div class="col-span-7 flex flex-col rounded-[32px] p-8 glass-panel-light shadow-burgundy-soft overflow-hidden">
+                <div class="col-span-7 flex flex-col rounded-4xl p-8 glass-panel-light shadow-burgundy-soft overflow-hidden">
                     <div class="flex items-center justify-between pb-5 border-b border-rose-100">
                         <div class="flex items-center gap-3">
-                            <div class="w-11 h-11 rounded-2xl bg-[#881337] text-white flex items-center justify-center font-bold shadow-md shadow-rose-950/20">
+                            <div class="w-11 h-11 rounded-2xl bg-burgundy-900 text-white flex items-center justify-center font-bold shadow-md shadow-rose-950/20">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                                 </svg>
@@ -293,7 +293,7 @@
                             </div>
                         </div>
 
-                        <div class="px-4 py-1.5 rounded-full bg-rose-100 text-[#881337] font-black text-xs">
+                        <div class="px-4 py-1.5 rounded-full bg-rose-100 text-burgundy-900 font-black text-xs">
                             <span x-text="itemCount + ' items'"></span>
                         </div>
                     </div>
@@ -303,14 +303,14 @@
                         <template x-for="(item, index) in cart" :key="item.id">
                             <div class="flex items-center justify-between p-4 rounded-2xl bg-white border border-rose-100/80 shadow-sm">
                                 <div class="flex items-center gap-4">
-                                    <div class="w-14 h-14 rounded-2xl bg-rose-50 border border-rose-200/60 flex items-center justify-center text-[#881337] font-black text-xl shadow-inner shrink-0" x-text="item.quantity + 'x'"></div>
+                                    <div class="w-14 h-14 rounded-2xl bg-rose-50 border border-rose-200/60 flex items-center justify-center text-burgundy-900 font-black text-xl shadow-inner shrink-0" x-text="item.quantity + 'x'"></div>
                                     <div>
                                         <h4 class="font-black text-slate-900 text-lg leading-snug" x-text="item.name"></h4>
                                         <p class="text-xs text-slate-500 mt-0.5" x-text="'रू ' + Number(item.price).toFixed(2) + ' each'"></p>
                                     </div>
                                 </div>
                                 <div class="text-right">
-                                    <span class="text-2xl font-black text-[#881337]" x-text="'रू ' + Number(item.total).toFixed(2)"></span>
+                                    <span class="text-2xl font-black text-burgundy-900" x-text="'रू ' + Number(item.total).toFixed(2)"></span>
                                 </div>
                             </div>
                         </template>
@@ -327,7 +327,7 @@
                 <div class="col-span-5 flex flex-col gap-6">
                     
                     <!-- Grand Total Card in Burgundy Gradient -->
-                    <div class="p-7 rounded-[32px] glass-panel-burgundy text-white shadow-burgundy-glow flex flex-col justify-between">
+                    <div class="p-7 rounded-4xl glass-panel-burgundy text-white shadow-burgundy-glow flex flex-col justify-between">
                         <div class="flex items-center justify-between">
                             <span class="text-xs font-black uppercase tracking-widest text-rose-200">TOTAL BILL AMOUNT</span>
                             <template x-if="discount > 0">
@@ -339,7 +339,7 @@
                     </div>
 
                     <!-- Interactive Tender or Big QR Box -->
-                    <div class="flex-1 rounded-[32px] p-7 glass-panel-light shadow-burgundy-soft border border-white flex flex-col justify-between overflow-hidden">
+                    <div class="flex-1 rounded-4xl p-7 glass-panel-light shadow-burgundy-soft border border-white flex flex-col justify-between overflow-hidden">
                         
                         <!-- CASH MODE -->
                         <template x-if="paymentMethod === 'cash'">
@@ -380,7 +380,7 @@
                         <template x-if="paymentMethod === 'qr'">
                             <div class="h-full flex flex-col items-center justify-between text-center py-1">
                                 
-                                <div class="px-5 py-2 rounded-full bg-[#881337]/10 text-[#881337] text-xs font-black uppercase tracking-widest flex items-center gap-2">
+                                <div class="px-5 py-2 rounded-full bg-burgundy-900/10 text-burgundy-900 text-xs font-black uppercase tracking-widest flex items-center gap-2">
                                     <svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
                                     </svg>
@@ -388,7 +388,7 @@
                                 </div>
 
                                 <!-- Big Prominent QR Art in Clean White Card -->
-                                <div class="my-auto w-full max-w-[340px] bg-white rounded-3xl p-3 shadow-xl border-4 border-[#881337]">
+                                <div class="my-auto w-full max-w-85 bg-white rounded-3xl p-3 shadow-xl border-4 border-burgundy-900">
                                     <img 
                                         :src="settings.payment_qr_image_url || '{{ asset('images/siddhartha-bank-qr.png') }}'" 
                                         alt="Scan QR to Pay" 
@@ -398,7 +398,7 @@
 
                                 <div class="space-y-1">
                                     <div class="text-2xl font-black text-slate-900" x-text="'Please Pay ' + (settings.currency_symbol || 'रू') + ' ' + Number(grandTotal).toFixed(2)"></div>
-                                    <p class="text-xs text-[#881337] font-extrabold uppercase tracking-wide" x-text="(settings.upi_bank_name || 'Siddhartha Bank') + ' • Any Banking App / Fonepay'"></p>
+                                    <p class="text-xs text-burgundy-900 font-extrabold uppercase tracking-wide" x-text="(settings.upi_bank_name || 'Siddhartha Bank') + ' • Any Banking App / Fonepay'"></p>
                                 </div>
 
                             </div>
@@ -429,7 +429,7 @@
                 <div class="w-full glass-panel-light rounded-3xl p-8 text-left space-y-4 mb-8 shadow-burgundy-soft border border-rose-100">
                     <div class="flex justify-between text-lg">
                         <span class="text-slate-500">Total Settled:</span>
-                        <span class="text-[#881337] font-black text-3xl" x-text="'रू ' + Number(lastOrder.grand_total || 0).toFixed(2)"></span>
+                        <span class="text-burgundy-900 font-black text-3xl" x-text="'रू ' + Number(lastOrder.grand_total || 0).toFixed(2)"></span>
                     </div>
                     <div class="flex justify-between text-base">
                         <span class="text-slate-500">Payment Option:</span>
@@ -443,7 +443,7 @@
                     </template>
                 </div>
 
-                <div class="text-xs text-[#881337] font-bold uppercase tracking-widest bg-rose-50 px-6 py-3 rounded-full border border-rose-200">
+                <div class="text-xs text-burgundy-900 font-bold uppercase tracking-widest bg-rose-50 px-6 py-3 rounded-full border border-rose-200">
                     Returning to stall menu in a few moments...
                 </div>
             </div>
@@ -463,11 +463,11 @@
         class="relative z-10 px-8 py-3 rounded-2xl glass-panel-light flex items-center justify-between text-xs text-slate-500 font-medium"
     >
         <div class="flex items-center gap-3">
-            <span class="font-bold text-[#881337]" x-text="settings.account_holder || 'Ghasa Products Nepal'"></span>
+            <span class="font-bold text-burgundy-900" x-text="settings.account_holder || 'Ghasa Products Nepal'"></span>
             <span>•</span>
             <span x-text="'Customer Helpline: ' + (settings.contact_phone || '+977-9800000000')"></span>
         </div>
-        <div class="flex items-center gap-2 font-bold text-[#881337]">
+        <div class="flex items-center gap-2 font-bold text-burgundy-900">
             <span>घासा अचार तथा पानी पुरी स्टलमा स्वागत छ!</span>
         </div>
     </footer>
