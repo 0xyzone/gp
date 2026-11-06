@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\Setting;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class OrderFulfillmentController extends Controller
@@ -34,7 +36,7 @@ class OrderFulfillmentController extends Controller
             'activeOrders' => $activeOrders,
             'recentServedOrders' => $recentServedOrders,
             'stallName' => $stallName,
-            'isStaff' => auth()->check(),
+            'isStaff' => Auth::check(),
         ]);
     }
 
