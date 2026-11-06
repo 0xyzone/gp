@@ -56,3 +56,4 @@ mkdir -p storage/logs
 nohup "$PHP_BIN" artisan reverb:start --host=0.0.0.0 --port=8080 > storage/logs/reverb.log 2>&1 &
 
 echo "Laravel Reverb started using $PHP_BIN on port 8080."
+
