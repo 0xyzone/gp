@@ -52,8 +52,12 @@ fi
 # If not running, change to project directory and start Reverb daemon
 cd "$PROJECT_DIR" || exit 1
 
-mkdir -p storage/logs
-nohup "$PHP_BIN" artisan reverb:start --host=0.0.0.0 --port=8080 > storage/logs/reverb.log 2>&1 &
+# Read REVERB_SERVER_PORT or REVERB_PORT from .env, default to 8080
+PORT=$(grep -E '^(REVERB_SERVER_PORT|REVERB_PORT)=' .env 2>/dev/null | head -n 1 | cut -d '=' -f2 | tr -d ' "\r')
+PORT="${PORT:-8080}"
 
-echo "Laravel Reverb started using $PHP_BIN on port 8080."
+mkdir -p storage/logs
+nohup "$PHP_BIN" artisan reverb:start --host=0.0.0.0 --port="$PORT" > storage/logs/reverb.log 2>&1 &
+
+echo "Laravel Reverb started using $PHP_BIN on port $PORT."
 
