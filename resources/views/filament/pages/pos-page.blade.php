@@ -45,12 +45,16 @@
                         $inCart = isset($cart[$product->id]);
                         $qty = $inCart ? $cart[$product->id]['quantity'] : 0;
                         $imgUrl = $product->image_url ?? asset('images/placeholder-product.svg');
+                        $isOutOfStock = $product->track_stock && $product->stock_quantity <= 0;
+                        $isLowStock = $product->track_stock && $product->stock_quantity > 0 && $product->stock_quantity <= $product->low_stock_threshold;
                     @endphp
                     <!-- Glassmorphic Product Card -->
                     <div 
                         wire:key="product-card-{{ $product->id }}"
-                        wire:click="addToCart({{ $product->id }})"
-                        class="relative rounded-2xl p-3.5 select-none cursor-pointer flex flex-col justify-between glass-product-card {{ $inCart ? 'glass-product-card-active' : '' }}"
+                        @if(! $isOutOfStock)
+                            wire:click="addToCart({{ $product->id }})"
+                        @endif
+                        class="relative rounded-2xl p-3.5 select-none flex flex-col justify-between glass-product-card {{ $inCart ? 'glass-product-card-active' : '' }} {{ $isOutOfStock ? 'opacity-60 cursor-not-allowed filter grayscale-[30%]' : 'cursor-pointer' }}"
                     >
                         <div>
                             <!-- Glass Inset Image Container -->
@@ -62,9 +66,19 @@
                                     loading="lazy"
                                 />
 
-                                @if($inCart)
+                                @if($isOutOfStock)
+                                    <div class="absolute inset-0 bg-black/60 backdrop-blur-[2px] flex items-center justify-center p-2">
+                                        <span class="px-2.5 py-1 rounded-full bg-rose-600/90 text-white font-black text-[10px] uppercase tracking-wider shadow-lg">
+                                            Out of Stock
+                                        </span>
+                                    </div>
+                                @elseif($inCart)
                                     <div class="absolute top-2 right-2 bg-gradient-to-r from-rose-600 to-rose-700 text-white text-[11px] font-black px-2.5 py-1 rounded-full shadow-lg shadow-rose-900/50 border border-white/30 backdrop-blur-md">
                                         {{ $qty }} in cart
+                                    </div>
+                                @elseif($isLowStock)
+                                    <div class="absolute top-2 right-2 bg-amber-500/90 text-white text-[9px] font-black px-2 py-0.5 rounded-full shadow border border-white/20 backdrop-blur-sm">
+                                        {{ $product->stock_quantity }} left
                                     </div>
                                 @endif
                             </div>

@@ -185,10 +185,16 @@
                                         $img = $product->image_url ?? asset('images/placeholder-product.svg');
                                         $hasOffer = $product->offer_price && (float) $product->offer_price > 0 && (float) $product->offer_price < (float) $product->price;
                                         $sellingPrice = $hasOffer ? (float) $product->offer_price : (float) $product->price;
+                                        $isOutOfStock = $product->track_stock && $product->stock_quantity <= 0;
+                                        $isLowStock = $product->track_stock && $product->stock_quantity > 0 && $product->stock_quantity <= $product->low_stock_threshold;
                                     @endphp
                                     <!-- Clean Product Card: Image, Price and Name ONLY (No tags, no clipping) -->
-                                    <div class="w-[300px] shrink-0 rounded-[28px] p-5 card-3d-clean flex flex-col justify-between select-none relative">
-                                        @if($hasOffer)
+                                    <div class="w-[300px] shrink-0 rounded-[28px] p-5 card-3d-clean flex flex-col justify-between select-none relative {{ $isOutOfStock ? 'opacity-70 filter grayscale-[25%]' : '' }}">
+                                        @if($isOutOfStock)
+                                            <div class="absolute top-4 right-4 z-10 px-2.5 py-1 rounded-full bg-slate-800 text-white font-black text-[10px] tracking-wider uppercase shadow-md border border-white/20">
+                                                Sold Out
+                                            </div>
+                                        @elseif($hasOffer)
                                             <div class="absolute top-4 right-4 z-10 px-2.5 py-1 rounded-full bg-gradient-to-r from-rose-600 to-amber-600 text-white font-black text-[10px] tracking-wider uppercase shadow-md shadow-rose-900/30 border border-white/40">
                                                 Stall Offer
                                             </div>
@@ -241,9 +247,19 @@
                                                     </span>
                                                 @endif
                                             </div>
-                                            <div class="px-3.5 py-1.5 rounded-xl bg-rose-50 text-[#881337] font-black text-xs border border-rose-200/60">
-                                                In Stock
-                                            </div>
+                                            @if($isOutOfStock)
+                                                <div class="px-3.5 py-1.5 rounded-xl bg-slate-100 text-slate-500 font-black text-xs border border-slate-200">
+                                                    Sold Out
+                                                </div>
+                                            @elseif($isLowStock)
+                                                <div class="px-3 py-1.5 rounded-xl bg-amber-50 text-amber-700 font-black text-xs border border-amber-200/80">
+                                                    Only {{ $product->stock_quantity }} left
+                                                </div>
+                                            @else
+                                                <div class="px-3.5 py-1.5 rounded-xl bg-rose-50 text-[#881337] font-black text-xs border border-rose-200/60">
+                                                    In Stock
+                                                </div>
+                                            @endif
                                         </div>
                                     </div>
                                 @endforeach

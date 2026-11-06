@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Products\Schemas;
 
+use App\Models\Product;
 use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\TextEntry;
@@ -101,6 +102,53 @@ class ProductInfolist
                                     ->placeholder('No custom notes or description provided for this product.')
                                     ->columnSpanFull()
                                     ->prose(),
+                            ]),
+
+                        Section::make('Inventory & Stock Status')
+                            ->icon('heroicon-o-cube')
+                            ->description('Current physical stall inventory and tracking parameters')
+                            ->schema([
+                                Grid::make(3)
+                                    ->schema([
+                                        TextEntry::make('track_stock')
+                                            ->label('STOCK TRACKING')
+                                            ->formatStateUsing(fn ($state) => $state ? 'Active' : 'Disabled')
+                                            ->badge()
+                                            ->color(fn ($state) => $state ? 'success' : 'gray'),
+
+                                        TextEntry::make('stock_quantity')
+                                            ->label('UNITS IN STOCK')
+                                            ->formatStateUsing(function ($state, Product $record) {
+                                                if (! $record->track_stock) {
+                                                    return 'Untracked';
+                                                }
+                                                if ($state <= 0) {
+                                                    return 'Out of Stock (0)';
+                                                }
+
+                                                return "{$state} Units Available";
+                                            })
+                                            ->badge()
+                                            ->weight(FontWeight::ExtraBold)
+                                            ->color(function ($state, Product $record) {
+                                                if (! $record->track_stock) {
+                                                    return 'gray';
+                                                }
+                                                if ($state <= 0) {
+                                                    return 'danger';
+                                                }
+                                                if ($state <= $record->low_stock_threshold) {
+                                                    return 'warning';
+                                                }
+
+                                                return 'success';
+                                            }),
+
+                                        TextEntry::make('low_stock_threshold')
+                                            ->label('LOW STOCK ALERT')
+                                            ->formatStateUsing(fn ($state) => "Triggered at {$state} units")
+                                            ->placeholder('-'),
+                                    ]),
                             ]),
 
                         Section::make('Audit Information')

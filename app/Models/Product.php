@@ -21,6 +21,9 @@ class Product extends Model
         'code',
         'price',
         'offer_price',
+        'track_stock',
+        'stock_quantity',
+        'low_stock_threshold',
         'image',
         'description',
         'is_active',
@@ -33,9 +36,65 @@ class Product extends Model
     protected $casts = [
         'price' => 'decimal:2',
         'offer_price' => 'decimal:2',
+        'track_stock' => 'boolean',
+        'stock_quantity' => 'integer',
+        'low_stock_threshold' => 'integer',
         'is_active' => 'boolean',
         'sort_order' => 'integer',
     ];
+
+    /**
+     * Determine if product is in stock or available for sale.
+     */
+    public function getIsInStockAttribute(): bool
+    {
+        if (! $this->track_stock) {
+            return true;
+        }
+
+        return (int) $this->stock_quantity > 0;
+    }
+
+    /**
+     * Determine if product has reached low stock warning level.
+     */
+    public function getIsLowStockAttribute(): bool
+    {
+        if (! $this->track_stock) {
+            return false;
+        }
+
+        return (int) $this->stock_quantity > 0 && (int) $this->stock_quantity <= (int) $this->low_stock_threshold;
+    }
+
+    /**
+     * Decrement stock quantity safely if tracking is enabled.
+     */
+    public function decrementStock(int $quantity = 1): bool
+    {
+        if (! $this->track_stock) {
+            return true;
+        }
+
+        $newStock = max(0, (int) $this->stock_quantity - $quantity);
+        $this->update(['stock_quantity' => $newStock]);
+
+        return true;
+    }
+
+    /**
+     * Increment stock quantity if tracking is enabled.
+     */
+    public function incrementStock(int $quantity = 1): bool
+    {
+        if (! $this->track_stock) {
+            return true;
+        }
+
+        $this->increment('stock_quantity', $quantity);
+
+        return true;
+    }
 
     /**
      * Get the resolved public URL of the product image, or null if not set.

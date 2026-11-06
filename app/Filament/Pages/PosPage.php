@@ -91,9 +91,31 @@ class PosPage extends Page
             return;
         }
 
+        // Check stock availability
+        if ($product->track_stock && $product->stock_quantity <= 0) {
+            Notification::make()
+                ->title('Out of Stock')
+                ->body("{$product->name} is currently out of stock.")
+                ->danger()
+                ->send();
+
+            return;
+        }
+
         $effectivePrice = $product->effective_price;
 
         if (isset($this->cart[$productId])) {
+            $currentQty = $this->cart[$productId]['quantity'];
+            if ($product->track_stock && ($currentQty + 1) > $product->stock_quantity) {
+                Notification::make()
+                    ->title('Stock Limit Reached')
+                    ->body("Only {$product->stock_quantity} units available for {$product->name}.")
+                    ->warning()
+                    ->send();
+
+                return;
+            }
+
             $this->cart[$productId]['quantity']++;
             $this->cart[$productId]['total'] = round($this->cart[$productId]['quantity'] * $this->cart[$productId]['price'], 2);
         } else {
@@ -131,6 +153,17 @@ class PosPage extends Page
     public function incrementQuantity(int $productId): void
     {
         if (isset($this->cart[$productId])) {
+            $product = Product::find($productId);
+            if ($product && $product->track_stock && ($this->cart[$productId]['quantity'] + 1) > $product->stock_quantity) {
+                Notification::make()
+                    ->title('Stock Limit Reached')
+                    ->body("Only {$product->stock_quantity} units available for {$product->name}.")
+                    ->warning()
+                    ->send();
+
+                return;
+            }
+
             $this->cart[$productId]['quantity']++;
             $this->cart[$productId]['total'] = round($this->cart[$productId]['quantity'] * $this->cart[$productId]['price'], 2);
             $this->broadcastCartState();
@@ -286,6 +319,12 @@ class PosPage extends Page
                 'quantity' => $item['quantity'],
                 'total_price' => $item['total'],
             ]);
+
+            // Deduct stock if tracking is enabled
+            $product = Product::find($item['id']);
+            if ($product) {
+                $product->decrementStock($item['quantity']);
+            }
         }
 
         OrderCompleted::dispatch([

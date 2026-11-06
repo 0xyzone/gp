@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Products\Tables;
 
+use App\Models\Product;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
@@ -52,6 +53,47 @@ class ProductsTable
                     ->weight('bold')
                     ->sortable()
                     ->alignEnd(),
+                TextColumn::make('stock_quantity')
+                    ->label('Stock')
+                    ->formatStateUsing(function ($state, Product $record) {
+                        if (! $record->track_stock) {
+                            return '∞ Untracked';
+                        }
+                        if ($state <= 0) {
+                            return 'Out of Stock';
+                        }
+
+                        return "{$state} left";
+                    })
+                    ->badge()
+                    ->color(function ($state, Product $record) {
+                        if (! $record->track_stock) {
+                            return 'gray';
+                        }
+                        if ($state <= 0) {
+                            return 'danger';
+                        }
+                        if ($state <= $record->low_stock_threshold) {
+                            return 'warning';
+                        }
+
+                        return 'success';
+                    })
+                    ->icon(function ($state, Product $record) {
+                        if (! $record->track_stock) {
+                            return null;
+                        }
+                        if ($state <= 0) {
+                            return 'heroicon-m-x-circle';
+                        }
+                        if ($state <= $record->low_stock_threshold) {
+                            return 'heroicon-m-exclamation-triangle';
+                        }
+
+                        return 'heroicon-m-check-circle';
+                    })
+                    ->sortable()
+                    ->alignCenter(),
                 IconColumn::make('is_active')
                     ->label('POS Status')
                     ->boolean()

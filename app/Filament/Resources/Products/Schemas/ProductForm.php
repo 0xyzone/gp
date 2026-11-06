@@ -80,6 +80,39 @@ class ProductForm
                                     ->placeholder('e.g. Discounted stall price')
                                     ->helperText('Must be strictly less than the actual price'),
                             ]),
+                        Section::make('Inventory & Stock Management')
+                            ->description('Track physical stall inventory, available units, and low stock warnings')
+                            ->icon('heroicon-o-cube')
+                            ->compact()
+                            ->schema([
+                                Toggle::make('track_stock')
+                                    ->label('Enable Stock Tracking')
+                                    ->default(true)
+                                    ->live()
+                                    ->helperText('When enabled, stock will decrease as sales are made in POS'),
+                                Grid::make(2)
+                                    ->visible(fn ($get) => (bool) $get('track_stock'))
+                                    ->schema([
+                                        TextInput::make('stock_quantity')
+                                            ->label('Current Stock Units')
+                                            ->numeric()
+                                            ->required()
+                                            ->default(50)
+                                            ->minValue(0)
+                                            ->step(1)
+                                            ->suffix('Units')
+                                            ->helperText('Available inventory at stall'),
+                                        TextInput::make('low_stock_threshold')
+                                            ->label('Low Stock Alert Level')
+                                            ->numeric()
+                                            ->required()
+                                            ->default(10)
+                                            ->minValue(1)
+                                            ->step(1)
+                                            ->suffix('Units')
+                                            ->helperText('Triggers warning badge when stock drops to or below this level'),
+                                    ]),
+                            ]),
                         Textarea::make('description')
                             ->label('Description / Notes')
                             ->rows(3)
