@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\OrderFulfillmentController;
 use App\Models\Category;
 use App\Models\Order;
 use App\Models\Product;
@@ -68,17 +69,15 @@ Route::get('/orders/{order}/receipt', function (Order $order) {
     return view('receipts.thermal', compact('order'));
 })->name('orders.receipt');
 
-// Fallback image delivery route for cPanel / LiteSpeed shared hosting where symbolic links to storage are forbidden or disabled
-Route::get('/storage/{path}', function (string $path) {
-    $disk = Storage::disk('public');
+// Public Kitchen & Stall Order Fulfillment Screen (Real-time Reverb updates)
+Route::get('/orders-board', [OrderFulfillmentController::class, 'index'])->name('orders.fulfillment');
+Route::get('/orders-board/active', [OrderFulfillmentController::class, 'activeOrders'])->name('orders.fulfillment.active');
 
-    abort_unless($disk->exists($path), 404);
-
-    return response()->file($disk->path($path), [
-        'Content-Type' => $disk->mimeType($path) ?? 'application/octet-stream',
-        'Cache-Control' => 'public, max-age=31536000',
-    ]);
-})->where('path', '.*')->name('storage.fallback');
+// Action endpoints: Staff-only access for Serving and Cancelling orders
+Route::middleware('auth')->group(function () {
+    Route::post('/orders-board/{order}/serve', [OrderFulfillmentController::class, 'markServed'])->name('orders.fulfillment.serve');
+    Route::post('/orders-board/{order}/cancel', [OrderFulfillmentController::class, 'cancel'])->name('orders.fulfillment.cancel');
+});
 
 // Fallback image delivery route for cPanel / LiteSpeed shared hosting where symbolic links to storage are forbidden or disabled
 Route::get('/storage/{path}', function (string $path) {

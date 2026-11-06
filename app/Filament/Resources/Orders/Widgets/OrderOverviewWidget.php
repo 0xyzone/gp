@@ -12,9 +12,9 @@ class OrderOverviewWidget extends StatsOverviewWidget
     protected function getStats(): array
     {
         $totalOrders = Order::count();
-        $totalRevenue = Order::where('status', 'completed')->sum('grand_total');
+        $totalRevenue = Order::whereIn('status', ['completed', 'served'])->sum('grand_total');
         $todayOrders = Order::whereDate('created_at', today())->count();
-        $todayRevenue = Order::whereDate('created_at', today())->where('status', 'completed')->sum('grand_total');
+        $todayRevenue = Order::whereDate('created_at', today())->whereIn('status', ['completed', 'served'])->sum('grand_total');
 
         return [
             Stat::make('Total Revenue', 'रू '.number_format((float) $totalRevenue, 2))

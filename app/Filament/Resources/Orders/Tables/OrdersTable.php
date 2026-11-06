@@ -31,12 +31,17 @@ class OrdersTable
                     ->label('Status')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
-                        'completed' => 'success',
+                        'completed' => 'primary',
+                        'served' => 'success',
                         'pending' => 'warning',
                         'cancelled' => 'danger',
                         default => 'gray',
                     })
-                    ->formatStateUsing(fn ($state) => ucfirst($state))
+                    ->formatStateUsing(fn ($state) => match ($state) {
+                        'served' => 'Served to Customer',
+                        'completed' => 'Preparing / Placed',
+                        default => ucfirst($state),
+                    })
                     ->sortable(),
                 TextColumn::make('payment_method')
                     ->label('Payment')

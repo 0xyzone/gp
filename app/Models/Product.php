@@ -154,9 +154,9 @@ class Product extends Model
         $added = (int) $this->stockEntries()->where('type', 'add')->sum('quantity');
         $subtracted = (int) $this->stockEntries()->where('type', 'subtract')->sum('quantity');
 
-        // Count sold items from completed orders
+        // Count sold items from completed and served orders
         $sold = (int) $this->orderItems()
-            ->whereHas('order', fn ($q) => $q->where('status', 'completed'))
+            ->whereHas('order', fn ($q) => $q->whereIn('status', ['completed', 'served']))
             ->sum('quantity');
 
         $computedStock = max(0, $added - $subtracted - $sold);

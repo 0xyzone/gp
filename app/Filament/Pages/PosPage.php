@@ -328,12 +328,15 @@ class PosPage extends Page
         }
 
         OrderCompleted::dispatch([
+            'order_id' => $order->id,
             'order_number' => $order->order_number,
             'items' => array_values($this->cart),
             'grand_total' => $grandTotal,
             'payment_method' => $this->paymentMethod,
             'cash_received' => $order->cash_received,
             'change_returned' => $order->change_returned,
+            'created_at' => $order->created_at->format('h:i A'),
+            'status' => 'completed',
         ]);
 
         Notification::make()

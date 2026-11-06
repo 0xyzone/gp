@@ -20,27 +20,27 @@ class DashboardStatsOverview extends StatsOverviewWidget
 
         $today = Carbon::today();
 
-        // Real sales data from database
-        $todayRevenue = (float) Order::where('status', 'completed')
+        // Real sales data from database (completed and served orders)
+        $todayRevenue = (float) Order::whereIn('status', ['completed', 'served'])
             ->whereDate('created_at', $today)
             ->sum('grand_total');
 
-        $totalRevenue = (float) Order::where('status', 'completed')->sum('grand_total');
+        $totalRevenue = (float) Order::whereIn('status', ['completed', 'served'])->sum('grand_total');
 
         $todayOrdersCount = Order::whereDate('created_at', $today)->count();
         $totalOrdersCount = Order::count();
 
-        $completedOrdersCount = Order::where('status', 'completed')->count();
+        $completedOrdersCount = Order::whereIn('status', ['completed', 'served'])->count();
         $avgOrderValue = $completedOrdersCount > 0 ? ($totalRevenue / $completedOrdersCount) : 0;
 
-        $cashCount = Order::where('payment_method', 'cash')->where('status', 'completed')->count();
-        $qrCount = Order::where('payment_method', 'qr')->where('status', 'completed')->count();
+        $cashCount = Order::where('payment_method', 'cash')->whereIn('status', ['completed', 'served'])->count();
+        $qrCount = Order::where('payment_method', 'qr')->whereIn('status', ['completed', 'served'])->count();
 
         // 7-day sparkline trend data
         $weeklyTrend = [];
         for ($i = 6; $i >= 0; $i--) {
             $date = Carbon::today()->subDays($i);
-            $weeklyTrend[] = (float) Order::where('status', 'completed')
+            $weeklyTrend[] = (float) Order::whereIn('status', ['completed', 'served'])
                 ->whereDate('created_at', $date)
                 ->sum('grand_total');
         }

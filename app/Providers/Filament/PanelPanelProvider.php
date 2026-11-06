@@ -62,6 +62,11 @@ class PanelPanelProvider extends PanelProvider
                     ->icon(Heroicon::OutlinedTv)
                     ->group('Expo POS')
                     ->sort(2),
+                NavigationItem::make('Kitchen & Orders Board')
+                    ->url('/orders-board', shouldOpenInNewTab: true)
+                    ->icon(Heroicon::OutlinedClipboardDocumentCheck)
+                    ->group('Expo POS')
+                    ->sort(3),
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
