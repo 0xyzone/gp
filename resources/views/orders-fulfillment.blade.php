@@ -247,9 +247,17 @@
                                         :disabled="order._loading"
                                         class="touch-action-btn min-h-[44px] w-full py-2.5 px-2 rounded-xl bg-red-950/40 hover:bg-red-900/60 active:bg-red-900/80 border border-red-500/40 text-red-200 hover:text-white font-bold text-xs tracking-wider transition flex items-center justify-center gap-1.5 disabled:opacity-50"
                                     >
-                                        <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                        </svg>
+                                        <template x-if="order._loading">
+                                            <svg class="animate-spin w-3.5 h-3.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                            </svg>
+                                        </template>
+                                        <template x-if="!order._loading">
+                                            <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                            </svg>
+                                        </template>
                                         <span class="truncate">Cancel</span>
                                     </button>
 
@@ -259,9 +267,17 @@
                                         :disabled="order._loading"
                                         class="touch-action-btn min-h-[44px] w-full py-2.5 px-2.5 rounded-xl bg-linear-to-r from-emerald-600 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600 active:from-emerald-700 active:to-emerald-800 border border-emerald-400/50 text-white font-black text-xs sm:text-sm tracking-wider shadow-lg shadow-emerald-950/80 transition flex items-center justify-center gap-1.5 disabled:opacity-50"
                                     >
-                                        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                        </svg>
+                                        <template x-if="order._loading">
+                                            <svg class="animate-spin w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                            </svg>
+                                        </template>
+                                        <template x-if="!order._loading">
+                                            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </template>
                                         <span>Mark Served</span>
                                     </button>
                                 </div>
@@ -436,6 +452,11 @@
                     }
                 },
 
+                getCsrfToken() {
+                    const meta = document.querySelector('meta[name="csrf-token"]');
+                    return meta ? meta.getAttribute('content') : '';
+                },
+
                 async settlePayment(order, method) {
                     if (order._loading) return;
                     order._loading = true;
@@ -445,20 +466,32 @@
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                                'X-CSRF-TOKEN': this.getCsrfToken(),
                                 'Accept': 'application/json'
                             },
                             body: JSON.stringify({ payment_method: method })
                         });
 
+                        if (res.status === 419) {
+                            alert('Session expired or CSRF token mismatch. Reloading page...');
+                            window.location.reload();
+                            return;
+                        }
+
+                        if (res.status === 401) {
+                            alert('Staff authentication expired. Please log in again.');
+                            window.location.href = '/login';
+                            return;
+                        }
+
                         const data = await res.json();
-                        if (data.success) {
+                        if (res.ok && data.success) {
                             order.payment_status = 'paid';
                         } else {
-                            alert(data.message || 'Could not record payment.');
+                            alert(data.message || `Error ${res.status}: Could not record payment.`);
                         }
                     } catch (e) {
-                        alert('Could not record payment. Please check connection.');
+                        alert('Could not record payment. Network error or server unreachable.');
                     } finally {
                         order._loading = false;
                     }
@@ -473,17 +506,31 @@
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                                'X-CSRF-TOKEN': this.getCsrfToken(),
                                 'Accept': 'application/json'
                             }
                         });
 
+                        if (res.status === 419) {
+                            alert('Session expired or CSRF token mismatch. Reloading page...');
+                            window.location.reload();
+                            return;
+                        }
+
+                        if (res.status === 401) {
+                            alert('Staff authentication expired. Please log in again.');
+                            window.location.href = '/login';
+                            return;
+                        }
+
                         const data = await res.json();
-                        if (data.success) {
+                        if (res.ok && data.success) {
                             this.handleOrderStatusChanged({ order_id: order.id, order_number: order.order_number, status: 'served' });
+                        } else {
+                            alert(data.message || `Error ${res.status}: Could not mark order as served.`);
                         }
                     } catch (e) {
-                        alert('Could not update order status. Please check connection.');
+                        alert('Could not update order status. Network error or server unreachable.');
                     } finally {
                         order._loading = false;
                     }
@@ -502,17 +549,31 @@
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                                'X-CSRF-TOKEN': this.getCsrfToken(),
                                 'Accept': 'application/json'
                             }
                         });
 
+                        if (res.status === 419) {
+                            alert('Session expired or CSRF token mismatch. Reloading page...');
+                            window.location.reload();
+                            return;
+                        }
+
+                        if (res.status === 401) {
+                            alert('Staff authentication expired. Please log in again.');
+                            window.location.href = '/login';
+                            return;
+                        }
+
                         const data = await res.json();
-                        if (data.success) {
+                        if (res.ok && data.success) {
                             this.handleOrderStatusChanged({ order_id: order.id, order_number: order.order_number, status: 'cancelled' });
+                        } else {
+                            alert(data.message || `Error ${res.status}: Could not cancel order.`);
                         }
                     } catch (e) {
-                        alert('Could not cancel order. Please check connection.');
+                        alert('Could not cancel order. Network error or server unreachable.');
                     } finally {
                         order._loading = false;
                     }
