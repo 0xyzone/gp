@@ -2,13 +2,11 @@
 
 namespace App\Filament\Resources\Orders;
 
-use App\Filament\Resources\Orders\Pages\CreateOrder;
-use App\Filament\Resources\Orders\Pages\EditOrder;
 use App\Filament\Resources\Orders\Pages\ListOrders;
-use App\Filament\Resources\Orders\Pages\ViewOrder;
 use App\Filament\Resources\Orders\Schemas\OrderForm;
 use App\Filament\Resources\Orders\Schemas\OrderInfolist;
 use App\Filament\Resources\Orders\Tables\OrdersTable;
+use App\Filament\Resources\Orders\Widgets\OrderOverviewWidget;
 use App\Models\Order;
 use BackedEnum;
 use Filament\Resources\Resource;
@@ -27,8 +25,6 @@ class OrderResource extends Resource
 
     protected static ?int $navigationSort = 1;
 
-    protected static ?string $recordTitleAttribute = 'order_number';
-
     public static function form(Schema $schema): Schema
     {
         return OrderForm::configure($schema);
@@ -44,20 +40,22 @@ class OrderResource extends Resource
         return OrdersTable::configure($table);
     }
 
-    public static function getRelations(): array
+    public static function getWidgets(): array
     {
         return [
-            //
+            OrderOverviewWidget::class,
         ];
+    }
+
+    public static function getRelations(): array
+    {
+        return [];
     }
 
     public static function getPages(): array
     {
         return [
             'index' => ListOrders::route('/'),
-            'create' => CreateOrder::route('/create'),
-            'view' => ViewOrder::route('/{record}'),
-            'edit' => EditOrder::route('/{record}/edit'),
         ];
     }
 }

@@ -3,8 +3,10 @@
 namespace App\Filament\Resources\Categories\Pages;
 
 use App\Filament\Resources\Categories\CategoryResource;
+use App\Filament\Resources\Categories\Widgets\CategoryOverviewWidget;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
+use Filament\Support\Enums\Width;
 
 class ListCategories extends ListRecords
 {
@@ -13,7 +15,16 @@ class ListCategories extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make(),
+            CreateAction::make()
+                ->slideOver()
+                ->modalWidth(Width::SevenExtraLarge),
+        ];
+    }
+
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            CategoryOverviewWidget::class,
         ];
     }
 }

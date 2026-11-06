@@ -8,8 +8,6 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600,700" rel="stylesheet" />
 
-    <!-- QR Code Generator Library -->
-    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
     <!-- Alpine.js -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
     <!-- Pusher & Laravel Echo -->
@@ -56,8 +54,8 @@
                 G
             </div>
             <div>
-                <h1 class="text-lg font-bold tracking-tight text-white">Ghasa Products</h1>
-                <p class="text-xs text-amber-400 font-semibold uppercase tracking-wider">Expo Stall Counter</p>
+                <h1 class="text-lg font-bold tracking-tight text-white">{{ \App\Models\Setting::get('stall_name', 'Ghasa Products') }}</h1>
+                <p class="text-xs text-amber-400 font-semibold uppercase tracking-wider">Customer Live Counter</p>
             </div>
         </div>
 
@@ -78,93 +76,93 @@
 
         <!-- STATE 1: Empty / Idle Welcome Screen -->
         <template x-if="screenState === 'idle'">
-            <div class="w-full h-full flex flex-col items-center justify-center text-center max-w-2xl mx-auto">
-                <div class="w-24 h-24 rounded-3xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center mb-6 glow">
-                    <svg class="w-12 h-12 text-amber-400 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                    </svg>
+            <div class="w-full h-full flex flex-col items-center justify-center text-center">
+                <div class="relative mb-6">
+                    <div class="w-24 h-24 rounded-3xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 glow">
+                        <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                        </svg>
+                    </div>
                 </div>
-                <h2 class="text-4xl font-extrabold text-white tracking-tight mb-3">Welcome to Ghasa Products!</h2>
-                <p class="text-lg text-slate-400 font-medium mb-8">
-                    Your order details and live calculation will appear right here as our team prepares your items.
+
+                <h2 class="text-4xl font-extrabold text-white tracking-tight mb-2">
+                    Welcome to {{ \App\Models\Setting::get('stall_name', 'Ghasa Products') }}
+                </h2>
+                <p class="text-slate-400 text-base max-w-md">
+                    Please place your order at the counter. Your items and live bill calculations will appear right here.
                 </p>
-                <div class="flex items-center gap-3 px-5 py-2.5 rounded-2xl bg-slate-900 border border-slate-800 text-sm text-slate-300">
-                    <span class="text-amber-400">✨</span>
-                    <span>Accepting Cash & Fonepay / QR Payments</span>
+
+                <div class="mt-8 flex items-center gap-3 px-5 py-2.5 rounded-full bg-slate-900/80 border border-slate-800 text-xs font-medium text-slate-400">
+                    <span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+                    Terminal Ready for Next Customer
                 </div>
             </div>
         </template>
 
-        <!-- STATE 2: Active Order Screen -->
+        <!-- STATE 2: Active Order Live Calculation Screen -->
         <template x-if="screenState === 'active'">
-            <div class="w-full h-full flex gap-8">
-                <!-- Left: Items list -->
-                <div class="flex-1 bg-slate-900/60 rounded-3xl border border-slate-800/80 p-6 flex flex-col backdrop-blur-sm">
+            <div class="w-full h-full grid grid-cols-12 gap-8">
+                
+                <!-- Left: Order Items List (8 cols) -->
+                <div class="col-span-7 flex flex-col bg-slate-900/70 border border-slate-800/80 rounded-3xl p-6 backdrop-blur-sm overflow-hidden">
                     <div class="flex items-center justify-between pb-4 border-b border-slate-800">
-                        <h3 class="text-xl font-bold text-white flex items-center gap-2">
-                            <span>Your Order</span>
-                            <span class="text-xs px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30" x-text="itemCount + ' items'"></span>
-                        </h3>
-                        <span class="text-xs text-slate-400 font-medium uppercase tracking-wider">Live Itemized Bill</span>
+                        <div class="flex items-center gap-2">
+                            <span class="text-sm font-bold text-slate-300 uppercase tracking-wider">Your Order Items</span>
+                            <span class="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-xs font-bold" x-text="itemCount + ' items'"></span>
+                        </div>
+                        <span class="text-xs text-slate-500">Live Counter</span>
                     </div>
 
                     <!-- Items Scrollable -->
                     <div class="flex-1 overflow-y-auto py-4 space-y-3 pr-2">
-                        <template x-for="item in cart" :key="item.id">
-                            <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 flex items-center justify-between gap-4 transition-all">
-                                <div class="flex items-center gap-3.5">
-                                    <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center font-bold text-sm">
-                                        <span x-text="'x' + item.quantity"></span>
-                                    </div>
+                        <template x-for="(item, index) in cart" :key="item.id">
+                            <div class="flex items-center justify-between p-3.5 rounded-2xl bg-slate-950/60 border border-slate-800/80">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center font-bold text-amber-400 text-sm" x-text="item.quantity + 'x'"></div>
                                     <div>
-                                        <h4 class="font-bold text-base text-white" x-text="item.name"></h4>
-                                        <p class="text-xs text-slate-400" x-text="'Rs. ' + Number(item.price).toFixed(2) + ' each'"></p>
+                                        <h4 class="font-bold text-white text-base" x-text="item.name"></h4>
+                                        <p class="text-xs text-slate-400" x-text="'रू ' + Number(item.price).toFixed(2) + ' each'"></p>
                                     </div>
                                 </div>
                                 <div class="text-right">
-                                    <span class="text-lg font-bold text-amber-400" x-text="'Rs. ' + Number(item.total).toFixed(2)"></span>
+                                    <span class="text-lg font-bold text-amber-400" x-text="'रू ' + Number(item.total).toFixed(2)"></span>
                                 </div>
                             </div>
                         </template>
                     </div>
-
-                    <div class="pt-4 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
-                        <span>Thank you for shopping with us!</span>
-                        <span>Prices inclusive of all taxes</span>
-                    </div>
                 </div>
 
-                <!-- Right: Calculations & Payment details -->
-                <div class="w-96 flex flex-col gap-4">
+                <!-- Right: Bill Calculations & Payment Status (5 cols) -->
+                <div class="col-span-5 flex flex-col gap-6">
                     <!-- Grand Total Card -->
-                    <div class="bg-gradient-to-br from-amber-500/20 via-slate-900 to-slate-900 rounded-3xl border border-amber-500/40 p-6 glow flex flex-col justify-between">
+                    <div class="p-6 rounded-3xl bg-gradient-to-br from-amber-600/20 via-slate-900 to-slate-900 border border-amber-500/30 flex flex-col justify-between glow">
                         <div>
-                            <span class="text-xs font-bold uppercase tracking-wider text-amber-400 block mb-1">Total Payable</span>
-                            <div class="text-5xl font-black text-white tracking-tight" x-text="'Rs. ' + Number(grandTotal).toFixed(2)"></div>
+                            <span class="text-xs font-bold text-amber-400 uppercase tracking-wider block mb-1">Total Amount Payable</span>
+                            <div class="text-5xl font-black text-white tracking-tight" x-text="'रू ' + Number(grandTotal).toFixed(2)"></div>
                         </div>
 
-                        <div class="mt-6 pt-4 border-t border-slate-800/80 space-y-2 text-sm">
+                        <div class="mt-6 pt-4 border-t border-slate-800 space-y-2 text-sm">
                             <div class="flex justify-between text-slate-400">
                                 <span>Subtotal</span>
-                                <span class="font-semibold text-slate-200" x-text="'Rs. ' + Number(subtotal).toFixed(2)"></span>
+                                <span class="font-semibold text-slate-200" x-text="'रू ' + Number(subtotal).toFixed(2)"></span>
                             </div>
                             <template x-if="discount > 0">
                                 <div class="flex justify-between text-emerald-400">
-                                    <span>Discount Applied</span>
-                                    <span class="font-bold" x-text="'- Rs. ' + Number(discount).toFixed(2)"></span>
+                                    <span>Expo Special Discount</span>
+                                    <span class="font-bold" x-text="'- रू ' + Number(discount).toFixed(2)"></span>
                                 </div>
                             </template>
                         </div>
                     </div>
 
-                    <!-- Payment Mode Feedback Panel -->
-                    <div class="flex-1 bg-slate-900/60 rounded-3xl border border-slate-800/80 p-6 flex flex-col justify-between">
+                    <!-- Payment Mode Section -->
+                    <div class="flex-1 p-6 rounded-3xl bg-slate-900/70 border border-slate-800/80 flex flex-col justify-between">
                         <!-- CASH MODE -->
                         <template x-if="paymentMethod === 'cash'">
                             <div class="h-full flex flex-col justify-between">
                                 <div>
-                                    <div class="flex items-center gap-2 mb-4 text-emerald-400">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div class="flex items-center gap-2 text-slate-300 mb-4">
+                                        <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
                                         </svg>
                                         <span class="font-bold text-sm uppercase tracking-wider">Cash Payment</span>
@@ -173,12 +171,12 @@
                                     <div class="space-y-4">
                                         <div class="p-3.5 rounded-2xl bg-slate-950/60 border border-slate-800">
                                             <span class="text-xs text-slate-400 block mb-1">Amount Tendered</span>
-                                            <span class="text-2xl font-bold text-slate-100" x-text="cashReceived > 0 ? 'Rs. ' + Number(cashReceived).toFixed(2) : 'Awaiting cash...'"></span>
+                                            <span class="text-2xl font-bold text-slate-100" x-text="cashReceived > 0 ? 'रू ' + Number(cashReceived).toFixed(2) : 'Awaiting cash...'"></span>
                                         </div>
 
                                         <div class="p-3.5 rounded-2xl border" :class="changeDue >= 0 && cashReceived > 0 ? 'bg-emerald-950/30 border-emerald-800/60 text-emerald-400' : 'bg-slate-950/60 border-slate-800 text-slate-400'">
                                             <span class="text-xs block mb-1" :class="changeDue >= 0 && cashReceived > 0 ? 'text-emerald-400' : 'text-slate-400'">Change Return</span>
-                                            <span class="text-3xl font-black" x-text="cashReceived > 0 ? 'Rs. ' + Number(Math.max(0, changeDue)).toFixed(2) : 'Rs. 0.00'"></span>
+                                            <span class="text-3xl font-black" x-text="cashReceived > 0 ? 'रू ' + Number(Math.max(0, changeDue)).toFixed(2) : 'रू 0.00'"></span>
                                         </div>
                                     </div>
                                 </div>
@@ -191,19 +189,31 @@
 
                         <!-- QR MODE -->
                         <template x-if="paymentMethod === 'qr'">
-                            <div class="h-full flex flex-col items-center justify-center text-center">
-                                <div class="text-xs font-bold text-amber-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                            <div class="h-full flex flex-col items-center justify-between text-center py-1">
+                                <div class="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
                                     </svg>
-                                    Scan & Pay with Any App
+                                    Scan with Any Bank App / Fonepay
                                 </div>
 
-                                <!-- QR Container -->
-                                <div class="p-3 bg-white rounded-2xl shadow-xl shadow-amber-500/10 mb-3" id="qrcode-container"></div>
+                                <!-- Official Bank QR Artwork from Settings -->
+                                <div class="my-auto w-full max-w-[260px] bg-white rounded-2xl p-2 shadow-2xl border-2 border-amber-400 overflow-hidden">
+                                    @php
+                                        $qrImage = \App\Models\Setting::get('payment_qr_image', 'images/siddhartha-bank-qr.png');
+                                        $qrUrl = str_starts_with($qrImage, 'http') ? $qrImage : (str_starts_with($qrImage, 'images/') ? asset($qrImage) : asset('storage/' . $qrImage));
+                                    @endphp
+                                    <img 
+                                        src="{{ $qrUrl }}" 
+                                        alt="Scan To Pay" 
+                                        class="w-full h-auto object-contain rounded-xl"
+                                    />
+                                </div>
 
-                                <div class="text-sm font-extrabold text-white" x-text="'Pay Rs. ' + Number(grandTotal).toFixed(2)"></div>
-                                <p class="text-[11px] text-slate-400 mt-0.5">Fonepay • eSewa • Khalti • Mobile Banking</p>
+                                <div>
+                                    <div class="text-base font-extrabold text-white" x-text="'Pay रू ' + Number(grandTotal).toFixed(2)"></div>
+                                    <p class="text-[11px] text-amber-400 font-medium mt-0.5">{{ \App\Models\Setting::get('upi_bank_name', 'Siddhartha Bank') }} • Any Banking App</p>
+                                </div>
                             </div>
                         </template>
                     </div>
@@ -225,7 +235,7 @@
                 <div class="w-full bg-slate-900 border border-slate-800 rounded-3xl p-6 text-left space-y-3 mb-6">
                     <div class="flex justify-between text-sm">
                         <span class="text-slate-400">Total Paid</span>
-                        <span class="text-white font-bold" x-text="'Rs. ' + Number(lastOrder.grand_total || 0).toFixed(2)"></span>
+                        <span class="text-white font-bold" x-text="'रू ' + Number(lastOrder.grand_total || 0).toFixed(2)"></span>
                     </div>
                     <div class="flex justify-between text-sm">
                         <span class="text-slate-400">Payment Method</span>
@@ -234,7 +244,7 @@
                     <template x-if="lastOrder.payment_method === 'cash'">
                         <div class="flex justify-between text-sm pt-2 border-t border-slate-800 text-emerald-400 font-bold">
                             <span>Change Returned</span>
-                            <span x-text="'Rs. ' + Number(lastOrder.change_returned || 0).toFixed(2)"></span>
+                            <span x-text="'रू ' + Number(lastOrder.change_returned || 0).toFixed(2)"></span>
                         </div>
                     </template>
                 </div>
@@ -262,7 +272,6 @@
                 cashReceived: 0,
                 changeDue: 0,
                 lastOrder: {},
-                qrCodeInstance: null,
 
                 init() {
                     this.updateTime();
@@ -330,32 +339,9 @@
 
                     if (this.cart.length > 0) {
                         this.screenState = 'active';
-                        this.$nextTick(() => {
-                            if (this.paymentMethod === 'qr') {
-                                this.renderQrCode();
-                            }
-                        });
                     } else {
                         this.screenState = 'idle';
                     }
-                },
-
-                renderQrCode() {
-                    const container = document.getElementById('qrcode-container');
-                    if (!container) return;
-                    container.innerHTML = '';
-                    
-                    // Standard Fonepay / Merchant static string or URL
-                    const qrData = `ghasaproducts://pay?amount=${this.grandTotal}&currency=NPR`;
-                    
-                    new QRCode(container, {
-                        text: qrData,
-                        width: 160,
-                        height: 160,
-                        colorDark: "#020617",
-                        colorLight: "#ffffff",
-                        correctLevel: QRCode.CorrectLevel.M
-                    });
                 },
 
                 handleOrderCompleted(order) {
@@ -384,4 +370,3 @@
     </script>
 </body>
 </html>
-

@@ -34,6 +34,18 @@ class Product extends Model
         'sort_order' => 'integer',
     ];
 
+    protected static function booted(): void
+    {
+        static::creating(function (Product $product): void {
+            if ($product->sort_order === null || $product->sort_order === 0) {
+                $maxSort = static::where('category_id', $product->category_id)->max('sort_order')
+                    ?? static::max('sort_order')
+                    ?? 0;
+                $product->sort_order = $maxSort + 1;
+            }
+        });
+    }
+
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);

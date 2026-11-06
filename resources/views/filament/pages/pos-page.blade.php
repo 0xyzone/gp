@@ -85,7 +85,7 @@
                         <!-- Price & Action controls -->
                         <div class="mt-3 pt-2.5 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between">
                             <span class="text-sm font-bold text-amber-600 dark:text-amber-400">
-                                Rs. {{ number_format($product->price, 2) }}
+                                रू {{ number_format($product->price, 2) }}
                             </span>
 
                             @if($inCart)
@@ -159,81 +159,88 @@
                     @forelse($cart as $item)
                         <div class="py-2.5 first:pt-0 last:pb-0 flex items-center justify-between gap-3">
                             <div class="flex-1 min-w-0">
-                                <h4 class="text-xs font-semibold text-gray-900 dark:text-gray-100 truncate">
+                                <h4 class="text-sm font-semibold text-gray-900 dark:text-gray-100 truncate">
                                     {{ $item['name'] }}
                                 </h4>
-                                <span class="text-[11px] text-gray-400">
-                                    Rs. {{ number_format($item['price'], 2) }} each
-                                </span>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">
+                                    रू {{ number_format($item['price'], 2) }} each
+                                </p>
                             </div>
 
-                            <!-- Quantity Selector -->
-                            <div class="flex items-center gap-1 bg-gray-100 dark:bg-gray-800 p-0.5 rounded-md">
-                                <button 
-                                    type="button"
-                                    wire:click="decrementQuantity({{ $item['id'] }})"
-                                    class="w-5 h-5 flex items-center justify-center text-xs font-bold text-gray-600 dark:text-gray-300 hover:bg-white dark:hover:bg-gray-700 rounded"
-                                >
-                                    -
-                                </button>
-                                <span class="text-xs font-bold px-1.5 text-gray-900 dark:text-gray-100 min-w-[20px] text-center">
-                                    {{ $item['quantity'] }}
-                                </span>
-                                <button 
-                                    type="button"
-                                    wire:click="incrementQuantity({{ $item['id'] }})"
-                                    class="w-5 h-5 flex items-center justify-center text-xs font-bold text-gray-600 dark:text-gray-300 hover:bg-white dark:hover:bg-gray-700 rounded"
-                                >
-                                    +
-                                </button>
-                            </div>
+                            <div class="flex items-center gap-2">
+                                <div class="flex items-center gap-1 bg-gray-100 dark:bg-gray-800 p-0.5 rounded-lg">
+                                    <button 
+                                        type="button" 
+                                        wire:click="decrementQuantity({{ $item['id'] }})"
+                                        class="w-5 h-5 flex items-center justify-center rounded text-gray-700 dark:text-gray-300 hover:bg-white dark:hover:bg-gray-700 text-xs"
+                                    >
+                                        -
+                                    </button>
+                                    <span class="text-xs font-bold px-1 min-w-[16px] text-center">
+                                        {{ $item['quantity'] }}
+                                    </span>
+                                    <button 
+                                        type="button" 
+                                        wire:click="incrementQuantity({{ $item['id'] }})"
+                                        class="w-5 h-5 flex items-center justify-center rounded text-gray-700 dark:text-gray-300 hover:bg-white dark:hover:bg-gray-700 text-xs"
+                                    >
+                                        +
+                                    </button>
+                                </div>
 
-                            <!-- Row Total -->
-                            <div class="text-right min-w-[65px]">
-                                <span class="text-xs font-bold text-gray-950 dark:text-white">
-                                    Rs. {{ number_format($item['total'], 2) }}
+                                <span class="text-xs font-bold text-gray-900 dark:text-gray-100 min-w-[60px] text-right">
+                                    रू {{ number_format($item['total'], 2) }}
                                 </span>
+
+                                <button 
+                                    type="button"
+                                    wire:click="removeFromCart({{ $item['id'] }})"
+                                    class="text-gray-400 hover:text-rose-500 transition-colors p-1"
+                                >
+                                    <x-heroicon-m-x-mark class="w-4 h-4" />
+                                </button>
                             </div>
                         </div>
                     @empty
-                        <div class="h-full flex flex-col items-center justify-center text-gray-400 dark:text-gray-500 py-12">
-                            <x-heroicon-o-shopping-cart class="w-10 h-10 mb-2 opacity-40" />
+                        <div class="h-full flex flex-col items-center justify-center text-center text-gray-400 dark:text-gray-500 py-12">
+                            <x-heroicon-o-shopping-cart class="w-12 h-12 mb-2 stroke-[1.5] opacity-40" />
                             <p class="text-xs font-medium">Cart is currently empty</p>
-                            <p class="text-[11px] text-gray-400">Click on product cards to add</p>
+                            <span class="text-[11px] text-gray-400 dark:text-gray-600 mt-0.5">Click product cards on the left to add items</span>
                         </div>
                     @endforelse
                 </div>
 
-                <!-- Live Calculations & Tender Section -->
-                <div class="p-4 border-t border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-950/40 rounded-b-xl flex flex-col gap-3">
-                    <!-- Calculations -->
+                <!-- Totals & Payment Section -->
+                <div class="p-4 border-t border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-950/30 rounded-b-xl space-y-3">
                     <div class="space-y-1.5 text-xs">
-                        <div class="flex justify-between text-gray-500 dark:text-gray-400">
+                        <div class="flex justify-between text-gray-600 dark:text-gray-400">
                             <span>Subtotal</span>
-                            <span class="font-semibold text-gray-900 dark:text-gray-200">Rs. {{ number_format($this->subtotal, 2) }}</span>
+                            <span class="font-semibold text-gray-900 dark:text-gray-200">रू {{ number_format($this->subtotal, 2) }}</span>
                         </div>
-                        <div class="flex items-center justify-between text-gray-500 dark:text-gray-400">
+
+                        <div class="flex items-center justify-between text-gray-600 dark:text-gray-400">
                             <span>Discount</span>
-                            <div class="flex items-center gap-1 w-24">
-                                <span class="text-[10px]">Rs.</span>
+                            <div class="flex items-center gap-1 w-28">
+                                <span class="text-[10px]">रू</span>
                                 <input 
                                     type="number" 
-                                    step="1" 
+                                    step="1"
                                     min="0"
-                                    wire:model.live.debounce.250ms="discount" 
-                                    class="w-full px-2 py-0.5 text-xs text-right rounded border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
+                                    wire:model.live.debounce.300ms="discount" 
+                                    class="w-full text-right py-0.5 px-1.5 text-xs rounded border-gray-200 dark:border-gray-800 dark:bg-gray-900 dark:text-white"
                                 />
                             </div>
                         </div>
-                        <div class="flex justify-between text-sm font-extrabold text-gray-950 dark:text-white pt-1.5 border-t border-gray-200 dark:border-gray-800">
-                            <span>Grand Total</span>
-                            <span class="text-amber-600 dark:text-amber-400 text-base">Rs. {{ number_format($this->grand_total, 2) }}</span>
+
+                        <div class="flex justify-between text-base font-bold text-gray-950 dark:text-white pt-2 border-t border-gray-200 dark:border-gray-800">
+                            <span>Total Payable</span>
+                            <span class="text-amber-600 dark:text-amber-400 text-base">रू {{ number_format($this->grand_total, 2) }}</span>
                         </div>
                     </div>
 
-                    <!-- Payment Mode Switcher -->
-                    <div class="pt-1">
-                        <label class="text-[11px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1.5 block">
+                    <!-- Payment Method Toggle -->
+                    <div class="pt-2">
+                        <label class="text-[11px] font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider block mb-1.5">
                             Payment Method
                         </label>
                         <div class="grid grid-cols-2 gap-2">
@@ -256,80 +263,65 @@
                         </div>
                     </div>
 
-                    <!-- Cash Calculation Box -->
+                    <!-- Cash Calculation inputs (if Cash) -->
                     @if($paymentMethod === 'cash')
-                        <div class="bg-white dark:bg-gray-900 p-3 rounded-lg border border-gray-200 dark:border-gray-800 space-y-2">
-                            <div class="flex items-center justify-between">
-                                <label class="text-xs font-semibold text-gray-700 dark:text-gray-300">
-                                    Cash Received:
-                                </label>
-                                <div class="relative w-32">
-                                    <span class="absolute inset-y-0 left-2 flex items-center text-xs text-gray-400">Rs.</span>
+                        <div class="space-y-2 pt-1">
+                            <div class="flex items-center justify-between gap-2">
+                                <label class="text-xs font-medium text-gray-600 dark:text-gray-400">Cash Received:</label>
+                                <div class="relative w-36">
+                                    <span class="absolute inset-y-0 left-2 flex items-center text-xs text-gray-400">रू</span>
                                     <input 
                                         type="number" 
                                         step="1"
                                         wire:model.live.debounce.150ms="cashReceived"
                                         placeholder="{{ $this->grand_total }}"
-                                        class="w-full pl-8 pr-2 py-1 text-xs text-right font-bold rounded border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-white focus:ring-1 focus:ring-amber-500"
+                                        class="w-full text-right py-1 pl-6 pr-2 text-xs font-bold rounded-lg border-gray-200 dark:border-gray-800 dark:bg-gray-900 dark:text-white focus:ring-1 focus:ring-amber-500"
                                     />
                                 </div>
                             </div>
 
-                            <!-- Quick Cash Tenders -->
-                            <div class="flex items-center gap-1.5 pt-1 overflow-x-auto">
-                                <button 
-                                    type="button" 
-                                    wire:click="setExactCash"
-                                    class="px-2 py-1 text-[10px] font-bold rounded bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-200"
-                                >
-                                    Exact
-                                </button>
+                            <!-- Quick Cash presets -->
+                            <div class="flex items-center justify-end gap-1.5">
                                 @foreach([100, 500, 1000] as $preset)
                                     @if($preset >= $this->grand_total)
                                         <button 
                                             type="button" 
                                             wire:click="setQuickCash({{ $preset }})"
-                                            class="px-2 py-1 text-[10px] font-bold rounded bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-200"
+                                            class="text-[10px] font-semibold px-2 py-0.5 rounded bg-gray-200/80 dark:bg-gray-800 hover:bg-amber-500 hover:text-white transition-colors"
                                         >
-                                            {{ $preset }}
+                                            रू {{ $preset }}
                                         </button>
                                     @endif
                                 @endforeach
                             </div>
 
-                            <!-- Change to Return -->
-                            <div class="pt-2 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between">
-                                <span class="text-xs font-medium text-gray-500 dark:text-gray-400">Change Due:</span>
+                            <!-- Change calculation -->
+                            <div class="p-2 rounded-lg bg-gray-100 dark:bg-gray-800/60 flex items-center justify-between text-xs">
+                                <span class="font-medium text-gray-600 dark:text-gray-300">Change Due:</span>
                                 <span class="text-sm font-extrabold {{ $this->change_due >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-500' }}">
-                                    Rs. {{ number_format(max(0, $this->change_due), 2) }}
+                                    रू {{ number_format(max(0, $this->change_due), 2) }}
                                     @if($this->change_due < 0)
-                                        <span class="text-[10px] font-normal text-rose-500 block">Short by Rs. {{ number_format(abs($this->change_due), 2) }}</span>
+                                        <span class="text-[10px] font-normal text-rose-500 block">Short by रू {{ number_format(abs($this->change_due), 2) }}</span>
                                     @endif
                                 </span>
                             </div>
                         </div>
                     @else
-                        <!-- QR Notice -->
-                        <div class="p-3 bg-amber-50 dark:bg-amber-950/40 rounded-lg border border-amber-200 dark:border-amber-800/50 flex items-center gap-3">
-                            <div class="w-8 h-8 rounded-full bg-amber-500/20 text-amber-600 dark:text-amber-300 flex items-center justify-center shrink-0">
-                                <x-heroicon-o-qr-code class="w-5 h-5" />
-                            </div>
-                            <div class="text-[11px] text-amber-950 dark:text-amber-200">
-                                <strong>Stall QR Displayed</strong>
-                                <p class="text-[10px] opacity-80">QR Code is being shown on customer display with total Rs. {{ number_format($this->grand_total, 2) }}</p>
-                            </div>
+                        <div class="p-2.5 rounded-lg bg-amber-50 dark:bg-amber-950/40 border border-amber-200/60 dark:border-amber-900/40 text-amber-900 dark:text-amber-200 text-xs flex items-center gap-2">
+                            <x-heroicon-o-information-circle class="w-5 h-5 shrink-0 text-amber-500" />
+                            <p class="text-[10px] opacity-90">Siddhartha Bank QR code is live on the customer display with total रू {{ number_format($this->grand_total, 2) }}</p>
                         </div>
                     @endif
 
-                    <!-- Complete Order Button -->
+                    <!-- Submit / Checkout Button -->
                     <button 
                         type="button"
                         wire:click="completeOrder"
                         @disabled(count($cart) === 0 || ($paymentMethod === 'cash' && $this->change_due < 0))
-                        class="w-full py-3 px-4 rounded-xl font-bold text-sm text-white bg-amber-500 hover:bg-amber-600 transition-all shadow-md shadow-amber-500/25 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                        class="w-full py-2.5 px-4 rounded-xl font-bold text-sm text-white shadow-lg transition-all flex items-center justify-center gap-2 {{ count($cart) === 0 || ($paymentMethod === 'cash' && $this->change_due < 0) ? 'bg-gray-300 dark:bg-gray-800 cursor-not-allowed shadow-none text-gray-500' : 'bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 shadow-amber-500/25 active:scale-[0.98]' }}"
                     >
-                        <x-heroicon-m-check-badge class="w-5 h-5" />
-                        Complete Order (Rs. {{ number_format($this->grand_total, 2) }})
+                        <x-heroicon-s-check-circle class="w-5 h-5" />
+                        Complete Order (रू {{ number_format($this->grand_total, 2) }})
                     </button>
                 </div>
             </div>

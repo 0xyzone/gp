@@ -22,7 +22,7 @@ class PosPage extends Page
 
     protected static ?string $navigationLabel = 'POS Terminal';
 
-    protected static ?string $title = 'Expo POS Terminal';
+    protected static ?string $title = '';
 
     protected static ?string $slug = 'pos';
 

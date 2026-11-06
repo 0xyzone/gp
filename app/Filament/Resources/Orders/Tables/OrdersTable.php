@@ -3,10 +3,13 @@
 namespace App\Filament\Resources\Orders\Tables;
 
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
+use Filament\Support\Enums\Width;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
 class OrdersTable
@@ -16,41 +19,78 @@ class OrdersTable
         return $table
             ->columns([
                 TextColumn::make('order_number')
-                    ->searchable(),
+                    ->label('Order #')
+                    ->searchable()
+                    ->sortable()
+                    ->weight('bold')
+                    ->copyable()
+                    ->icon('heroicon-o-receipt-percent'),
                 TextColumn::make('status')
-                    ->searchable(),
-                TextColumn::make('subtotal')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('discount')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('grand_total')
-                    ->numeric()
+                    ->label('Status')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'completed' => 'success',
+                        'pending' => 'warning',
+                        'cancelled' => 'danger',
+                        default => 'gray',
+                    })
+                    ->formatStateUsing(fn ($state) => ucfirst($state))
                     ->sortable(),
                 TextColumn::make('payment_method')
-                    ->searchable(),
-                TextColumn::make('cash_received')
-                    ->numeric()
+                    ->label('Payment')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'cash' => 'success',
+                        'qr' => 'info',
+                        default => 'gray',
+                    })
+                    ->formatStateUsing(fn ($state) => strtoupper($state))
                     ->sortable(),
-                TextColumn::make('change_returned')
-                    ->numeric()
-                    ->sortable(),
+                TextColumn::make('subtotal')
+                    ->label('Subtotal')
+                    ->formatStateUsing(fn ($state) => 'रू '.number_format((float) $state, 2))
+                    ->sortable()
+                    ->alignEnd(),
+                TextColumn::make('discount')
+                    ->label('Discount')
+                    ->formatStateUsing(fn ($state) => 'रू '.number_format((float) $state, 2))
+                    ->color('danger')
+                    ->sortable()
+                    ->alignEnd(),
+                TextColumn::make('grand_total')
+                    ->label('Grand Total')
+                    ->formatStateUsing(fn ($state) => 'रू '.number_format((float) $state, 2))
+                    ->weight('bold')
+                    ->color('primary')
+                    ->sortable()
+                    ->alignEnd(),
                 TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->label('Date & Time')
+                    ->dateTime('M d, Y h:i A')
+                    ->sortable(),
             ])
+            ->defaultSort('created_at', 'desc')
             ->filters([
-                //
+                SelectFilter::make('status')
+                    ->options([
+                        'completed' => 'Completed',
+                        'pending' => 'Pending',
+                        'cancelled' => 'Cancelled',
+                    ]),
+                SelectFilter::make('payment_method')
+                    ->options([
+                        'cash' => 'Cash',
+                        'qr' => 'QR Payment',
+                    ]),
             ])
             ->recordActions([
-                ViewAction::make(),
-                EditAction::make(),
+                ViewAction::make()
+                    ->slideOver()
+                    ->modalWidth(Width::SevenExtraLarge),
+                EditAction::make()
+                    ->slideOver()
+                    ->modalWidth(Width::SevenExtraLarge),
+                DeleteAction::make(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
