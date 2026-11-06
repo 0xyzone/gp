@@ -79,9 +79,20 @@
 
                         <!-- Quantity Stepper & Price Display -->
                         <div class="mt-3.5 pt-2.5 border-t border-rose-200/40 dark:border-rose-900/40 flex items-center justify-between">
-                            <span class="text-xs font-black text-rose-700 dark:text-rose-300">
-                                रू {{ number_format($product->price, 2) }}
-                            </span>
+                            <div class="flex flex-col leading-tight">
+                                @if($product->offer_price && (float) $product->offer_price > 0 && (float) $product->offer_price < (float) $product->price)
+                                    <span class="text-[10px] line-through text-gray-400 dark:text-rose-300/50">
+                                        रू {{ number_format($product->price, 2) }}
+                                    </span>
+                                    <span class="text-xs font-black text-rose-700 dark:text-rose-300">
+                                        रू {{ number_format($product->offer_price, 2) }}
+                                    </span>
+                                @else
+                                    <span class="text-xs font-black text-rose-700 dark:text-rose-300">
+                                        रू {{ number_format($product->price, 2) }}
+                                    </span>
+                                @endif
+                            </div>
 
                             @if($inCart)
                                 <div class="flex items-center gap-1.5 bg-rose-200/40 dark:bg-black/40 border border-rose-300/40 dark:border-rose-800/40 backdrop-blur-md rounded-lg p-0.5" wire:click.stop>

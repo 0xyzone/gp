@@ -39,9 +39,17 @@ class ProductsTable
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('price')
-                    ->label('Price')
+                    ->label('Actual Price')
                     ->formatStateUsing(fn ($state) => 'रू '.number_format((float) $state, 2))
-                    ->weight('semibold')
+                    ->weight('medium')
+                    ->sortable()
+                    ->alignEnd(),
+                TextColumn::make('offer_price')
+                    ->label('Offer Price')
+                    ->formatStateUsing(fn ($state) => $state ? 'रू '.number_format((float) $state, 2) : '-')
+                    ->badge(fn ($state) => filled($state))
+                    ->color('primary')
+                    ->weight('bold')
                     ->sortable()
                     ->alignEnd(),
                 IconColumn::make('is_active')

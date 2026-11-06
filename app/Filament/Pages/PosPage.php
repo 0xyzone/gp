@@ -91,6 +91,8 @@ class PosPage extends Page
             return;
         }
 
+        $effectivePrice = $product->effective_price;
+
         if (isset($this->cart[$productId])) {
             $this->cart[$productId]['quantity']++;
             $this->cart[$productId]['total'] = round($this->cart[$productId]['quantity'] * $this->cart[$productId]['price'], 2);
@@ -99,9 +101,11 @@ class PosPage extends Page
                 'id' => $product->id,
                 'name' => $product->name,
                 'code' => $product->code,
-                'price' => (float) $product->price,
+                'price' => $effectivePrice,
+                'regular_price' => (float) $product->price,
+                'offer_price' => $product->offer_price ? (float) $product->offer_price : null,
                 'quantity' => 1,
-                'total' => (float) $product->price,
+                'total' => $effectivePrice,
                 'image' => $product->image ? asset('storage/'.$product->image) : null,
             ];
         }

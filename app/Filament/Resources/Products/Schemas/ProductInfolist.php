@@ -36,20 +36,25 @@ class ProductInfolist
                         Grid::make(2)
                             ->schema([
                                 TextEntry::make('price')
-                                    ->label('PRICE')
+                                    ->label('REGULAR PRICE')
                                     ->formatStateUsing(fn ($state) => 'रू '.number_format((float) $state, 2))
+                                    ->weight(FontWeight::Bold),
+
+                                TextEntry::make('offer_price')
+                                    ->label('STALL OFFER PRICE')
+                                    ->formatStateUsing(fn ($state) => $state ? 'रू '.number_format((float) $state, 2) : 'No Offer')
                                     ->size('lg')
                                     ->weight(FontWeight::Black)
                                     ->color('primary'),
-
-                                IconEntry::make('is_active')
-                                    ->label('POS STATUS')
-                                    ->boolean()
-                                    ->trueIcon('heroicon-o-check-badge')
-                                    ->falseIcon('heroicon-o-x-circle')
-                                    ->trueColor('success')
-                                    ->falseColor('danger'),
                             ]),
+
+                        IconEntry::make('is_active')
+                            ->label('POS AVAILABILITY STATUS')
+                            ->boolean()
+                            ->trueIcon('heroicon-o-check-badge')
+                            ->falseIcon('heroicon-o-x-circle')
+                            ->trueColor('success')
+                            ->falseColor('danger'),
                     ]),
 
                 // PRODUCT DETAILS & METADATA (Right Column)

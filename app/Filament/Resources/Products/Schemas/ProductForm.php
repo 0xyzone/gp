@@ -42,29 +42,38 @@ class ProductForm
                                     ->placeholder('e.g. GP-TEA-01')
                                     ->maxLength(50),
                             ]),
+                        Select::make('category_id')
+                            ->label('Category')
+                            ->relationship('category', 'name')
+                            ->searchable()
+                            ->preload()
+                            ->createOptionModalHeading('Add New Category')
+                            ->createOptionForm(function (Schema $categorySchema): array {
+                                return CategoryForm::configure($categorySchema)->getComponents();
+                            })
+                            ->helperText('Select an existing category or create a new one instantly'),
                         Grid::make([
                             'default' => 1,
                             'sm' => 2,
                         ])
                             ->schema([
-                                Select::make('category_id')
-                                    ->label('Category')
-                                    ->relationship('category', 'name')
-                                    ->searchable()
-                                    ->preload()
-                                    ->createOptionModalHeading('Add New Category')
-                                    ->createOptionForm(function (Schema $categorySchema): array {
-                                        return CategoryForm::configure($categorySchema)->getComponents();
-                                    })
-                                    ->helperText('Select an existing category or create a new one instantly'),
                                 TextInput::make('price')
-                                    ->label('Price (NPR)')
+                                    ->label('Actual / Regular Price')
                                     ->required()
                                     ->numeric()
                                     ->prefix('रू')
                                     ->minValue(0)
                                     ->step(0.01)
-                                    ->placeholder('0.00'),
+                                    ->placeholder('0.00')
+                                    ->helperText('Standard retail price'),
+                                TextInput::make('offer_price')
+                                    ->label('Offer / Stall Price')
+                                    ->numeric()
+                                    ->prefix('रू')
+                                    ->minValue(0)
+                                    ->step(0.01)
+                                    ->placeholder('e.g. Discounted stall price')
+                                    ->helperText('Special discounted price used on POS if provided'),
                             ]),
                         Textarea::make('description')
                             ->label('Description / Notes')
