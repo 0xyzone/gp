@@ -156,10 +156,12 @@ class OrdersTable
                     ->openUrlInNewTab(),
                 ViewAction::make()
                     ->slideOver()
-                    ->modalWidth(Width::SevenExtraLarge),
+                    ->modalWidth(Width::SevenExtraLarge)
+                    ->extraModalWindowAttributes(['class' => 'fi-fixed-positioning-context']),
                 EditAction::make()
                     ->slideOver()
-                    ->modalWidth(Width::SevenExtraLarge),
+                    ->modalWidth(Width::SevenExtraLarge)
+                    ->extraModalWindowAttributes(['class' => 'fi-fixed-positioning-context']),
                 DeleteAction::make(),
             ])
             ->toolbarActions([

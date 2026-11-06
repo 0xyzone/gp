@@ -17,7 +17,8 @@ class ListCategories extends ListRecords
         return [
             CreateAction::make()
                 ->slideOver()
-                ->modalWidth(Width::FiveExtraLarge),
+                ->modalWidth(Width::FiveExtraLarge)
+                ->extraModalWindowAttributes(['class' => 'fi-fixed-positioning-context']),
         ];
     }
 

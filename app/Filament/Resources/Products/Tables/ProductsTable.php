@@ -127,10 +127,12 @@ class ProductsTable
             ->recordActions([
                 ViewAction::make()
                     ->slideOver()
-                    ->modalWidth(Width::FiveExtraLarge),
+                    ->modalWidth(Width::FiveExtraLarge)
+                    ->extraModalWindowAttributes(['class' => 'fi-fixed-positioning-context']),
                 EditAction::make()
                     ->slideOver()
-                    ->modalWidth(Width::FiveExtraLarge),
+                    ->modalWidth(Width::FiveExtraLarge)
+                    ->extraModalWindowAttributes(['class' => 'fi-fixed-positioning-context']),
                 DeleteAction::make(),
             ])
             ->toolbarActions([

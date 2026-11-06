@@ -4,17 +4,19 @@ All Filament resources across the application must strictly follow this visual a
 
 ## 1. Slide-Over Modals (Width & Proportions)
 - **Modal Width Rule**: Never use narrow modal widths like `Width::Large` or `Width::Medium` for resource create/edit slide-overs. They compress form fields into single vertical stripes.
-- **Standard Width**: Always use `Width::FiveExtraLarge` (or `Width::SevenExtraLarge` for rich media/spec sheets):
+- **Standard Width & Dropdown Stacking**: Always use `Width::FiveExtraLarge` (or `Width::SevenExtraLarge` for rich media/spec sheets) and attach `->extraModalWindowAttributes(['class' => 'fi-fixed-positioning-context'])` to ensure Floating UI dropdown options escape stacking contexts cleanly:
   ```php
   use Filament\Support\Enums\Width;
 
   CreateAction::make()
       ->slideOver()
-      ->modalWidth(Width::FiveExtraLarge);
+      ->modalWidth(Width::FiveExtraLarge)
+      ->extraModalWindowAttributes(['class' => 'fi-fixed-positioning-context']);
 
   EditAction::make()
       ->slideOver()
-      ->modalWidth(Width::FiveExtraLarge);
+      ->modalWidth(Width::FiveExtraLarge)
+      ->extraModalWindowAttributes(['class' => 'fi-fixed-positioning-context']);
   ```
 
 ## 2. Form Schema Architecture (Grid & Sections)

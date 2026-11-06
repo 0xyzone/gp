@@ -19,7 +19,8 @@ class ListStockEntries extends ListRecords
                 ->label('New Stock Entry')
                 ->icon('heroicon-o-plus')
                 ->slideOver()
-                ->modalWidth(Width::FiveExtraLarge),
+                ->modalWidth(Width::FiveExtraLarge)
+                ->extraModalWindowAttributes(['class' => 'fi-fixed-positioning-context']),
         ];
     }
 
