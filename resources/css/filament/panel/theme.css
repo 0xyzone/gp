@@ -4,16 +4,25 @@
 @source '../../../../resources/views/filament/**/*';
 
 /* ==========================================================================
-   Full Dark Burgundy & Harmonized Light Theme for Filament Panel
+   WARM GLASSMORPHISM & FROSTED GLASS SYSTEM
    ========================================================================== */
 
-/* DARK MODE: Full Elegant Dark Burgundy & Glassmorphism */
+/* DARK MODE: Warm Deep Burgundy Velvet + Multi-Layer Amber/Rose Frosted Glass */
 .dark {
-    --bg-panel: #160207;
-    --bg-canvas: radial-gradient(circle at 10% 10%, #29040e 0%, #170207 60%, #0e0104 100%);
-    --bg-surface: rgba(43, 6, 16, 0.88);
-    --border-surface: rgba(225, 29, 72, 0.22);
-    --border-subtle: rgba(225, 29, 72, 0.12);
+    /* Rich warm dark gradient canvas with golden amber & rose undertones */
+    --bg-panel: #140207;
+    --bg-canvas: radial-gradient(circle at 18% 12%, rgba(159, 18, 57, 0.22) 0%, transparent 40%),
+                 radial-gradient(circle at 85% 80%, rgba(217, 119, 6, 0.12) 0%, transparent 45%),
+                 radial-gradient(circle at 50% 50%, #20030a 0%, #120106 70%, #0a0104 100%);
+    
+    /* Warm Glass Surface Tokens */
+    --glass-bg: rgba(38, 5, 14, 0.65);
+    --glass-bg-subtle: rgba(46, 7, 18, 0.45);
+    --glass-bg-hover: rgba(65, 10, 26, 0.7);
+    --glass-border: rgba(251, 113, 133, 0.2);
+    --glass-border-highlight: rgba(255, 255, 255, 0.16);
+    --glass-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.65), 0 0 20px -4px rgba(190, 24, 93, 0.15);
+    --glass-blur: blur(20px) saturate(180%);
 }
 
 .dark .fi-layout,
@@ -23,20 +32,26 @@
 }
 
 .dark .fi-topbar {
-    border-bottom: 1px solid var(--border-subtle) !important;
-    backdrop-filter: blur(16px);
+    background: rgba(20, 2, 7, 0.75) !important;
+    border-bottom: 1px solid var(--glass-border) !important;
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    box-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.5) !important;
 }
 
 .dark .fi-sidebar {
-    border-right: 1px solid var(--border-subtle) !important;
-    background: linear-gradient(180deg, #1f030a 0%, #120105 100%) !important;
+    background: linear-gradient(180deg, rgba(28, 4, 11, 0.85) 0%, rgba(14, 2, 6, 0.95) 100%) !important;
+    border-right: 1px solid var(--glass-border) !important;
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
 }
 
 .dark .fi-sidebar-item-active .fi-sidebar-item-btn {
-    background: linear-gradient(135deg, rgba(136, 19, 55, 0.95) 0%, rgba(76, 5, 25, 0.98) 100%) !important;
+    background: linear-gradient(135deg, rgba(159, 18, 57, 0.85) 0%, rgba(112, 11, 40, 0.9) 100%) !important;
     color: #fff !important;
-    box-shadow: 0 4px 16px -2px rgba(136, 19, 55, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
-    border: 1px solid rgba(225, 29, 72, 0.35) !important;
+    box-shadow: 0 8px 20px -4px rgba(190, 24, 93, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.35) !important;
+    border: 1px solid rgba(254, 205, 211, 0.35) !important;
+    backdrop-filter: blur(10px);
 }
 
 .dark .fi-main {
@@ -44,19 +59,21 @@
     min-height: 100vh;
 }
 
-/* Individual card styling in Dark Mode */
+/* Glassmorphism Containers in Dark Mode */
 .dark .fi-wi-stats-overview-stat,
 .dark .fi-ta-ctn,
 .dark .fi-modal-window,
-.dark .fi-dropdown-panel {
-    background: var(--bg-surface) !important;
-    border: 1px solid var(--border-surface) !important;
-    box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
-    backdrop-filter: blur(12px);
+.dark .fi-dropdown-panel,
+.dark .fi-section:not(.fi-section-not-contained) {
+    background: var(--glass-bg) !important;
+    border: 1px solid var(--glass-border) !important;
+    box-shadow: var(--glass-shadow), inset 0 1px 1px var(--glass-border-highlight) !important;
+    backdrop-filter: var(--glass-blur) !important;
+    -webkit-backdrop-filter: var(--glass-blur) !important;
     border-radius: 1.25rem !important;
 }
 
-/* Fix overlapping rectangles: do not wrap stats overview widget in an outer box */
+/* Prevent outer box clipping for stats widget */
 .fi-wi-stats-overview,
 .fi-wi-stats-overview > .fi-section,
 .fi-wi-stats-overview .fi-section-not-contained {
@@ -66,20 +83,13 @@
     padding: 0 !important;
 }
 
-/* Standard sections (forms / settings / resources) */
-.dark .fi-section:not(.fi-section-not-contained) {
-    background: var(--bg-surface) !important;
-    border: 1px solid var(--border-surface) !important;
-    box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
-    backdrop-filter: blur(12px);
-    border-radius: 1.25rem !important;
-}
-
-/* LIGHT MODE: Harmonized Clean Burgundy & Rose Cream */
+/* LIGHT MODE: Warm Peach-Cream & Liquid Frosted Glass */
 html:not(.dark) {
-    --bg-light-canvas: radial-gradient(circle at 10% 10%, #fff1f2 0%, #fdf8f8 50%, #f9f1f3 100%);
-    --bg-light-surface: #ffffff;
-    --border-light-surface: rgba(136, 19, 55, 0.12);
+    --bg-light-canvas: radial-gradient(circle at 15% 15%, #ffe4e6 0%, #fff1f2 40%, #fdf2e9 100%);
+    --light-glass-bg: rgba(255, 255, 255, 0.72);
+    --light-glass-border: rgba(244, 63, 94, 0.18);
+    --light-glass-shadow: 0 14px 32px -8px rgba(159, 18, 57, 0.12), 0 2px 8px -2px rgba(217, 119, 6, 0.08);
+    --light-glass-blur: blur(16px) saturate(160%);
 }
 
 html:not(.dark) .fi-main {
@@ -87,42 +97,150 @@ html:not(.dark) .fi-main {
 }
 
 html:not(.dark) .fi-topbar {
-    background: rgba(255, 255, 255, 0.9) !important;
-    border-bottom: 1px solid var(--border-light-surface) !important;
-    backdrop-filter: blur(12px);
+    background: rgba(255, 255, 255, 0.8) !important;
+    border-bottom: 1px solid var(--light-glass-border) !important;
+    backdrop-filter: var(--light-glass-blur);
+    -webkit-backdrop-filter: var(--light-glass-blur);
 }
 
 html:not(.dark) .fi-sidebar {
-    background: #ffffff !important;
-    border-right: 1px solid var(--border-light-surface) !important;
+    background: rgba(255, 255, 255, 0.82) !important;
+    border-right: 1px solid var(--light-glass-border) !important;
+    backdrop-filter: var(--light-glass-blur);
+    -webkit-backdrop-filter: var(--light-glass-blur);
 }
 
 html:not(.dark) .fi-sidebar-item-active .fi-sidebar-item-btn {
-    background: linear-gradient(135deg, #881337 0%, #4c0519 100%) !important;
+    background: linear-gradient(135deg, rgba(159, 18, 57, 0.95) 0%, rgba(136, 19, 55, 0.98) 100%) !important;
     color: #ffffff !important;
-    box-shadow: 0 4px 12px -2px rgba(136, 19, 55, 0.35) !important;
+    box-shadow: 0 6px 16px -2px rgba(159, 18, 57, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.4) !important;
 }
 
 html:not(.dark) .fi-wi-stats-overview-stat,
 html:not(.dark) .fi-ta-ctn,
 html:not(.dark) .fi-modal-window,
 html:not(.dark) .fi-section:not(.fi-section-not-contained) {
-    background: #ffffff !important;
-    border: 1px solid var(--border-light-surface) !important;
-    box-shadow: 0 10px 25px -8px rgba(136, 19, 55, 0.08), 0 0 1px rgba(136, 19, 55, 0.05) !important;
+    background: var(--light-glass-bg) !important;
+    border: 1px solid var(--light-glass-border) !important;
+    box-shadow: var(--light-glass-shadow), inset 0 1px 1px rgba(255, 255, 255, 0.8) !important;
+    backdrop-filter: var(--light-glass-blur) !important;
+    -webkit-backdrop-filter: var(--light-glass-blur) !important;
     border-radius: 1.25rem !important;
 }
 
-/* Universal Button Styling (Burgundy Brand in both light and dark) */
-.fi-btn-primary {
-    background: linear-gradient(135deg, #be123c 0%, #881337 100%) !important;
-    border: 1px solid rgba(255, 255, 255, 0.18) !important;
-    box-shadow: 0 4px 14px 0 rgba(136, 19, 55, 0.4) !important;
-    color: #ffffff !important;
+/* ==========================================================================
+   GLASSMORPHISM UTILITY CLASSES FOR THE POS VIEW
+   ========================================================================== */
+
+/* The Glass Card Container */
+.glass-panel {
+    background: rgba(255, 255, 255, 0.75);
+    border: 1px solid rgba(244, 63, 94, 0.16);
+    box-shadow: 0 12px 30px -8px rgba(159, 18, 57, 0.08), inset 0 1px 1px rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(18px) saturate(170%);
+    -webkit-backdrop-filter: blur(18px) saturate(170%);
 }
 
-.fi-btn-primary:hover {
-    background: linear-gradient(135deg, #e11d48 0%, #9f1239 100%) !important;
+.dark .glass-panel {
+    background: rgba(36, 4, 13, 0.62) !important;
+    border: 1px solid rgba(251, 113, 133, 0.22) !important;
+    box-shadow: 0 18px 40px -12px rgba(0, 0, 0, 0.7), inset 0 1px 1px rgba(255, 255, 255, 0.18), 0 0 24px -6px rgba(190, 24, 93, 0.2) !important;
+    backdrop-filter: blur(20px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+}
+
+/* Glass Pill Buttons (Filter Bar) */
+.glass-pill {
+    position: relative;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Inactive Glass Pill */
+.glass-pill-inactive {
+    background: rgba(255, 255, 255, 0.6);
+    color: #4c0519;
+    border: 1px solid rgba(244, 63, 94, 0.15);
+    box-shadow: 0 2px 6px -1px rgba(136, 19, 55, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.glass-pill-inactive:hover {
+    background: rgba(255, 255, 255, 0.85);
+    border-color: rgba(244, 63, 94, 0.35);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px -2px rgba(136, 19, 55, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.dark .glass-pill-inactive {
+    background: rgba(48, 6, 18, 0.5) !important;
+    color: #fecdd3 !important;
+    border: 1px solid rgba(251, 113, 133, 0.18) !important;
+    box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+}
+
+.dark .glass-pill-inactive:hover {
+    background: rgba(72, 9, 27, 0.7) !important;
+    border-color: rgba(251, 113, 133, 0.4) !important;
+    color: #ffffff !important;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px -2px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 0 14px rgba(225, 29, 72, 0.25) !important;
+}
+
+/* Active Glass Pill - Frosted Glowing Gem */
+.glass-pill-active {
+    background: linear-gradient(135deg, rgba(190, 18, 60, 0.9) 0%, rgba(136, 19, 55, 0.95) 100%) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(254, 205, 211, 0.45) !important;
+    box-shadow: 0 6px 20px -3px rgba(190, 18, 60, 0.55), inset 0 1px 2px rgba(255, 255, 255, 0.4), 0 0 16px rgba(244, 63, 94, 0.3) !important;
+}
+
+.dark .glass-pill-active {
+    background: linear-gradient(135deg, rgba(225, 29, 72, 0.85) 0%, rgba(159, 18, 57, 0.9) 100%) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.35) !important;
+    box-shadow: 0 8px 24px -4px rgba(225, 29, 72, 0.65), inset 0 1px 2px rgba(255, 255, 255, 0.45), 0 0 20px rgba(244, 63, 94, 0.4) !important;
+}
+
+/* Glass Product Cards */
+.glass-product-card {
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(244, 63, 94, 0.14);
+    box-shadow: 0 8px 24px -6px rgba(136, 19, 55, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(14px) saturate(160%);
+    -webkit-backdrop-filter: blur(14px) saturate(160%);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.glass-product-card:hover {
+    border-color: rgba(244, 63, 94, 0.35);
+    box-shadow: 0 12px 28px -6px rgba(136, 19, 55, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+}
+
+.dark .glass-product-card {
+    background: rgba(34, 4, 12, 0.55) !important;
+    border: 1px solid rgba(251, 113, 133, 0.18) !important;
+    box-shadow: 0 10px 28px -8px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+    backdrop-filter: blur(16px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
+}
+
+.dark .glass-product-card:hover {
+    border-color: rgba(251, 113, 133, 0.38) !important;
+    box-shadow: 0 14px 34px -8px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 0 18px rgba(225, 29, 72, 0.2) !important;
+}
+
+/* Glass in-cart highlight */
+.glass-product-card-active {
+    border-color: #e11d48 !important;
+    box-shadow: 0 0 0 2px rgba(225, 29, 72, 0.4), 0 12px 30px -6px rgba(190, 18, 60, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.3) !important;
+    background: rgba(255, 241, 242, 0.8) !important;
+}
+
+.dark .glass-product-card-active {
+    border-color: #f43f5e !important;
+    box-shadow: 0 0 0 2px rgba(244, 63, 94, 0.5), 0 14px 36px -8px rgba(0, 0, 0, 0.8), inset 0 1px 2px rgba(255, 255, 255, 0.3), 0 0 25px rgba(225, 29, 72, 0.35) !important;
+    background: rgba(56, 7, 21, 0.7) !important;
 }
 
 /* Scrollbar styling */
@@ -134,9 +252,9 @@ html:not(.dark) .fi-section:not(.fi-section-not-contained) {
     background: transparent;
 }
 .scrollbar-thin::-webkit-scrollbar-thumb {
-    background: rgba(225, 29, 72, 0.3);
+    background: rgba(244, 63, 94, 0.28);
     border-radius: 9999px;
 }
 .scrollbar-thin::-webkit-scrollbar-thumb:hover {
-    background: rgba(225, 29, 72, 0.6);
+    background: rgba(244, 63, 94, 0.55);
 }
