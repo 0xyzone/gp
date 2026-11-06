@@ -15,34 +15,104 @@ class ExpoDemoSeeder extends Seeder
     public function run(): void
     {
         $categories = [
-            'Beverages' => [
-                ['name' => 'Signature Cold Brew', 'code' => 'BEV-01', 'price' => 180.00],
-                ['name' => 'Iced Matcha Latte', 'code' => 'BEV-02', 'price' => 220.00],
-                ['name' => 'Fresh Lemon Mint Iced Tea', 'code' => 'BEV-03', 'price' => 150.00],
-                ['name' => 'Sparkling Berry Cooler', 'code' => 'BEV-04', 'price' => 200.00],
+            'Homemade Achar & Pickles' => [
+                [
+                    'name' => 'Akabare Khursani Achar',
+                    'code' => 'GP-ACH-01',
+                    'price' => 350.00,
+                    'description' => 'Fiery authentic round red chili achar infused with mustard oil and traditional spices.',
+                ],
+                [
+                    'name' => 'Gundruk Bhatmas Achar',
+                    'code' => 'GP-ACH-02',
+                    'price' => 280.00,
+                    'description' => 'Fermented leafy greens mixed with roasted soybeans and Himalayan herbs.',
+                ],
+                [
+                    'name' => 'Lapsi Achar (Sweet & Sour)',
+                    'code' => 'GP-ACH-03',
+                    'price' => 250.00,
+                    'description' => 'Traditional Nepali hog plum pickle with the perfect sweet, tangy and spicy balance.',
+                ],
+                [
+                    'name' => 'Mula Ra Kakro Ko Achar',
+                    'code' => 'GP-ACH-04',
+                    'price' => 220.00,
+                    'description' => 'Crunchy sun-dried radish & sesame seed pickle with aromatic timur pepper.',
+                ],
+                [
+                    'name' => 'Buff Meat Achar',
+                    'code' => 'GP-ACH-05',
+                    'price' => 450.00,
+                    'description' => 'Rich, savory slow-cooked shredded buffalo meat pickle seasoned with mountain spices.',
+                ],
+                [
+                    'name' => 'Chicken Timur Achar',
+                    'code' => 'GP-ACH-06',
+                    'price' => 420.00,
+                    'description' => 'Tender boneless chicken bites preserved with tingling Szechuan timur and roasted spices.',
+                ],
             ],
-            'Snacks & Pastries' => [
-                ['name' => 'Artisanal Butter Croissant', 'code' => 'SNK-01', 'price' => 140.00],
-                ['name' => 'Dark Chocolate Brownie', 'code' => 'SNK-02', 'price' => 160.00],
-                ['name' => 'Crispy Truffle Fries', 'code' => 'SNK-03', 'price' => 250.00],
-                ['name' => 'Caramel Glazed Donut', 'code' => 'SNK-04', 'price' => 120.00],
+            'Expo Special Pani Puri Stall' => [
+                [
+                    'name' => 'Classic Crispy Pani Puri (Plate of 8)',
+                    'code' => 'GP-PP-01',
+                    'price' => 100.00,
+                    'description' => 'Crispy puris stuffed with spiced aloo chana mash and tangy mint-coriander spicy water.',
+                ],
+                [
+                    'name' => 'Khatta Meetha Pani Puri (Plate of 8)',
+                    'code' => 'GP-PP-02',
+                    'price' => 120.00,
+                    'description' => 'Puris filled with sweet lapsi chutney & spicy jaljeera water blend.',
+                ],
+                [
+                    'name' => 'Dahi Puri Chat (6 Pieces)',
+                    'code' => 'GP-PP-03',
+                    'price' => 150.00,
+                    'description' => 'Loaded puris topped with chilled creamy yogurt, sev, pomegranate and sweet-sour chutneys.',
+                ],
+                [
+                    'name' => 'Akabare Spicy Pani Puri Challenge',
+                    'code' => 'GP-PP-04',
+                    'price' => 140.00,
+                    'description' => 'Extreme hot pani puri seasoned with our signature Ghasa Akabare chili extract.',
+                ],
             ],
-            'Expo Merchandise' => [
-                ['name' => 'Limited Edition Tote Bag', 'code' => 'MERCH-01', 'price' => 450.00],
-                ['name' => 'Stainless Steel Coffee Flask', 'code' => 'MERCH-02', 'price' => 850.00],
-                ['name' => 'Stall Souvenir Pin Pack', 'code' => 'MERCH-03', 'price' => 200.00],
-                ['name' => 'Cotton Brand T-Shirt', 'code' => 'MERCH-04', 'price' => 750.00],
-            ],
-            'Combo Packs' => [
-                ['name' => 'Expo Special: Drink + Brownie', 'code' => 'CMB-01', 'price' => 300.00],
-                ['name' => 'Mega Chill: 2 Drinks + Fries', 'code' => 'CMB-02', 'price' => 550.00],
-                ['name' => 'VIP Pack: Drink + Merch Flask', 'code' => 'CMB-03', 'price' => 950.00],
+            'Gift Packs & Combos' => [
+                [
+                    'name' => 'Trio Achar Gift Hamper (3 Jars)',
+                    'code' => 'GP-CMB-01',
+                    'price' => 850.00,
+                    'description' => 'Beautiful wooden gift box containing Akabare, Lapsi, and Gundruk achar jars.',
+                ],
+                [
+                    'name' => 'Stall Combo: Plate of Pani Puri + Achar Jar',
+                    'code' => 'GP-CMB-02',
+                    'price' => 420.00,
+                    'description' => 'Enjoy 1 plate of fresh pani puri at our stall and take home 1 jar of signature achar.',
+                ],
+                [
+                    'name' => 'Family Achar Feast Box (5 Jars)',
+                    'code' => 'GP-CMB-03',
+                    'price' => 1450.00,
+                    'description' => 'Complete assortment of all 5 bestseller Ghasa pickles for family feasts.',
+                ],
             ],
         ];
 
+        // Clean out legacy irrelevant demo items
+        Product::whereNotIn('code', [
+            'GP-ACH-01', 'GP-ACH-02', 'GP-ACH-03', 'GP-ACH-04', 'GP-ACH-05', 'GP-ACH-06',
+            'GP-PP-01', 'GP-PP-02', 'GP-PP-03', 'GP-PP-04',
+            'GP-CMB-01', 'GP-CMB-02', 'GP-CMB-03',
+        ])->delete();
+
+        Category::whereNotIn('name', array_keys($categories))->delete();
+
         $sortOrder = 1;
         foreach ($categories as $catName => $products) {
-            $category = Category::firstOrCreate(
+            $category = Category::updateOrCreate(
                 ['slug' => Str::slug($catName)],
                 [
                     'name' => $catName,
@@ -59,7 +129,7 @@ class ExpoDemoSeeder extends Seeder
                         'category_id' => $category->id,
                         'name' => $p['name'],
                         'price' => $p['price'],
-                        'description' => 'Freshly served at the Expo stall.',
+                        'description' => $p['description'],
                         'is_active' => true,
                         'sort_order' => $pSort++,
                     ]

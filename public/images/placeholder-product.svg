@@ -1,25 +1,44 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
   <defs>
     <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#1e293b" />
-      <stop offset="100%" stop-color="#0f172a" />
+      <stop offset="0%" stop-color="#fff5f5" />
+      <stop offset="100%" stop-color="#ffe4e6" />
     </linearGradient>
-    <linearGradient id="glowGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.3" />
-      <stop offset="100%" stop-color="#d97706" stop-opacity="0.05" />
+    <linearGradient id="burgundyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#881337" />
+      <stop offset="100%" stop-color="#4c0519" />
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b" />
+      <stop offset="100%" stop-color="#d97706" />
     </linearGradient>
   </defs>
-  <rect width="400" height="400" rx="28" fill="url(#bgGrad)" />
-  <circle cx="200" cy="180" r="100" fill="url(#glowGrad)" />
   
-  <!-- Modern Bag Icon -->
-  <g transform="translate(140, 115) scale(1.2)" stroke="#f59e0b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none">
-    <path d="M16 38 V 82 C 16 88 20 92 26 92 H 74 C 80 92 84 88 84 82 V 38 Z" fill="#1e293b" fill-opacity="0.8"/>
-    <path d="M34 38 V 24 C 34 15 41 8 50 8 C 59 8 66 15 66 24 V 38" />
-    <circle cx="50" cy="58" r="7" fill="#f59e0b" stroke="none" />
-  </g>
-  
-  <text x="200" y="295" font-family="'Instrument Sans', sans-serif" font-size="20" font-weight="700" fill="#94a3b8" text-anchor="middle" letter-spacing="1">GHASA PRODUCTS</text>
-  <text x="200" y="322" font-family="'Instrument Sans', sans-serif" font-size="13" font-weight="600" fill="#f59e0b" text-anchor="middle" letter-spacing="3">EXPO SPECIAL</text>
-</svg>
+  <rect width="400" height="400" rx="36" fill="url(#bgGrad)" />
+  <circle cx="200" cy="180" r="110" fill="#fecdd3" fill-opacity="0.5" />
 
+  <!-- Traditional Achar Jar Graphic -->
+  <g transform="translate(130, 90)">
+    <!-- Jar Lid -->
+    <rect x="35" y="10" width="70" height="20" rx="6" fill="url(#goldGrad)" />
+    <path d="M42 30 Q70 38 98 30" stroke="#b45309" stroke-width="3" fill="none" />
+    <!-- Cloth tie drape -->
+    <path d="M30 25 C30 25, 45 42, 70 42 C95 42, 110 25, 110 25 L116 35 C116 35, 95 50, 70 50 C45 50, 24 35, 24 35 Z" fill="#9f1239" />
+    <!-- Jar Body Glass -->
+    <rect x="20" y="45" width="100" height="135" rx="24" fill="url(#burgundyGrad)" />
+    <!-- Inner Spice Seeds & Chili Accents -->
+    <circle cx="50" cy="90" r="6" fill="#fbbf24" />
+    <circle cx="85" cy="110" r="5" fill="#fde68a" />
+    <circle cx="65" cy="140" r="7" fill="#f87171" />
+    <circle cx="95" cy="150" r="5" fill="#fbbf24" />
+    <!-- Jar Label -->
+    <rect x="35" y="80" width="70" height="55" rx="8" fill="#ffffff" />
+    <rect x="42" y="90" width="56" height="5" rx="2" fill="#881337" />
+    <rect x="48" y="102" width="44" height="4" rx="2" fill="#d97706" />
+    <circle cx="70" cy="120" r="4" fill="#881337" />
+  </g>
+
+  <!-- Typography -->
+  <text x="200" y="300" font-family="'Instrument Sans', sans-serif" font-size="22" font-weight="900" fill="#4c0519" text-anchor="middle" letter-spacing="1.5">GHASA PRODUCTS</text>
+  <text x="200" y="326" font-family="'Instrument Sans', sans-serif" font-size="13" font-weight="800" fill="#be123c" text-anchor="middle" letter-spacing="3">TRADITIONAL ACHAR & FOOD</text>
+</svg>
