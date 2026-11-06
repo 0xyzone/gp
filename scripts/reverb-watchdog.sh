@@ -43,9 +43,9 @@ if [ -z "$PHP_BIN" ]; then
     exit 1
 fi
 
-# Check if Reverb process is already active
-if pgrep -f "artisan reverb:start" > /dev/null 2>&1; then
-    # Already running smoothly
+# Check if this project's Reverb process is already active
+if pgrep -f "$PROJECT_DIR/artisan reverb:start" > /dev/null 2>&1; then
+    # Already running smoothly for this project
     exit 0
 fi
 
