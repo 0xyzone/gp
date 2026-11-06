@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=1920, height=1080, initial-scale=1">
     <title>{{ \App\Models\Setting::get('stall_name', 'घासा • Ghasa Products') }} - Customer Display</title>
 
+    <meta name="reverb-key" content="{{ config('reverb.apps.apps.0.key', env('REVERB_APP_KEY')) }}">
+    <meta name="reverb-host" content="{{ env('REVERB_HOST') }}">
+    <meta name="reverb-port" content="{{ env('REVERB_PORT', 8080) }}">
+    <meta name="reverb-scheme" content="{{ env('REVERB_SCHEME', 'http') }}">
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
 
