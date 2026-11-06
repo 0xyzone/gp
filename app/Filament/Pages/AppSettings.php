@@ -59,8 +59,7 @@ class AppSettings extends Page
                                     ->disk('public')
                                     ->directory('settings')
                                     ->visibility('public')
-                                    ->helperText('Upload a new QR design banner anytime (e.g. Siddhartha Bank, Fonepay, eSewa).')
-                                    ->required(),
+                                    ->helperText('Optional: Upload a custom QR design banner anytime (defaults to Siddhartha Bank QR if empty).'),
                             ]),
 
                         Section::make('Stall & Currency Details')
@@ -111,6 +110,9 @@ class AppSettings extends Page
         $state = $this->form->getState();
 
         foreach ($state as $key => $value) {
+            if ($key === 'payment_qr_image' && empty($value)) {
+                continue;
+            }
             Setting::set($key, (string) $value);
         }
 
