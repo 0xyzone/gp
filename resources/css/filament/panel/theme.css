@@ -86,9 +86,30 @@
    FORM INPUTS, TEXTBOXES & SELECT DROPDOWN GLASS THEMING
    ========================================================================== */
 
-/* Dropdown Global Elevation */
+/* Dropdown Global Elevation & Stacking Context Isolation */
 .fi-dropdown-panel {
-    z-index: 50 !important;
+    z-index: 9999 !important;
+}
+
+/* Ensure the field containing an open dropdown is elevated above all sibling fields */
+.fi-fo-field-wrp:has(.fi-dropdown-panel[style*="display: block"]),
+.fi-fo-field-wrp:has(.fi-select-input-ctn:focus-within),
+.fi-fo-field-wrp:has([aria-expanded="true"]) {
+    position: relative !important;
+    z-index: 100 !important;
+}
+
+/* Ensure the section containing an active select stays above lower sections */
+.fi-section:has(.fi-dropdown-panel[style*="display: block"]),
+.fi-section:has([aria-expanded="true"]) {
+    position: relative !important;
+    z-index: 90 !important;
+}
+
+/* Inactive fields explicitly sit behind */
+.fi-fo-field-wrp {
+    position: relative;
+    z-index: 1;
 }
 
 /* Dark Mode Inputs & Input Wrappers */
@@ -126,7 +147,7 @@
     -webkit-backdrop-filter: blur(28px) saturate(200%) !important;
     border-radius: 1rem !important;
     overflow: hidden !important;
-    z-index: 50 !important;
+    z-index: 9999 !important;
 }
 
 /* Select Search Box inside Dropdown Panel */
