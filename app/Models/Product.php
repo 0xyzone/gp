@@ -37,11 +37,11 @@ class Product extends Model
     ];
 
     /**
-     * Get the effective selling price (offer_price if set and positive, otherwise regular price).
+     * Get the effective selling price (offer_price if set, positive, and strictly less than price, otherwise regular price).
      */
     public function getEffectivePriceAttribute(): float
     {
-        if ($this->offer_price !== null && (float) $this->offer_price > 0) {
+        if ($this->offer_price !== null && (float) $this->offer_price > 0 && (float) $this->offer_price < (float) $this->price) {
             return (float) $this->offer_price;
         }
 

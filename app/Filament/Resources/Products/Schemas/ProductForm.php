@@ -62,18 +62,23 @@ class ProductForm
                                     ->required()
                                     ->numeric()
                                     ->prefix('रू')
-                                    ->minValue(0)
+                                    ->minValue(0.01)
                                     ->step(0.01)
+                                    ->live(onBlur: true)
                                     ->placeholder('0.00')
                                     ->helperText('Standard retail price'),
                                 TextInput::make('offer_price')
                                     ->label('Offer / Stall Price')
                                     ->numeric()
                                     ->prefix('रू')
-                                    ->minValue(0)
+                                    ->minValue(0.01)
                                     ->step(0.01)
+                                    ->lt('price')
+                                    ->validationMessages([
+                                        'lt' => 'The offer price must be strictly less than the actual price.',
+                                    ])
                                     ->placeholder('e.g. Discounted stall price')
-                                    ->helperText('Special discounted price used on POS if provided'),
+                                    ->helperText('Must be strictly less than the actual price'),
                             ]),
                         Textarea::make('description')
                             ->label('Description / Notes')
