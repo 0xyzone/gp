@@ -15,10 +15,17 @@ class StockEntryForm
     public static function configure(Schema $schema): Schema
     {
         return $schema
+            ->columns(12)
             ->components([
-                Section::make('Stock Entry Details')
-                    ->description('Record new inventory batches or corrections linked to stall products')
+                // Primary Column: Core Stock Transaction Form (8 cols on desktop)
+                Section::make('Stock Transaction Details')
+                    ->description('Record inward stock arrival, outward returns/damage, or corrections')
                     ->icon('heroicon-o-cube')
+                    ->columnSpan([
+                        'default' => 12,
+                        'md' => 7,
+                        'xl' => 8,
+                    ])
                     ->schema([
                         Select::make('product_id')
                             ->label('Select Product')
@@ -28,7 +35,10 @@ class StockEntryForm
                             ->required()
                             ->helperText('Product whose stock will be adjusted by this entry'),
 
-                        Grid::make(2)
+                        Grid::make([
+                            'default' => 1,
+                            'sm' => 2,
+                        ])
                             ->schema([
                                 Select::make('type')
                                     ->label('Entry Type')
@@ -49,27 +59,37 @@ class StockEntryForm
                                     ->step(1)
                                     ->suffix('Units')
                                     ->placeholder('e.g. 50')
-                                    ->helperText('Number of units to record'),
-                            ]),
-
-                        Grid::make(2)
-                            ->schema([
-                                DatePicker::make('entry_date')
-                                    ->label('Entry Date')
-                                    ->default(now())
-                                    ->required(),
-
-                                TextInput::make('reference_number')
-                                    ->label('Reference / Batch #')
-                                    ->placeholder('e.g. BATCH-2026-A1, INV-882')
-                                    ->helperText('Optional batch or invoice reference number'),
+                                    ->helperText('Number of physical units to adjust'),
                             ]),
 
                         Textarea::make('notes')
                             ->label('Remarks / Notes')
-                            ->placeholder('e.g. Morning expo opening stock, restocked from production kitchen...')
-                            ->rows(3)
-                            ->columnSpanFull(),
+                            ->placeholder('e.g. Morning expo opening stock, restocked from production kitchen, breakage correction...')
+                            ->rows(4)
+                            ->columnSpanFull()
+                            ->helperText('Optional explanation for stall cashiers and inventory audit'),
+                    ]),
+
+                // Secondary Column: Metadata, Dates & Batch Tracking (4 cols on desktop)
+                Section::make('Reference & Audit')
+                    ->description('Tracking dates and invoice identifiers')
+                    ->icon('heroicon-o-tag')
+                    ->columnSpan([
+                        'default' => 12,
+                        'md' => 5,
+                        'xl' => 4,
+                    ])
+                    ->schema([
+                        DatePicker::make('entry_date')
+                            ->label('Entry Date')
+                            ->default(now())
+                            ->required()
+                            ->helperText('Date of physical receipt or adjustment'),
+
+                        TextInput::make('reference_number')
+                            ->label('Batch / Invoice Ref #')
+                            ->placeholder('e.g. BATCH-2026-A1')
+                            ->helperText('Supplier batch or transfer note number'),
                     ]),
             ]);
     }

@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\StockEntries\Pages;
 
 use App\Filament\Resources\StockEntries\StockEntryResource;
+use App\Filament\Resources\StockEntries\Widgets\StockOverviewWidget;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Support\Enums\Width;
@@ -18,7 +19,14 @@ class ListStockEntries extends ListRecords
                 ->label('New Stock Entry')
                 ->icon('heroicon-o-plus')
                 ->slideOver()
-                ->modalWidth(Width::Large),
+                ->modalWidth(Width::FiveExtraLarge),
+        ];
+    }
+
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            StockOverviewWidget::class,
         ];
     }
 }

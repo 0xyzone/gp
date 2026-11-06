@@ -110,7 +110,7 @@ class StockEntriesTable
             ->recordActions([
                 EditAction::make()
                     ->slideOver()
-                    ->modalWidth(Width::Large),
+                    ->modalWidth(Width::FiveExtraLarge),
                 DeleteAction::make(),
             ])
             ->toolbarActions([

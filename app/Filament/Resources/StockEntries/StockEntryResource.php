@@ -5,6 +5,7 @@ namespace App\Filament\Resources\StockEntries;
 use App\Filament\Resources\StockEntries\Pages\ListStockEntries;
 use App\Filament\Resources\StockEntries\Schemas\StockEntryForm;
 use App\Filament\Resources\StockEntries\Tables\StockEntriesTable;
+use App\Filament\Resources\StockEntries\Widgets\StockOverviewWidget;
 use App\Models\StockEntry;
 use BackedEnum;
 use Filament\Resources\Resource;
@@ -37,6 +38,13 @@ class StockEntryResource extends Resource
     public static function table(Table $table): Table
     {
         return StockEntriesTable::configure($table);
+    }
+
+    public static function getWidgets(): array
+    {
+        return [
+            StockOverviewWidget::class,
+        ];
     }
 
     public static function getRelations(): array
