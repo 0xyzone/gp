@@ -5,12 +5,12 @@
 # ==============================================================================
 
 # Determine base home directory and project path
-CURRENT_USER=$(whoami)
-PROJECT_DIR="${HOME}/gp"
+CURRENT_USER="${USER:-suminshr}"
+PROJECT_DIR="/home/suminshr/gp"
 
-# Fallback in case ${HOME} is not set in a cron subshell
-if [ ! -d "$PROJECT_DIR" ]; then
-    PROJECT_DIR="/home/${CURRENT_USER}/gp"
+# Fallback if running under different context or HOME variable is available
+if [ ! -d "$PROJECT_DIR" ] && [ -n "$HOME" ]; then
+    PROJECT_DIR="${HOME}/gp"
 fi
 
 # Ensure project directory exists
