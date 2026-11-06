@@ -38,4 +38,22 @@ class Setting extends Model
             // Ignore in unmigrated test contexts
         }
     }
+
+    /**
+     * Get all settings as key => value dictionary.
+     *
+     * @return array<string, string|null>
+     */
+    public static function allKeyed(): array
+    {
+        try {
+            if (! Schema::hasTable('settings')) {
+                return [];
+            }
+
+            return static::pluck('value', 'key')->all();
+        } catch (Throwable) {
+            return [];
+        }
+    }
 }

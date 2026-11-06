@@ -50,41 +50,44 @@
     <!-- ========================================================================= -->
     <!-- MODULAR HEADER BAR -->
     <!-- ========================================================================= -->
-    @if(\App\Models\Setting::get('show_display_header', '1') === '1')
-        <header class="relative z-20 flex items-center justify-between px-8 py-5 rounded-3xl glass-panel-light shadow-burgundy-soft">
-            <div class="flex items-center gap-4">
-                <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#881337] to-[#4c0519] flex items-center justify-center text-white font-black text-2xl shadow-lg shadow-rose-950/20">
-                    घ
+    <header 
+        x-show="settings.show_display_header === '1'" 
+        x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0 -translate-y-4"
+        x-transition:enter-end="opacity-100 translate-y-0"
+        x-transition:leave="transition ease-in duration-200"
+        x-transition:leave-start="opacity-100 translate-y-0"
+        x-transition:leave-end="opacity-0 -translate-y-4"
+        class="relative z-20 flex items-center justify-between px-8 py-5 rounded-3xl glass-panel-light shadow-burgundy-soft"
+    >
+        <div class="flex items-center gap-4">
+            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#881337] to-[#4c0519] flex items-center justify-center text-white font-black text-2xl shadow-lg shadow-rose-950/20">
+                घ
+            </div>
+            <div>
+                <div class="flex items-center gap-3">
+                    <h1 class="text-2xl font-black tracking-tight text-[#4c0519]" x-text="settings.stall_name"></h1>
+                    <span class="px-3 py-1 rounded-full bg-[#881337]/10 text-[#881337] font-extrabold text-xs tracking-wider uppercase" x-text="settings.display_badge_text"></span>
                 </div>
-                <div>
-                    <div class="flex items-center gap-3">
-                        <h1 class="text-2xl font-black tracking-tight text-[#4c0519]">
-                            {{ \App\Models\Setting::get('stall_name', 'घासा • Ghasa Products') }}
-                        </h1>
-                        <span class="px-3 py-1 rounded-full bg-[#881337]/10 text-[#881337] font-extrabold text-xs tracking-wider uppercase">
-                            {{ \App\Models\Setting::get('display_badge_text', 'Authentic Nepali Achar & Pani Puri Stall') }}
-                        </span>
-                    </div>
-                    <p class="text-xs text-slate-500 font-semibold mt-0.5">
-                        100% Traditional Homemade Pickles, Organics & Live Crunchy Pani Puri
-                    </p>
-                </div>
+                <p class="text-xs text-slate-500 font-semibold mt-0.5">
+                    100% Traditional Homemade Pickles, Organics & Live Crunchy Pani Puri
+                </p>
+            </div>
+        </div>
+
+        <!-- Connection Badge & Real-Time Clock -->
+        <div class="flex items-center gap-4">
+            <div class="flex items-center gap-2.5 px-5 py-2.5 rounded-2xl bg-white border border-rose-100 shadow-sm text-xs font-bold text-slate-700">
+                <span class="relative flex h-3 w-3">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" :class="connected ? 'bg-emerald-400' : 'bg-rose-400'"></span>
+                    <span class="relative inline-flex rounded-full h-3 w-3" :class="connected ? 'bg-emerald-500' : 'bg-rose-500'"></span>
+                </span>
+                <span x-text="connected ? 'Counter Connected' : 'Connecting...'"></span>
             </div>
 
-            <!-- Connection Badge & Real-Time Clock -->
-            <div class="flex items-center gap-4">
-                <div class="flex items-center gap-2.5 px-5 py-2.5 rounded-2xl bg-white border border-rose-100 shadow-sm text-xs font-bold text-slate-700">
-                    <span class="relative flex h-3 w-3">
-                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" :class="connected ? 'bg-emerald-400' : 'bg-rose-400'"></span>
-                        <span class="relative inline-flex rounded-full h-3 w-3" :class="connected ? 'bg-emerald-500' : 'bg-rose-500'"></span>
-                    </span>
-                    <span x-text="connected ? 'Counter Connected' : 'Connecting...'"></span>
-                </div>
-
-                <div class="px-5 py-2.5 rounded-2xl bg-[#881337] text-white font-mono text-xs font-bold shadow-md shadow-rose-950/15" x-text="currentTime"></div>
-            </div>
-        </header>
-    @endif
+            <div class="px-5 py-2.5 rounded-2xl bg-[#881337] text-white font-mono text-xs font-bold shadow-md shadow-rose-950/15" x-text="currentTime"></div>
+        </div>
+    </header>
 
     <!-- ========================================================================= -->
     <!-- MAIN INTERFACE: 1920x1080 FULL SCREEN WITH CLEAN PROPORTIONS & BREATHING SPACE -->
@@ -98,39 +101,43 @@
             <div class="w-full h-full flex flex-col justify-between">
                 
                 <!-- Hero Promo Banner (Controlled via Settings Page) -->
-                @if(\App\Models\Setting::get('show_hero_banner', '1') === '1')
-                    <div class="relative rounded-[32px] p-8 glass-panel-burgundy text-white flex items-center justify-between overflow-hidden shrink-0">
-                        <div class="absolute -right-20 -bottom-20 w-80 h-80 rounded-full bg-white/5 blur-2xl pointer-events-none"></div>
+                <div 
+                    x-show="settings.show_hero_banner === '1'" 
+                    x-transition:enter="transition ease-out duration-300"
+                    x-transition:enter-start="opacity-0 -translate-y-4"
+                    x-transition:enter-end="opacity-100 translate-y-0"
+                    x-transition:leave="transition ease-in duration-200"
+                    x-transition:leave-start="opacity-100 translate-y-0"
+                    x-transition:leave-end="opacity-0 -translate-y-4"
+                    class="relative rounded-[32px] p-8 glass-panel-burgundy text-white flex items-center justify-between overflow-hidden shrink-0"
+                >
+                    <div class="absolute -right-20 -bottom-20 w-80 h-80 rounded-full bg-white/5 blur-2xl pointer-events-none"></div>
 
-                        <div class="space-y-2 max-w-3xl">
-                            <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/15 text-rose-100 text-xs font-bold uppercase tracking-widest backdrop-blur-md">
-                                <span>✨</span> Welcome to our Expo Stall
-                            </div>
-                            <h2 class="text-4xl font-black tracking-tight leading-tight">
-                                {{ \App\Models\Setting::get('display_hero_title', 'स्वादिलो घरको अचार र क्रिस्पी पानी पुरी!') }}
-                            </h2>
-                            <p class="text-sm text-rose-100/90 leading-relaxed font-normal max-w-2xl">
-                                {{ \App\Models\Setting::get('display_hero_desc', 'Taste our signature Akabare, Gundruk, Buff & Chicken Pickles, or enjoy freshly served hygienic Pani Puri with tingling jaljeera and sweet lapsi chutney.') }}
-                            </p>
+                    <div class="space-y-2 max-w-3xl">
+                        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/15 text-rose-100 text-xs font-bold uppercase tracking-widest backdrop-blur-md">
+                            <span>✨</span> Welcome to our Expo Stall
                         </div>
-
-                        <!-- Right Quick QR Scan Pill (Modular Toggle) -->
-                        @if(\App\Models\Setting::get('show_qr_pill', '1') === '1')
-                            <div class="bg-white/10 backdrop-blur-md p-5 rounded-3xl border border-white/20 flex items-center gap-4 shrink-0 shadow-lg">
-                                <div class="w-14 h-14 rounded-2xl bg-white text-[#881337] flex items-center justify-center font-black shadow-md">
-                                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
-                                    </svg>
-                                </div>
-                                <div class="text-left">
-                                    <span class="text-[11px] font-black uppercase tracking-widest text-rose-200 block">Digital Stall Pay</span>
-                                    <span class="text-base font-black text-white">{{ \App\Models\Setting::get('upi_bank_name', 'Siddhartha Bank') }} QR</span>
-                                    <span class="text-[11px] text-rose-100/80 block mt-0.5">Fonepay • eSewa • Mobile Banking</span>
-                                </div>
-                            </div>
-                        @endif
+                        <h2 class="text-4xl font-black tracking-tight leading-tight" x-text="settings.display_hero_title"></h2>
+                        <p class="text-sm text-rose-100/90 leading-relaxed font-normal max-w-2xl" x-text="settings.display_hero_desc"></p>
                     </div>
-                @endif
+
+                    <!-- Right Quick QR Scan Pill (Modular Toggle) -->
+                    <div 
+                        x-show="settings.show_qr_pill === '1'"
+                        class="bg-white/10 backdrop-blur-md p-5 rounded-3xl border border-white/20 flex items-center gap-4 shrink-0 shadow-lg"
+                    >
+                        <div class="w-14 h-14 rounded-2xl bg-white text-[#881337] flex items-center justify-center font-black shadow-md">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
+                            </svg>
+                        </div>
+                        <div class="text-left">
+                            <span class="text-[11px] font-black uppercase tracking-widest text-rose-200 block">Digital Stall Pay</span>
+                            <span class="text-base font-black text-white" x-text="(settings.upi_bank_name || 'Siddhartha Bank') + ' QR'"></span>
+                            <span class="text-[11px] text-rose-100/80 block mt-0.5">Fonepay • eSewa • Mobile Banking</span>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- Products Showcase: Smooth Step Carousel with Auto Infinite Reset (Image, Price & Name Only) -->
                 <div class="relative w-full flex-1 flex flex-col justify-center overflow-hidden py-3">
@@ -143,16 +150,14 @@
                         </div>
 
                         <!-- Modular Carousel Progress Indicator -->
-                        @if(\App\Models\Setting::get('show_carousel_dots', '1') === '1')
-                            <div class="flex items-center gap-1.5">
-                                <template x-for="(dot, dotIdx) in totalProducts" :key="dotIdx">
-                                    <span 
-                                        class="h-1.5 rounded-full transition-all duration-300"
-                                        :class="(activeProductIndex) === dotIdx ? 'w-6 bg-[#881337]' : 'w-1.5 bg-rose-200'"
-                                    ></span>
-                                </template>
-                            </div>
-                        @endif
+                        <div x-show="settings.show_carousel_dots === '1'" class="flex items-center gap-1.5">
+                            <template x-for="(dot, dotIdx) in totalProducts" :key="dotIdx">
+                                <span 
+                                    class="h-1.5 rounded-full transition-all duration-300"
+                                    :class="(activeProductIndex) === dotIdx ? 'w-6 bg-[#881337]' : 'w-1.5 bg-rose-200'"
+                                ></span>
+                            </template>
+                        </div>
 
                         <span class="text-xs font-semibold text-slate-500" x-text="'Item ' + (activeProductIndex + 1) + ' of ' + totalProducts"></span>
                     </div>
@@ -192,8 +197,11 @@
                                                 {{ $product->name }}
                                             </h3>
 
-                                            @if(\App\Models\Setting::get('show_product_description', '0') === '1' && $product->description)
-                                                <p class="text-xs text-slate-500 line-clamp-1 mt-1 font-normal">
+                                            @if($product->description)
+                                                <p 
+                                                    x-show="settings.show_product_description === '1'" 
+                                                    class="text-xs text-slate-500 line-clamp-1 mt-1 font-normal"
+                                                >
                                                     {{ $product->description }}
                                                 </p>
                                             @endif
@@ -339,22 +347,16 @@
 
                                 <!-- Big Prominent QR Art in Clean White Card -->
                                 <div class="my-auto w-full max-w-[340px] bg-white rounded-3xl p-3 shadow-xl border-4 border-[#881337]">
-                                    @php
-                                        $qrImage = \App\Models\Setting::get('payment_qr_image', 'images/siddhartha-bank-qr.png');
-                                        $qrUrl = str_starts_with($qrImage, 'http') ? $qrImage : (str_starts_with($qrImage, 'images/') ? asset($qrImage) : asset('storage/' . $qrImage));
-                                    @endphp
                                     <img 
-                                        src="{{ $qrUrl }}" 
+                                        :src="settings.payment_qr_image_url || '{{ asset('images/siddhartha-bank-qr.png') }}'" 
                                         alt="Scan QR to Pay" 
                                         class="w-full h-auto object-contain rounded-2xl block"
                                     />
                                 </div>
 
                                 <div class="space-y-1">
-                                    <div class="text-2xl font-black text-slate-900" x-text="'Please Pay रू ' + Number(grandTotal).toFixed(2)"></div>
-                                    <p class="text-xs text-[#881337] font-extrabold uppercase tracking-wide">
-                                        {{ \App\Models\Setting::get('upi_bank_name', 'Siddhartha Bank') }} • Any Banking App / Fonepay
-                                    </p>
+                                    <div class="text-2xl font-black text-slate-900" x-text="'Please Pay ' + (settings.currency_symbol || 'रू') + ' ' + Number(grandTotal).toFixed(2)"></div>
+                                    <p class="text-xs text-[#881337] font-extrabold uppercase tracking-wide" x-text="(settings.upi_bank_name || 'Siddhartha Bank') + ' • Any Banking App / Fonepay'"></p>
                                 </div>
 
                             </div>
@@ -408,18 +410,25 @@
     </main>
 
     <!-- Clean Bottom Footer Bar (Modular Toggle) -->
-    @if(\App\Models\Setting::get('show_display_footer', '1') === '1')
-        <footer class="relative z-10 px-8 py-3 rounded-2xl glass-panel-light flex items-center justify-between text-xs text-slate-500 font-medium">
-            <div class="flex items-center gap-3">
-                <span class="font-bold text-[#881337]">{{ \App\Models\Setting::get('account_holder', 'Ghasa Products Nepal') }}</span>
-                <span>•</span>
-                <span>Customer Helpline: {{ \App\Models\Setting::get('contact_phone', '+977-9800000000') }}</span>
-            </div>
-            <div class="flex items-center gap-2 font-bold text-[#881337]">
-                <span>घासा अचार तथा पानी पुरी स्टलमा स्वागत छ!</span>
-            </div>
-        </footer>
-    @endif
+    <footer 
+        x-show="settings.show_display_footer === '1'" 
+        x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0 translate-y-4"
+        x-transition:enter-end="opacity-100 translate-y-0"
+        x-transition:leave="transition ease-in duration-200"
+        x-transition:leave-start="opacity-100 translate-y-0"
+        x-transition:leave-end="opacity-0 translate-y-4"
+        class="relative z-10 px-8 py-3 rounded-2xl glass-panel-light flex items-center justify-between text-xs text-slate-500 font-medium"
+    >
+        <div class="flex items-center gap-3">
+            <span class="font-bold text-[#881337]" x-text="settings.account_holder || 'Ghasa Products Nepal'"></span>
+            <span>•</span>
+            <span x-text="'Customer Helpline: ' + (settings.contact_phone || '+977-9800000000')"></span>
+        </div>
+        <div class="flex items-center gap-2 font-bold text-[#881337]">
+            <span>घासा अचार तथा पानी पुरी स्टलमा स्वागत छ!</span>
+        </div>
+    </footer>
 
     <!-- Customer Display Echo Connection & Infinite Carousel Handler -->
     <script>
@@ -428,6 +437,7 @@
                 connected: false,
                 currentTime: '',
                 screenState: 'idle', // 'idle', 'active', 'completed'
+                settings: @json($initialSettings),
                 cart: [],
                 itemCount: 0,
                 subtotal: 0,
@@ -520,9 +530,20 @@
                         channel.listen('.cart.cleared', () => {
                             this.resetToIdle();
                         });
+
+                        channel.listen('.settings.updated', (e) => {
+                            this.handleSettingsUpdated(e.settings);
+                        });
                     };
 
                     connectEcho();
+                },
+
+                handleSettingsUpdated(newSettings) {
+                    this.settings = Object.assign({}, this.settings, newSettings);
+                    if (newSettings.stall_name) {
+                        document.title = newSettings.stall_name + ' - Customer Display';
+                    }
                 },
 
                 handleCartUpdate(payload) {

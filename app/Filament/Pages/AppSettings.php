@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages;
 
+use App\Events\SettingsUpdated;
 use App\Models\Setting;
 use BackedEnum;
 use Filament\Actions\Action;
@@ -181,5 +182,16 @@ class AppSettings extends Page
             ->body('Public display modular elements and texts have been updated.')
             ->success()
             ->send();
+
+        // Broadcast settings update instantly over websockets to all connected screens
+        $allSettings = Setting::allKeyed();
+        if (isset($allSettings['payment_qr_image']) && $allSettings['payment_qr_image']) {
+            $allSettings['payment_qr_image_url'] = str_starts_with($allSettings['payment_qr_image'], 'http')
+                ? $allSettings['payment_qr_image']
+                : (str_starts_with($allSettings['payment_qr_image'], 'images/')
+                    ? asset($allSettings['payment_qr_image'])
+                    : asset('storage/'.$allSettings['payment_qr_image']));
+        }
+        broadcast(new SettingsUpdated($allSettings));
     }
 }
