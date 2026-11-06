@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\Setting;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Storage;
 
 Route::get('/display', function () {
     $categories = collect();
@@ -66,3 +67,15 @@ Route::get('/orders/{order}/receipt', function (Order $order) {
 
     return view('receipts.thermal', compact('order'));
 })->name('orders.receipt');
+
+// Fallback image delivery route for cPanel / LiteSpeed shared hosting where symbolic links to storage are forbidden or disabled
+Route::get('/storage/{path}', function (string $path) {
+    $disk = Storage::disk('public');
+
+    abort_unless($disk->exists($path), 404);
+
+    return response()->file($disk->path($path), [
+        'Content-Type' => $disk->mimeType($path) ?? 'application/octet-stream',
+        'Cache-Control' => 'public, max-age=31536000',
+    ]);
+})->where('path', '.*')->name('storage.fallback');
