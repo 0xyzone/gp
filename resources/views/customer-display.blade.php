@@ -30,6 +30,11 @@
         .shadow-burgundy-glow {
             box-shadow: 0 25px 60px -10px rgba(136, 19, 55, 0.35);
         }
+
+        /* Smooth step slide transition */
+        .slide-carousel-track {
+            transition: transform 0.75s cubic-bezier(0.4, 0, 0.2, 1);
+        }
     </style>
 </head>
 <body class="flex flex-col justify-between p-10 font-sans" x-data="customerDisplay()" x-init="init()" x-cloak>
@@ -85,15 +90,13 @@
     <main class="relative z-10 flex-1 my-7 flex flex-col min-h-0 overflow-hidden">
 
         <!-- ===================================================================== -->
-        <!-- VIEW 1: STANDBY / IDLE SCREEN (BURGUNDY CLEAN MOBILE APP CARD SHOWCASE) -->
-        <!-- Clean Hero Banner + Infinite Product Ribbon with Crisp Cards -->
+        <!-- VIEW 1: STANDBY / IDLE SCREEN (SMOOTH STEP SLIDE ANIMATION - 2s INTERVAL) -->
         <!-- ===================================================================== -->
         <template x-if="screenState === 'idle'">
             <div class="w-full h-full flex flex-col justify-between">
                 
                 <!-- Hero Banner Card -->
                 <div class="relative rounded-[32px] p-8 glass-panel-burgundy text-white flex items-center justify-between overflow-hidden shrink-0">
-                    <!-- Subtle pattern accent -->
                     <div class="absolute -right-20 -bottom-20 w-80 h-80 rounded-full bg-white/5 blur-2xl pointer-events-none"></div>
 
                     <div class="space-y-2 max-w-3xl">
@@ -123,7 +126,7 @@
                     </div>
                 </div>
 
-                <!-- Products Infinite Carousel Section with Proper Breathing Space -->
+                <!-- Products Step-by-Step Sliding Showcase (Slides 1 item, pauses 2s, smooth ease-in-out) -->
                 <div class="relative w-full flex-1 flex flex-col justify-center overflow-hidden py-3">
                     <div class="flex items-center justify-between mb-4 px-2">
                         <div class="flex items-center gap-2.5">
@@ -132,24 +135,35 @@
                                 Fresh Stall Catalog • Live Menu
                             </span>
                         </div>
-                        <span class="text-xs font-semibold text-slate-500">
-                            Order at the counter • {{ count($allProducts) }} Items Available
-                        </span>
+
+                        <!-- Progress Dots Indicator -->
+                        <div class="flex items-center gap-1.5">
+                            <template x-for="(dot, dotIdx) in totalProducts" :key="dotIdx">
+                                <span 
+                                    class="h-1.5 rounded-full transition-all duration-500"
+                                    :class="(currentSlide % totalProducts) === dotIdx ? 'w-6 bg-[#881337]' : 'w-1.5 bg-rose-200'"
+                                ></span>
+                            </template>
+                        </div>
+
+                        <span class="text-xs font-semibold text-slate-500" x-text="'Item ' + ((currentSlide % totalProducts) + 1) + ' of ' + totalProducts"></span>
                     </div>
 
-                    <!-- Marquee Track Wrapper with Soft Gradient Edges -->
+                    <!-- Slide Track Enclosure -->
                     <div class="relative w-full overflow-hidden">
                         <div class="absolute left-0 inset-y-0 w-28 bg-gradient-to-r from-[#fcf9f9] to-transparent z-10 pointer-events-none"></div>
                         <div class="absolute right-0 inset-y-0 w-28 bg-gradient-to-l from-[#fcf9f9] to-transparent z-10 pointer-events-none"></div>
 
-                        <!-- Infinite Looping Track -->
-                        <div class="flex gap-7 animate-marquee-slow w-max py-3">
-                            @foreach([$allProducts, $allProducts] as $productsBatch)
+                        <!-- Smooth Translating Track (328px step = 300px card + 28px gap) -->
+                        <div 
+                            class="flex gap-7 slide-carousel-track w-max py-3"
+                            :style="'transform: translateX(-' + (currentSlide * 328) + 'px)'"
+                        >
+                            @foreach([$allProducts, $allProducts, $allProducts] as $productsBatch)
                                 @foreach($productsBatch as $product)
                                     @php
                                         $img = $product->image ? asset('storage/' . $product->image) : asset('images/placeholder-product.svg');
                                     @endphp
-                                    <!-- App Card Style with Glassmorphic Clean Look -->
                                     <div class="w-[300px] shrink-0 rounded-[28px] p-5 glass-card-clean flex flex-col justify-between select-none">
                                         <div>
                                             <!-- Image Box -->
@@ -413,16 +427,37 @@
                 cashReceived: 0,
                 changeDue: 0,
                 lastOrder: {},
+                currentSlide: 0,
+                totalProducts: {{ count($allProducts) }},
+                slideTimer: null,
 
                 init() {
                     this.updateTime();
                     setInterval(() => this.updateTime(), 1000);
                     this.setupEcho();
+                    this.startProductSlideTimer();
                 },
 
                 updateTime() {
                     const now = new Date();
                     this.currentTime = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                },
+
+                startProductSlideTimer() {
+                    if (this.slideTimer) {
+                        clearInterval(this.slideTimer);
+                    }
+
+                    // Slides one product, stays for 2 seconds, then smoothly transitions
+                    this.slideTimer = setInterval(() => {
+                        if (this.screenState === 'idle' && this.totalProducts > 0) {
+                            this.currentSlide++;
+                            // Reset position seamlessly when cycling through duplicate batches
+                            if (this.currentSlide >= this.totalProducts * 2) {
+                                this.currentSlide = 0;
+                            }
+                        }
+                    }, 2000);
                 },
 
                 setupEcho() {
