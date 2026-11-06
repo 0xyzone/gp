@@ -61,7 +61,7 @@
     <!-- Top Navigation & Live Header (Optimized for Mobile single row + expandable stats) -->
     <header class="glass-header sticky top-0 z-30 px-3.5 sm:px-8 py-3 flex items-center justify-between gap-2 shadow-lg shadow-black/40">
         <div class="flex items-center gap-2.5 sm:gap-4 min-w-0">
-            <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-br from-rose-600 to-rose-900 border border-rose-300/30 flex items-center justify-center font-black text-base sm:text-xl text-white shadow-md shadow-rose-950/60 shrink-0">
+            <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-linear-to-br from-rose-600 to-rose-900 border border-rose-300/30 flex items-center justify-center font-black text-base sm:text-xl text-white shadow-md shadow-rose-950/60 shrink-0">
                 घा
             </div>
             <div class="min-w-0">
@@ -257,7 +257,7 @@
                                     <button 
                                         @click="markServed(order)"
                                         :disabled="order._loading"
-                                        class="touch-action-btn min-h-[44px] w-full py-2.5 px-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600 active:from-emerald-700 active:to-emerald-800 border border-emerald-400/50 text-white font-black text-xs sm:text-sm tracking-wider shadow-lg shadow-emerald-950/80 transition flex items-center justify-center gap-1.5 disabled:opacity-50"
+                                        class="touch-action-btn min-h-[44px] w-full py-2.5 px-2.5 rounded-xl bg-linear-to-r from-emerald-600 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600 active:from-emerald-700 active:to-emerald-800 border border-emerald-400/50 text-white font-black text-xs sm:text-sm tracking-wider shadow-lg shadow-emerald-950/80 transition flex items-center justify-center gap-1.5 disabled:opacity-50"
                                     >
                                         <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
