@@ -5,6 +5,7 @@ use App\Models\Category;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Setting;
+use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
@@ -82,6 +83,7 @@ Route::middleware('auth')->group(function () {
 
 // Fallback image delivery route for cPanel / LiteSpeed shared hosting where symbolic links to storage are forbidden or disabled
 Route::get('/storage/{path}', function (string $path) {
+    /** @var FilesystemAdapter $disk */
     $disk = Storage::disk('public');
 
     abort_unless($disk->exists($path), 404);
